@@ -48,6 +48,7 @@ app.get("/",function(request,response){
 })
 
 app.get('/contact', (req, res) => {
+    console.log("hello idiot")
     res.render('contact.hbs')
 })
 
