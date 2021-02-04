@@ -1,25 +1,17 @@
 const express = require("express")
 const expressHandlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
-const mysql = require("mysql2")
 const path = require("path")
 
 
 const app = express()
+//const user_table = require('../data-acces-layer/user_table.js')
 
 
 app.engine('hbs', expressHandlebars({
     defaultLayout: 'main.hbs',
     extname: "hbs"
 }))
-
-const connection = mysql.createConnection({
-    host: 'db',
-    user: 'root',
-    database: 'hello',
-    password: "abc123"
-});
-
 
 
 app.use(bodyParser.urlencoded({
@@ -34,14 +26,6 @@ app.use(express.static('views/images'))
 */
 app.get("/",function(request,response){
     response.render('index.hbs')
-
-    connection.query(
-        'SELECT * FROM `user`',
-        function(err, results, fields) {
-          console.log(results); // results contains rows returned by server
-          console.log(fields); // fields contains extra meta data about results, if available
-        }
-    )
 })
 
 
