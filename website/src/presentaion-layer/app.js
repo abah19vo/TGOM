@@ -50,10 +50,8 @@ app.get('/about', (req, res) => {
 })
   
 app.get('/contact', (req, res) => {
-<<<<<<< Updated upstream
-    console.log("hello idiot")
-    res.render('contact.hbs')
-=======
+
+
 res.render('contact.hbs')
 })
 
@@ -75,7 +73,6 @@ app.get('/flight', (req, res) => {
 
 app.get('/marvel', (req, res) => {
     res.render('marvel.hbs')
->>>>>>> Stashed changes
 })
 
 
