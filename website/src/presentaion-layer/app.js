@@ -39,7 +39,7 @@ app.get("/",function(request,response){
     console.log("Bye")
 
     connection.query(
-        'SELECT * FROM `humans`',
+        'SELECT * FROM `user`',
         function(err, results, fields) {
           console.log(results); // results contains rows returned by server
           console.log(fields); // fields contains extra meta data about results, if available

@@ -1,4 +1,29 @@
-CREATE TABLE humans(
-   name VARCHAR(50) ,
-    age INT(11) 
+CREATE TABLE user(
+    id int NOT NULL AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL ,
+    name VARCHAR(50) NOT NULL, 
+    password VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
 )
+
+CREATE TABLE IF NOT EXISTS feedBack(
+    id int NOT NULL AUTO_INCREMENT,
+    userId int NOT NULL,
+    title VARCHAR(50),
+    content VARCHAR(400),
+    PRIMARY KEY (id)
+    FOREIGN KEY (userId) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
+)
+
+
+CREATE TABLE IF NOT EXISTS comment(
+    id int NOT NULL AUTO_INCREMENT,
+    feedBackId NOT NULL,
+    userId int NOT NULL,
+    content VARCHAR(400),
+    PRIMARY KEY (id),
+    FOREIGN KEY (feedBackId) REFERENCES feedBack(id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (userId) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
+)
+
+
