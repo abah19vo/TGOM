@@ -28,7 +28,7 @@ exports.getFeedbackById = function(id,callback){
 
 
 
-exports.getAllFeedbacks = function(id,callback){
+exports.getAllFeedbacks = function(callback){
     const query = "SELECT * FROM feedBack AS F JOIN user AS U ON F.userId = U.id"
     connection.query(query,function(error, feedbacks){
         callback(error,feedbacks)
