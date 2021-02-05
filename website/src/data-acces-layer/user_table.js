@@ -21,11 +21,14 @@ exports.getUserById = function(id,callback){
     const query = " SELECT * FROM user WHERE id = ?"
     const values = [id]
     connection.query(query,values,function(error,user){
-        if(error){
-            callback(error)
-        }else{
-            callback(user)
-        }
+        callback(error,user)
+    })
+}
+
+exports.getAllUsers = function(id,callback){
+    const query = " SELECT * FROM user WHERE id = ?"
+    connection.query(query,function(error,user){
+        callback(error,user)
     })
 }
 

@@ -18,17 +18,19 @@ exports.createFeedBack= function(title,content,userId,callback){
     })
 }
 
-exports.getFeedbacksById = function(id,callback){
+exports.getFeedbackById = function(id,callback){
     const query = "SELECT * FROM feedBack AS F WHERE id= ? JOIN user AS U ON F.userId = U.id"
     const values =[id]
     connection.query(query,values,function(error, feedback){
-        if(error){
-            callback(error)
-        }else{
-            callback(feedback)
-        }
+        callback(error,feedback)
     })
 }
 
 
 
+exports.getAllFeedbacks = function(id,callback){
+    const query = "SELECT * FROM feedBack AS F JOIN user AS U ON F.userId = U.id"
+    connection.query(query,function(error, feedbacks){
+        callback(error,feedbacks)
+    })
+}

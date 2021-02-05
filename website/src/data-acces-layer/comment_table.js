@@ -9,6 +9,18 @@ const connection = mysql.createConnection({
     password: "abc123"
 })
 
-exports.getCommentsById = function(id,feedbackId,callback){
-    const values =[id, feedbackId]
+exports.createComment = function(userId,feedbackId,content,callback){
+    const values = [feedbackId,userId,content]
+    const query = 'INSERT INTO comment(feedBackId,userId,content) VALUES(?,?.?)'
+    connection.query(query,values,function(error){
+        callback(error)
+    })
+}
+
+exports.getCommentsByFeedbackId = function(feedbackId,userId,callback){
+    const values =[feedbackId,userId]
+    const query = 'SELECT * FROM comment AS C WHERE C.feedbackId = ? JOIN user AS U ON C.userId = U.id'
+    connection.query(query,values,function(error,comments){
+        callback(error,(comments))
+    })
 }
