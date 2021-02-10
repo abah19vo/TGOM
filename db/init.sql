@@ -7,6 +7,7 @@ CREATE TABLE  IF NOT EXISTS user(
     username VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL, 
     password VARCHAR(50) NOT NULL,
+    CONSTRAINT usernameUnique UNIQUE (username),
     PRIMARY KEY (id)
 );
 

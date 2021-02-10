@@ -1,4 +1,4 @@
-const mysql = require("mysql2")
+const mysql = require("../array acces/node_modules/mysql2")
 
 
 
@@ -14,7 +14,11 @@ exports.createFeedBack= function(title,content,userId,callback){
     const values = [title,content,userId]
 
     connection.query(query,values,function(error){
-        callback(error)
+        if(error){
+            callback(['internalError'])
+        }else{
+            callback([])
+        }
     })
 }
 
@@ -22,7 +26,13 @@ exports.getFeedbackById = function(id,callback){
     const query = "SELECT * FROM feedBack AS F WHERE id= ? JOIN user AS U ON F.userId = U.id"
     const values =[id]
     connection.query(query,values,function(error, feedback){
-        callback(error,feedback)
+
+        if(error){
+            callback(['internalError'],null)
+        }else{
+            callback([],feedback)
+        }
+       
     })
 }
 
@@ -31,6 +41,10 @@ exports.getFeedbackById = function(id,callback){
 exports.getAllFeedbacks = function(callback){
     const query = "SELECT * FROM feedBack AS F JOIN user AS U ON F.userId = U.id"
     connection.query(query,function(error, feedbacks){
-        callback(error,feedbacks)
+        if(error){
+            callback(['internalError'],null)
+        }else{
+            callback([],feedback)
+        }
     })
 }

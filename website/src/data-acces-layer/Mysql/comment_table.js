@@ -1,4 +1,4 @@
-const mysql = require("mysql2")
+const mysql = require("../array acces/node_modules/mysql2")
 
 
 
@@ -13,7 +13,11 @@ exports.createComment = function(userId,feedbackId,content,callback){
     const values = [feedbackId,userId,content]
     const query = 'INSERT INTO comment(feedBackId,userId,content) VALUES(?,?.?)'
     connection.query(query,values,function(error){
-        callback(error)
+        if(error){
+            callback(['internalError'])
+        }else{
+            callback([])
+        }
     })
 }
 
@@ -21,6 +25,10 @@ exports.getCommentsByFeedbackId = function(feedbackId,userId,callback){
     const values =[feedbackId,userId]
     const query = 'SELECT * FROM comment AS C WHERE C.feedbackId = ? JOIN user AS U ON C.userId = U.id'
     connection.query(query,values,function(error,comments){
-        callback(error,(comments))
+        if(error){
+            callback(['internalError'],null)
+        }else{
+            callback([],comments)
+        }
     })
 }
