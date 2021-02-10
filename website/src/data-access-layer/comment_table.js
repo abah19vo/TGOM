@@ -21,8 +21,8 @@ exports.createComment = function(userId,feedbackId,content,callback){
     })
 }
 
-exports.getCommentsByFeedbackId = function(feedbackId,userId,callback){
-    const values =[feedbackId,userId]
+exports.getCommentsByFeedbackId = function(feedbackId,callback){
+    const values =[feedbackId]
     const query = 'SELECT * FROM comment AS C WHERE C.feedbackId = ? JOIN user AS U ON C.userId = U.id'
     connection.query(query,values,function(error,comments){
         if(error){

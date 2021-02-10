@@ -44,7 +44,7 @@ exports.getAllFeedbacks = function(callback){
         if(error){
             callback(['internalError'],null)
         }else{
-            callback([],feedback)
+            callback([],feedbacks)
         }
     })
 }
