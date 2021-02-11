@@ -2,6 +2,12 @@ const express = require("express")
 const expressHandlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require("path")
+var expressSession = require('express-session')
+const bcrypt = require('bcrypt')
+
+
+
+const ADMIN_USERNAME = "raswer"
 
 
 const app = express()
@@ -13,7 +19,6 @@ app.engine('hbs', expressHandlebars({
     extname: "hbs"
 }))
 
-
 app.use(bodyParser.urlencoded({
     extended: false
 }))
@@ -21,9 +26,19 @@ app.use(bodyParser.urlencoded({
 app.set('views',path.join(__dirname,'views'))
 app.use(express.static(path.join(__dirname,'public')))
 
-/*app.use(express.static('views/CSS'))
-app.use(express.static('views/images'))
-*/
+app.use(expressSession({
+  secret: "ldfdslmlfmsdo",
+  saveUninitialized:false,
+  resave: false,
+}))
+
+app.use(function(req,res,next){
+  const isLoggedIn = req.session.isLoggedIn
+  res.locals.isLoggedIn = isLoggedIn
+  next()
+})
+
+
 app.get("/",function(request,response){
     response.render('index.hbs')
 })
@@ -57,6 +72,10 @@ app.get('/flight', (req, res) => {
 
 app.get('/marvel', (req, res) => {
     res.render('marvel.hbs')
+})
+
+app.get('/register', (req, res) => {
+  res.render('register.hbs')
 })
 
 
