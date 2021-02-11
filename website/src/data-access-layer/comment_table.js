@@ -9,8 +9,8 @@ const connection = mysql.createConnection({
     password: "abc123"
 })
 
-exports.createComment = function(userId,feedbackId,content,callback){
-    const values = [feedbackId,userId,content]
+exports.createComment = function(newComment,callback){
+    const values = [newComment.feedbackId,newComment.userId,newComment.content]
     const query = 'INSERT INTO comment(feedBackId,userId,content) VALUES(?,?.?)'
     connection.query(query,values,function(error){
         if(error){

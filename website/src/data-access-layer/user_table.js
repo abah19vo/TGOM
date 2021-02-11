@@ -9,9 +9,9 @@ const connection = mysql.createConnection({
     password: "abc123"
 })
 
-exports.createUser = function(username,password,name,callback){
+exports.createUser = function(newUser,callback){
     const query = " INSERT INTO user(username,password,name) VALUES(?,?,?)"
-    const values = [username,password,name]
+    const values = [newUser.username,newUser.password,newUser.name]
     connection.query(query, values, function(error){
 
         if(error){
