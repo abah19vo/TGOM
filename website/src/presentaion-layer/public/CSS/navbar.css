@@ -28,9 +28,8 @@ a{
     grid-template-rows: auto;
     grid-template-columns: auto 1fr;
     background-color: rgb(10, 10, 12);
-    margin-left: -10px;
-    margin-right: -7px;
-    height: 120px;
+    margin-left: 0%;
+    margin-right: 0%;
 }
 
 .mainlogo{
@@ -43,20 +42,20 @@ a{
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    margin-top: 25px;
-    padding: 0px;
+    margin-top: 2%;
+    margin-left: 15%;
 }
 #icons li{
     display: inline-block;
-    line-height: 30px;
+    line-height: 20px;
     margin: 20px;
 }
 .loimg{
     display: flex;
     flex-direction: row;
-    width: 90px;
-    margin-left: 100%;
+    width: 30%;
     margin-top: -10%;
+    margin-left: 120%;
 }
 .logout-button{
     margin-top: 5%;
@@ -71,6 +70,7 @@ a{
     background-color: rgb(216, 13, 13);
     font-family: 'Electrolize', sans-serif;
 }
+
 #staff_table{
     margin-top: 5%;
     height: 50%;

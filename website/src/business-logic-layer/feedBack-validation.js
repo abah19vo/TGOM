@@ -3,7 +3,7 @@ const GAME_NAME_MIN_LENGTH = 4
 const REVIEW_MIN_LENGTH = 3
 const REVIEW_MAX_LENGTH = 260
 
-exports.getReviewValidationErrors = function(title, game, comment){
+exports.getFeedbackValidationErrors = function(title, game, comment){
 	
 	const errors = []
 	

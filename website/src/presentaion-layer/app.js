@@ -2,6 +2,12 @@ const express = require("express")
 const expressHandlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require("path")
+var expressSession = require('express-session')
+const bcrypt = require('bcrypt')
+
+
+
+const ADMIN_USERNAME = "raswer"
 
 
 const app = express()
@@ -13,7 +19,6 @@ app.engine('hbs', expressHandlebars({
     extname: "hbs"
 }))
 
-
 app.use(bodyParser.urlencoded({
     extended: false
 }))
@@ -21,15 +26,48 @@ app.use(bodyParser.urlencoded({
 app.set('views',path.join(__dirname,'views'))
 app.use(express.static(path.join(__dirname,'public')))
 
-/*app.use(express.static('views/CSS'))
-app.use(express.static('views/images'))
-*/
+app.use(expressSession({
+  secret: "ldfdslmlfmsdo",
+  saveUninitialized:false,
+  resave: false,
+}))
+
+app.use(function(req,res,next){
+  const isLoggedIn = req.session.isLoggedIn
+  res.locals.isLoggedIn = isLoggedIn
+  next()
+})
+
+
 app.get("/",function(request,response){
+  const newUser = {username: "raswer",
+                    password: "abc123",
+                    name:"ivin"}
+  const newUserq = {username: "raqwer",
+  password: "abc123",
+  name:"ivin"}
+  user_table.createUser(newUser, function(error){
+    if(error){
+      console.log(error)
+    }
+  })
+  user_table.createUser(newUserq, function(error){
+    if(error){
+      console.log(error)
+    }
+  })
     response.render('index.hbs')
 })
 
 
 app.get('/about', (req, res) => {
+  user_table.getUserById(1, function(error, user){
+    if(error){
+      console.log(error)
+    }else{
+      console.log(user + error)
+    }
+  })
     res.render('about.hbs')
 })
   
@@ -57,6 +95,10 @@ app.get('/flight', (req, res) => {
 
 app.get('/marvel', (req, res) => {
     res.render('marvel.hbs')
+})
+
+app.get('/register', (req, res) => {
+  res.render('register.hbs')
 })
 
 
