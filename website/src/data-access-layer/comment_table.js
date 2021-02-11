@@ -1,4 +1,4 @@
-const mysql = require("../array acces/node_modules/mysql2")
+const mysql = require("../node_modules/mysql2")
 
 
 

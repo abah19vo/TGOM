@@ -16,7 +16,7 @@ exports.createUser = function(username,password,name,callback){
 
         if(error){
             if(error.sqlMessage.includes('usernameUnique')){
-                callback('usernameTaken')
+                callback(['usernameTaken'])
             }else{
                callback(['internalError']) 
             }
@@ -30,6 +30,19 @@ exports.createUser = function(username,password,name,callback){
 exports.getUserById = function(id,callback){
     const query = " SELECT * FROM user WHERE id = ?"
     const values = [id]
+    connection.query(query,values,function(error,user){
+        if(error){
+            callback(['internalError'],null)
+        }else{
+            callback([],user)
+        }
+        
+    })
+}
+
+exports.getUserById = function(username,callback){
+    const query = " SELECT * FROM user WHERE username = ?"
+    const values = [username]
     connection.query(query,values,function(error,user){
         if(error){
             callback(['internalError'],null)
