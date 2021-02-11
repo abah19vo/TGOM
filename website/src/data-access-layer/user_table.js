@@ -40,6 +40,19 @@ exports.getUserById = function(id,callback){
     })
 }
 
+exports.getUserByUserName = function(username,callback){
+    const query = " SELECT * FROM user WHERE username = ?"
+    const values = [username]
+    connection.query(query,values,function(error,user){
+        if(error){
+            callback(['internalError'],null)
+        }else{
+            callback([],user)
+        }
+        
+    })
+}
+
 exports.getAllUsers = function(callback){
     const query = " SELECT * FROM user"
     connection.query(query,function(error,users){

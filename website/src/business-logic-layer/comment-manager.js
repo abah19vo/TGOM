@@ -9,7 +9,11 @@ module.exports= function({commentRepository}){
             callback(errors, null)
             return
         }
-        commentRepository.createComment(comment.userId,comment.feedbackId,comment.content,callback)
+        commentRepository.createComment(newComment, callback)
+    }
+
+    exports.getCommentsByFeedbackId = function(feedbackId, callback){
+        commentRepository.getCommentsByFeedbackId(feedbackId,callback)
     }
 
 }

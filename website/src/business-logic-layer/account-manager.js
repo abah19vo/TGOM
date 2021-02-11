@@ -4,23 +4,27 @@ module.exports= function({accountRepository}){
 
     const exports = {}
 
-    exports.getAllAccounts = function(callback){
+    exports.getAllUsers = function(callback){
         accountRepository.getAllAccounts(callback)
     }
 
-    exports.createAccount = function(account, callback){
+    exports.createUser = function(newUser, callback){
         
-        const errors = accountValidator.getErrorNewAccount(account)
+        const errors = accountValidator.getErrorNewAccount(newUser)
 
         if(errors.length > 0){
             callback(errors,null)
             return
         }
 
-        accountRepository.createAccount(account, callback)
+        accountRepository.createAccount(newUser, callback)
     }
 
-    exports.getAccountByUsername = function(username, callback){
+    exports.getUserById = function(id, callback){
+        accountRepository.getAccountByUsername(id, callback)
+    }
+
+    exports.getUserByUserName = function(username, callback){
         accountRepository.getAccountByUsername(username, callback)
     }
 
