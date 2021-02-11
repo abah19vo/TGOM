@@ -43,20 +43,19 @@ a{
     display: flex;
     flex-direction: row;
     margin-top: 2%;
-    margin-left: 35%;
+    margin-left: 15%;
 }
 #icons li{
     display: inline-block;
-    line-height: 30px;
+    line-height: 20px;
     margin: 20px;
-    
 }
 .loimg{
     display: flex;
     flex-direction: row;
-    width: 100px;
-    margin-left: 100%;
-    margin-top: -25%;
+    width: 30%;
+    margin-top: -10%;
+    margin-left: 120%;
 }
 .logout-button{
     margin-top: 5%;
@@ -71,6 +70,7 @@ a{
     background-color: rgb(216, 13, 13);
     font-family: 'Electrolize', sans-serif;
 }
+
 #staff_table{
     margin-top: 5%;
     height: 50%;

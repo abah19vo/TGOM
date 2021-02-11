@@ -11,7 +11,7 @@ const ADMIN_USERNAME = "raswer"
 
 
 const app = express()
-//const user_table = require('../data-acces-layer/Mysql/user_table.js')
+const user_table = require('../data-access-layer/user_table.js')
 
 
 app.engine('hbs', expressHandlebars({
@@ -40,11 +40,34 @@ app.use(function(req,res,next){
 
 
 app.get("/",function(request,response){
+  const newUser = {username: "raswer",
+                    password: "abc123",
+                    name:"ivin"}
+  const newUserq = {username: "raqwer",
+  password: "abc123",
+  name:"ivin"}
+  user_table.createUser(newUser, function(error){
+    if(error){
+      console.log(error)
+    }
+  })
+  user_table.createUser(newUserq, function(error){
+    if(error){
+      console.log(error)
+    }
+  })
     response.render('index.hbs')
 })
 
 
 app.get('/about', (req, res) => {
+  user_table.getUserById(1, function(error, user){
+    if(error){
+      console.log(error)
+    }else{
+      console.log(user + error)
+    }
+  })
     res.render('about.hbs')
 })
   

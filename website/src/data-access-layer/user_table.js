@@ -1,4 +1,5 @@
-const mysql = require("../data-access-layer-array/node_modules/mysql2")
+const { response } = require("express")
+const mysql = require("mysql2")
 
 
 
@@ -13,7 +14,6 @@ exports.createUser = function(newUser,callback){
     const query = " INSERT INTO user(username,password,name) VALUES(?,?,?)"
     const values = [newUser.username,newUser.password,newUser.name]
     connection.query(query, values, function(error){
-
         if(error){
             if(error.sqlMessage.includes('usernameUnique')){
                 callback('usernameTaken')
@@ -34,7 +34,7 @@ exports.getUserById = function(id,callback){
         if(error){
             callback(['internalError'],null)
         }else{
-            callback([],user)
+            callback([], user)
         }
         
     })
