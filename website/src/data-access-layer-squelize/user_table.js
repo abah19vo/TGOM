@@ -15,6 +15,8 @@ const User = sequelize.define('user',{
         type:DataTypes.STRING
     }
 })
+User.hasMany('feedback')
+User.hasMany('comment')
 
 sequelize.sync({force:true})
 

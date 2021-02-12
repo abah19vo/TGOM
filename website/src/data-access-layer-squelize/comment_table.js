@@ -18,6 +18,8 @@ const Comment = sequelize.define('comment',{
     },
     foreignKeyConstraint: true
 })
+Comment.belongsTo('comment')
+Comment.belongsTo('feedback')
 
 exports.createComment = function(newComment,callback){
     Comment.create(newComment).then(callback([])).catch(e=>{           

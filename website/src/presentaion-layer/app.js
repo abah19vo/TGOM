@@ -4,24 +4,41 @@ const bodyParser = require('body-parser')
 const path = require("path")
 var expressSession = require('express-session')
 const bcrypt = require('bcrypt')
-
-
-
 const ADMIN_USERNAME = "raswer"
 
+module.exports = function({userRouter,variusRouter}){
+  const app = express()
 
-const app = express()
-const user_table = require('../data-access-layer/user_table.js')
+  app.set('views',path.join(__dirname,'views'))
 
+  app.engine('hbs', expressHandlebars({
+    defaultLayout: 'main',
+    extname: "hbs",
+    layoutsDir: path.join(__dirname,'layouts')
+  }))
+
+  //app.use(bodyParser.urlencoded())
+	app.use(express.urlencoded())
+
+  
+  app.use(express.static(path.join(__dirname,'public')))
+
+  app.use('/account',userRouter)
+  app.use('/',variusRouter)
+  
+  return app
+}
+
+
+
+/*
 
 app.engine('hbs', expressHandlebars({
     defaultLayout: 'main.hbs',
     extname: "hbs"
 }))
 
-app.use(bodyParser.urlencoded({
-    extended: false
-}))
+
 
 app.set('views',path.join(__dirname,'views'))
 app.use(express.static(path.join(__dirname,'public')))
@@ -37,130 +54,9 @@ app.use(function(req,res,next){
   res.locals.isLoggedIn = isLoggedIn
   next()
 })
-
-
-app.get("/",function(request,response){
-  const newUser = {username: "raswer",
-                    password: "abc123",
-                    name:"ivin"}
-  const newUserq = {username: "raqwer",
-  password: "abc123",
-  name:"ivin"}
-  user_table.createUser(newUser, function(error){
-    if(error){
-      console.log(error)
-    }
-  })
-  user_table.createUser(newUserq, function(error){
-    if(error){
-      console.log(error)
-    }
-  })
-    response.render('index.hbs')
-})
-
-
-app.get('/about', (req, res) => {
-  user_table.getUserById(1, function(error, user){
-    if(error){
-      console.log(error)
-    }else{
-      console.log(user + error)
-    }
-  })
-    res.render('about.hbs')
-})
-  
-app.get('/contact', (req, res) => {
-
-
-res.render('contact.hbs')
-})
-
-app.get('/staffs', (req, res) => {
-res.render('staffs.hbs')
-})
-
-app.get('/reviews', (req, res) => {
-    res.render('review.hbs')
-})
-
-app.get('/comments', (req, res) => {
-    res.render('comments.hbs')
-})
-
-app.get('/flight', (req, res) => {
-    res.render('flight.hbs')
-})
-
-app.get('/marvel', (req, res) => {
-    res.render('marvel.hbs')
-})
-
-app.get('/register', (req, res) => {
-  res.render('register.hbs')
-})
-
-
-app.get('/login', (req, res) => {
-
-	if(req.session.isLoggedIn){
-		res.redirect('/')
-	}else{
-    res.render('login.hbs')
-	}
-})
-
-
-app.post("/login", function(request, response){
-    const enteredusername = request.body.username
-    const enteredpassword = request.body.password
-  
-    db.getPassword(ADMIN_USERNAME, function(error,hash){
-      if(error){
-        const model={
-          loginError: true
-        }
-        response.render('login.hbs',model)     
-      }else{
-        bcrypt.compare(enteredpassword, hash.password, function(err, result) {
-          if(err){
-            const model={
-              loginError: true
-            }
-            response.render('login.hbs',model)     
-          }else{
-            if(result && enteredusername == ADMIN_USERNAME ){
-              request.session.isLoggedIn = true
-              response.redirect("/")
-            }else{
-              const model={
-                loginError: true
-              }
-              response.render('login.hbs',model)
-            }
-        }
-        })
-      }
-    })  
-  
-  })  
-
-
-  app.post('/logout', (req, res) =>{
-
-    req.session.isLoggedIn = false
-    res.redirect('/')
-  
-  })
-
-  
-
-
-app.listen(8080)
-
-
-   
+const userRouter = require('./routers/user-router.js')
+app.use('/user',userRouter)
+*/
   
    
   

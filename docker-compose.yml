@@ -3,7 +3,7 @@ services:
   website:
     build: ./website
     ports: 
-      - 8000:8080
+      - 8000:8000
     volumes: 
       - ./website/src:/the-website/src/
     depends_on: 

@@ -17,6 +17,9 @@ const Feedback = sequelize.define('feedback',{
     foreignKeyConstraint: true
 })
 
+Feedback.belongsTo('user')
+Feedback.hasMany('comment')
+
 module.exports =function(){
    
     exports.createFeedback= function(newFeedback,callback){
@@ -37,7 +40,12 @@ module.exports =function(){
 
 
     exports.getAllFeedbacks = function(callback){
-        
+        Posts.findAll({
+            include: [{
+              model: user,
+              where: ["id = userId"]
+             }]
+          },{raw: true}).then(AllFeedbacks => callback([],AllFeedbacks)).catch(e=>callback(['internalError'],null))
     } 
     return exports
 }

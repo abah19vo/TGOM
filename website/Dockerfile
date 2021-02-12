@@ -8,4 +8,4 @@ RUN npm install
 
 COPY src src
 
-CMD npm run start
+CMD ["npm","run" ,"start"]
