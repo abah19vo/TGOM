@@ -54,8 +54,8 @@ a{
     display: flex;
     flex-direction: row;
     width: 30%;
-    margin-top: -10%;
-    margin-left: 120%;
+    margin-top: -7%;
+    margin-left: 80%;
 }
 .logout-button{
     margin-top: 5%;

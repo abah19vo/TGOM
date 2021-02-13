@@ -28,19 +28,7 @@ module.exports = function(){
         })
     }
     
-    
-    
-    exports.getUserByUserName = function(username,callback){
-        const query = " SELECT * FROM user WHERE username = ?"
-        const values = [username]
-        connection.query(query,values,function(error,user){
-            if(error){
-                callback(['internalError'],null)
-            }else{
-                callback([],user)
-            }
-        })
-    }
+ 
     
     exports.getUserById = function(id,callback){
         const query = " SELECT * FROM user WHERE id = ?"
@@ -65,12 +53,33 @@ module.exports = function(){
         })
     }
 
+       
+    exports.getUserByUserName = function(username,callback){
+        const query = " SELECT * FROM user WHERE username = ?"
+        const values = [username]
+        connection.query(query,values,function(error,user){
+            if(error){
+                callback(['internalError'],null)
+            }else{
+                callback([],user)
+            }
+        })
+    }
+
+    exports.getPassword = function(username,callback){
+        const query = "SELECT password FROM user WHERE username = ?"
+        const values = [username]
+        connection.query(query, values, function(error,hash){
+            if(error){
+                callback(['internalError'],null)
+            }else{
+                callback(null,hash)
+            }
+        })
+    }
+
     return exports
 }
-
-
-
-
 
 
 /*'SELECT * FROM `user`'*/

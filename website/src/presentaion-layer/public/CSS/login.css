@@ -13,6 +13,18 @@
   margin-top: auto;
   color: red;
 }
+.register_center{
+  margin: 0;
+  position: absolute;
+  margin-top: 25%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 30% ;
+  height:auto; 
+  font-family: 'Electrolize', sans-serif;
+}
+
 .login_error_msg{
     text-align: center;
 }
@@ -22,7 +34,13 @@
   font-size: 45px;
   font-weight: 900;
   text-align: center;
-
+} 
+.register_logo{
+  margin-top: -35%;
+  font-family: 'Electrolize', sans-serif;
+  font-size: 45px;
+  font-weight: 900;
+  text-align: center;
 } 
 .btn{
   margin-top: 10%;
