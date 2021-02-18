@@ -8,8 +8,10 @@
     </div>
     <div class="register_center" >
         <form action="" method="POST" name="register">
-            {{#if registerError}}
-                <p class="login_error_msg">Cannot register, Try Again</p>
+            {{#if errors.length}}
+                {{#each errors}}
+                    <p class="login_error_msg">{{this}}</p>
+                {{/each}}
             {{/if}}
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <div class="form-group has-success">

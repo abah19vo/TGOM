@@ -59,9 +59,12 @@ module.exports = function(){
         const values = [username]
         connection.query(query,values,function(error,user){
             if(error){
+                console.log(error)
                 callback(['internalError'],null)
+            }else if(user.length==0 || user[0] == undefined){
+                callback(['invalidUsername'],null)
             }else{
-                callback([],user)
+                callback([],user[0])
             }
         })
     }
@@ -73,7 +76,7 @@ module.exports = function(){
             if(error){
                 callback(['internalError'],null)
             }else{
-                callback(null,hash)
+                callback([],hash)
             }
         })
     }

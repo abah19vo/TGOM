@@ -4,7 +4,8 @@ const bodyParser = require('body-parser')
 const path = require("path")
 var expressSession = require('express-session')
 const bcrypt = require('bcrypt')
-const ADMIN_USERNAME = "raswer"
+
+//const ADMIN_USERNAME = "raswer"
 
 module.exports = function({userRouter,variusRouter}){
   const app = express()
@@ -15,6 +16,12 @@ module.exports = function({userRouter,variusRouter}){
     defaultLayout: 'main',
     extname: "hbs",
     layoutsDir: path.join(__dirname,'layouts')
+  }))
+
+  app.use(expressSession({
+    secret: "ldfdslmlfmsdo",
+    saveUninitialized:false,
+    resave: false,
   }))
 
   //app.use(bodyParser.urlencoded())
@@ -43,11 +50,7 @@ app.engine('hbs', expressHandlebars({
 app.set('views',path.join(__dirname,'views'))
 app.use(express.static(path.join(__dirname,'public')))
 
-app.use(expressSession({
-  secret: "ldfdslmlfmsdo",
-  saveUninitialized:false,
-  resave: false,
-}))
+
 
 app.use(function(req,res,next){
   const isLoggedIn = req.session.isLoggedIn

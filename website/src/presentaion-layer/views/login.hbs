@@ -6,20 +6,21 @@
     <div class="login_logo">
         <span style="color:#FFF">LOGIN</span>
     </div>
-    <div class="center" >
     <form action="" method="POST" name="login">
-    {{#if loginError}}
-        <p class="login_error_msg">Cannot Login, Try Again</p>
-    {{/if}}
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div class="form-group has-success">
-        <label class="form-label" for="input-example-1">Username:</label>
-        <input class="form-input" type="text" name="username" placeholder="Username" required>
-    </div>
-    <div class="form-group">
-        <label class="form-label" for="input-example-1">Password:</label>
-        <input class="form-input" type="password" name="password" placeholder="Password" required>
-    </div>      
+        {{#if errors.length}}
+            {{#each errors}}
+                <p class="login_error_msg">{{this}}</p>
+            {{/each}}
+        {{/if}}
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <div class="form-group has-success">
+            <label class="form-label" for="input-example-1">Username:</label>
+            <input class="form-input" type="text" name="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="input-example-1">Password:</label>
+            <input class="form-input" type="password" name="password" placeholder="Password" required>
+        </div>      
         <button class="btn" type="submit" value="login">Login</button>
         <a href="/account/sign-up" class="register">Register</a>
     </form>

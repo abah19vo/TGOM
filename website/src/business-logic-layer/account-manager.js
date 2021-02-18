@@ -13,7 +13,7 @@ module.exports= function({accountRepository}){
     exports.createUser = async (newUser, callback) =>{
         
         const errors = accountValidator.getErrorNewUser(newUser)
-
+        
         if(errors.length > 0){
             callback(errors,null)
             return
@@ -33,6 +33,31 @@ module.exports= function({accountRepository}){
 
     exports.getPassword = function(username, callback){
         accountRepository.getPassword(username, callback)
+    }
+
+    exports.login = function(insertedAccount, callback){
+
+        const validationErrors = accountValidator.validateAccount(insertedAccount)
+        if(validationErrors.length > 0){
+            callback(validationErrors)
+            return
+        }
+
+        accountRepository.getUserByUserName(insertedAccount.username, function(repositoryErrors,repositoryAccount){
+            console.log(repositoryErrors)
+            console.log(repositoryAccount)
+            if(repositoryErrors.length > 0){
+                callback(repositoryErrors)
+            }else{
+                const errors = accountValidator.checkIfRealUser(repositoryAccount,insertedAccount)
+                console.log("maniger------>"+errors)
+                if(errors.length > 0){
+                    callback(errors)
+                }else{
+                    callback([])
+                }
+            }
+        })
     }
 
     return exports
