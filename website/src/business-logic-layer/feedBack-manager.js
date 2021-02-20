@@ -16,7 +16,8 @@ module.exports = function({feedBackRepository}){
             callback(errors, null)
             return
         }
-        
+    
+        if (isloggedin)
         feedBackRepository.createFeedBack(newFeedback, callback)
     }
 
