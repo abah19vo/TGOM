@@ -17,12 +17,12 @@
 			<li><a class="contact" href="/contact">CONTACT</a></li>
 			<li><a class="admin" href="/comments" >FEEDBACK</a></li>
 		{{#if isLoggedIn}}
-			<form action="/logout"  method="POST"> 
+			<form action="/account/sign-out"  method="POST"> 
 				<button class="logout-button" type="submit" name="logout" id="logout">LOGOUT</button>
 			</form>
 		{{/if}}	
 			{{#unless isLoggedIn}}
-				<a href="/account/login"><img src="/images/profile.png" class="loimg"></a>
+				<a href="/account/sign-in"><img src="/images/profile.png" class="loimg"></a>
 			{{/unless}}
 		</div>
 	</div>

@@ -2,17 +2,20 @@ const express = require("express")
 const expressHandlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const path = require("path")
-const bcrypt = require('bcrypt')
 const session = require('express-session')
+const cookieParser = require('cookie-parser')
 const redis = require('redis')
-let RedisStore = require('connect-redis')(session)
+const redisStore = require('connect-redis')(session)
+const Client = redis.createClient(6379, 'redis');
 
-var Client = redis.createClient();
+
+
 
 //const ADMIN_USERNAME = "raswer"
 
 module.exports = function({userRouter,variusRouter}){
   const app = express()
+
 
   app.set('views',path.join(__dirname,'views'))
 
@@ -23,15 +26,13 @@ module.exports = function({userRouter,variusRouter}){
   }))
 
 	app.use(express.urlencoded())
+  app.use(cookieParser())
  
   app.use(express.static(path.join(__dirname,'public')))
 
-  app.use('/account',userRouter)
-  app.use('/',variusRouter)
-  
   app.use(
     session({
-      store: new RedisStore({client: Client}),
+      store: new redisStore({host: redis, port:6379, client: Client}),
       saveUninitialized: false,
       secret: 'keyboard cat',
       resave: false,
@@ -43,6 +44,10 @@ module.exports = function({userRouter,variusRouter}){
     res.locals.isLoggedIn = isLoggedIn
     next()
   })
+
+  
+  app.use('/account',userRouter)
+  app.use('/',variusRouter)
 
   Client.on("error", function (err) {
     console.log(err);

@@ -51,11 +51,11 @@ module.exports = function({accountManager}){
 			
 	})
 
-	router.get('/login', (req, res) => {
+	router.get('/sign-in', (req, res) => {
         res.render('login.hbs')
     })
 
-	router.post("/login", function(request, response){
+	router.post("/sign-in", function(request, response){
 
 		const insertedAccount = {
 			username: request.body.username,
@@ -82,16 +82,16 @@ module.exports = function({accountManager}){
 				response.render('login.hbs',model)
 
 			}else{
-				//request.session.isLoggedIn = true
+				request.session.isLoggedIn = true
 				response.redirect('/')
+			
 			}
 			
 		})
     })
     
     
-
-	router.post('/logout', (req, res) =>{
+	router.post('/sign-out', (req, res) =>{
     
         req.session.isLoggedIn = false
         res.redirect('/')

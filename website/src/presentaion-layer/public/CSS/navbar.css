@@ -58,9 +58,11 @@ a{
     margin-left: 80%;
 }
 .logout-button{
+    display: flex;
+    flex-direction: row;
     margin-top: 5%;
     height: 50%;
-    margin-left: 45%;
+    margin-left: 190%;
     font-family: 'Electrolize', sans-serif;
     font-size: xx-large;
     border-style: none;
@@ -68,6 +70,7 @@ a{
 }
 .logout-button:hover{
     background-color: rgb(216, 13, 13);
+    color: white;
     font-family: 'Electrolize', sans-serif;
 }
 
