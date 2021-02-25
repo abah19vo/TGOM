@@ -12,11 +12,11 @@ module.exports = function(){
     const exports = {}
     
     exports.createFeedBack= function(newFeedback,callback){
-        const query = "INSERT INTO feedBack(title,content,userId) VALUES(?,?,?)"
-        const values = [newFeedback.title,newFeedback.content,newFeedback.userId]
+        const query = "INSERT INTO feedBack(title,content,game,userId) VALUES(?,?,?,?)"
+        const values = [newFeedback.title,newFeedback.game,newFeedback.content,newFeedback.userId]
 
         connection.query(query,values,function(error){
-            if(error){
+            if(error){                
                 callback(['internalError'])
             }else{
                 callback([])

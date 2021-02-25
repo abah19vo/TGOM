@@ -41,8 +41,10 @@ module.exports = function({accountManager}){
 				
 				const model = {
 					errors: errorMessages,
-					username: account.username,
-					password: account.password,
+					username: request.body.username,
+					password: request.body.password,
+					name: request.body.name,
+					confirmPassword: request.body.repeat_password
 				}
 				response.render('register.hbs',model)
 			}
@@ -62,7 +64,7 @@ module.exports = function({accountManager}){
 			password: request.body.password,
 		}      
 		
-		accountManager.login(insertedAccount,function(errors){
+		accountManager.login(insertedAccount,function(errors,id){
 			const errorTranslations = {
 				usernameTooShort: "The username needs to be at least 3 characters.",
 				usernameTooLong: "The username is too long.",
@@ -83,19 +85,18 @@ module.exports = function({accountManager}){
 
 			}else{
 				request.session.isLoggedIn = true
+				request.session.userId = id
 				response.redirect('/')
-			
 			}
 			
 		})
     })
     
     
+
 	router.post('/sign-out', (req, res) =>{
-    
         req.session.isLoggedIn = false
         res.redirect('/')
-    
     })
 
     return router

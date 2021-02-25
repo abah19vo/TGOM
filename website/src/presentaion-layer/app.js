@@ -13,7 +13,7 @@ const Client = redis.createClient(6379, 'redis');
 
 //const ADMIN_USERNAME = "raswer"
 
-module.exports = function({userRouter,variusRouter}){
+module.exports = function({userRouter,variusRouter,feedbackRouter}){
   const app = express()
 
 
@@ -29,6 +29,7 @@ module.exports = function({userRouter,variusRouter}){
   app.use(cookieParser())
  
   app.use(express.static(path.join(__dirname,'public')))
+
 
   app.use(
     session({
@@ -46,6 +47,7 @@ module.exports = function({userRouter,variusRouter}){
   })
 
   
+  app.use('/feedbacks',feedbackRouter)
   app.use('/account',userRouter)
   app.use('/',variusRouter)
 

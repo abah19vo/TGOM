@@ -1,0 +1,40 @@
+<title>feedback</title>
+
+<div id="comment_table">
+	{{#if feedback}}
+		<div class="content-section">
+			<h1 class="comment_header">{{feedback.title}}</h1>
+			{{> errors errors}}
+			{{#if dbErrorOccurred}}
+				<p class="admin_top">Can't display the page now, try again later.</p>
+			{{/if}}
+
+			<p>By:</p>
+			<p>{{feedback.name}}</p>
+			<p>TITLE:</p>
+			<p class="title">{{feedback.title}}</p>
+			<p>COMMENT:</p>
+			<p class="comment_area">{{feedback.comment}}</p>
+
+		</div>
+		<div id= "section-space">
+			{{#if isLoggedIn}}
+        		<p class="creat"><a href="/feedbacks/create/{{user.id}}">Post A Comment</a></p>
+    		{{/if}}
+		</div>
+		<div class="content-section">
+			{{#if comments.length}}
+				{{#each comments}}
+					<p>Name: {{comments.name}}</p>
+					<p>Comment: {{comments.content}}</p>
+				{{/each}}
+			{{else}}
+				<p>No Comments with that post exists</p>
+			{{/if}}
+		</div>
+			
+	{{else}}
+		<p>No post with that ID exists</p>
+	{{/if}}
+
+</div>
