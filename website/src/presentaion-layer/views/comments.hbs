@@ -1,15 +1,15 @@
 <link href = "/CSS/staffs.css" rel= "stylesheet" type = "text/css" >
 
-<title>Comments</title>
+<title>Feedbacks</title>
 	{{#if dbErrorOccurred}}
 		<p class="admin_top">Can't display the page now, try again later.</p>
 	{{else}}
-		<p class="creat"><a href="/comments/create">POST A COMMENT</a></p>
-		<p class="staff_top">COMMENTS:</p>
-		{{#if comments.length}}
+		<p class="creat"><a href="/comments/create">Post A Feedback</a></p>
+		<p class="staff_top">FEEDBACKS:</p>
+		{{#if feedbacks.length}}
 			<div class="displayed_list">
-				{{#each comments}}
-					<p><a href="/comments/{{id}}" class="id_name">{{title}}</a></p>
+				{{#each feedbacks}}
+					<p><a href="/feedback/{{id}}" class="id_name">{{title}}</a></p>
 				{{/each}}
 			</div>
 		{{else}}

@@ -10,7 +10,7 @@ h1{
    font-family: 'Electrolize', sans-serif;
     font-size: 75px;
 }
-#textrow{
+#textow{
     display: flex;
     justify-content: space-between;
     flex-direction: column;

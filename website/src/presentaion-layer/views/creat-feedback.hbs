@@ -14,12 +14,12 @@
 		<form action="" method="POST">
 			<input type="hidden" name="_csrf" value="{{csrfToken}}">
 			<div>
-				Title: <input type="name" name="title" value="{{title}}">
+				Title: <input type="name" name="title" value="{{feedback.title}}">
 			</div>
 			<div id="update_textarea">
-				Comment: 
+				content: 
 			</div>
-				<textarea class="update_textarea" type="text" name="comment" rows="4" cols="60" >{{comment.comment}} </textarea>
+				<textarea class="update_textarea" type="text" name="content" rows="4" cols="60" >{{feedback.content}} </textarea>
 			<div id="submit_update">
 				<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">
 			</div>

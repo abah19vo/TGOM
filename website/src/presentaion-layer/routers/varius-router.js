@@ -24,10 +24,6 @@ module.exports = function(){
         res.render('review.hbs')
     })
     
-    router.get('/comments', (req, res) => {
-        res.render('comments.hbs')
-    })
-    
     router.get('/flight', (req, res) => {
         res.render('flight.hbs')
     })

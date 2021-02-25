@@ -41,8 +41,10 @@ module.exports = function({accountManager}){
 				
 				const model = {
 					errors: errorMessages,
-					username: account.username,
-					password: account.password,
+					username: request.body.username,
+					password: request.body.password,
+					name: request.body.name,
+					confirmPassword: request.body.repeat_password
 				}
 				response.render('register.hbs',model)
 			}
@@ -87,21 +89,13 @@ module.exports = function({accountManager}){
 			}
 			
 		})
-		
-		
-		
-
-
-
     })
     
     
 
 	router.post('/logout', (req, res) =>{
-    
-        req.session.isLoggedIn = false
+       // req.session.isLoggedIn = false
         res.redirect('/')
-    
     })
 
     return router

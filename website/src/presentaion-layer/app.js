@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 
 //const ADMIN_USERNAME = "raswer"
 
-module.exports = function({userRouter,variusRouter}){
+module.exports = function({userRouter,variusRouter,feedbackRouter}){
   const app = express()
 
   app.set('views',path.join(__dirname,'views'))
@@ -30,6 +30,7 @@ module.exports = function({userRouter,variusRouter}){
   
   app.use(express.static(path.join(__dirname,'public')))
 
+  app.use('/feedbacks',feedbackRouter)
   app.use('/account',userRouter)
   app.use('/',variusRouter)
   
