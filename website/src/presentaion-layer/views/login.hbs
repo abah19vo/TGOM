@@ -6,7 +6,7 @@
     <div class="login_logo">
         <span style="color:#FFF">LOGIN</span>
     </div>
-    <form action="" method="POST" name="login">
+    <form action="/account/sign-in" method="POST" name="login">
         {{#if errors.length}}
             {{#each errors}}
                 <p class="login_error_msg">{{this}}</p>
