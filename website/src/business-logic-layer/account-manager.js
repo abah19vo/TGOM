@@ -50,11 +50,10 @@ module.exports= function({accountRepository}){
                 callback(repositoryErrors)
             }else{
                 const errors = accountValidator.checkIfRealUser(repositoryAccount,insertedAccount)
-                console.log("maniger------>"+errors)
                 if(errors.length > 0){
-                    callback(errors)
+                    callback(errors,null)
                 }else{
-                    callback([])
+                    callback([],repositoryAccount.id)
                 }
             }
         })

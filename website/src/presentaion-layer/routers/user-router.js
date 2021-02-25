@@ -64,7 +64,7 @@ module.exports = function({accountManager}){
 			password: request.body.password,
 		}      
 		
-		accountManager.login(insertedAccount,function(errors){
+		accountManager.login(insertedAccount,function(errors,id){
 			const errorTranslations = {
 				usernameTooShort: "The username needs to be at least 3 characters.",
 				usernameTooLong: "The username is too long.",
@@ -85,8 +85,8 @@ module.exports = function({accountManager}){
 
 			}else{
 				request.session.isLoggedIn = true
+				request.session.userId = id
 				response.redirect('/')
-			
 			}
 			
 		})

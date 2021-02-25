@@ -3,21 +3,21 @@ const GAME_NAME_MIN_LENGTH = 4
 const REVIEW_MIN_LENGTH = 3
 const REVIEW_MAX_LENGTH = 260
 
-exports.getFeedbackValidationErrors = function(title, game, comment){
+exports.getFeedbackValidationErrors = function(newFeedback){
 	
 	const errors = []
 	
-	if(title.length < TITLE_MIN_LENGTH){
+	if(newFeedback.title.length < TITLE_MIN_LENGTH){
 		errors.push("titleTooShort")
 	}
-	if(game.length < GAME_NAME_MIN_LENGTH){
+	if(newFeedback.game.length < GAME_NAME_MIN_LENGTH){
 		errors.push("gameTooShort")
 	}
-	if(comment.length < REVIEW_MIN_LENGTH){
-		errors.push("commentTooShort")
+	if(newFeedback.content.length < REVIEW_MIN_LENGTH){
+		errors.push("contentTooShort")
     }
-    if(comment.length > REVIEW_MAX_LENGTH){
-		errors.push("commentTooLong")
+    if(newFeedback.content.length > REVIEW_MAX_LENGTH){
+		errors.push("contentTooLong")
 	}
 	
 	return errors

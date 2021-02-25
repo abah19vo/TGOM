@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS feedBack(
     userId INT NOT NULL,
     title VARCHAR(50),
     content VARCHAR(400),
+    game varchar(50),
     PRIMARY KEY (id),
     FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE
 );

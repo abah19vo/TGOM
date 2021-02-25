@@ -1,28 +1,28 @@
 const feedBackValidator = require('./feedBack-validation')
 
-module.exports = function({feedBackRepository}){
+module.exports = function({feedbackRepository}){
 
     const exports = {}
 
-    exports.getAllFeedback = function(callback){
-        feedBackRepository.getAllFeedback(callback)
+    exports.getAllFeedbacks = function(callback){
+        feedbackRepository.getAllFeedbacks(callback)
     }
 
-    exports.createFeedBack = function(newFeedback, callback){
+    exports.createFeedback = function(newFeedback, callback){
         
         const errors = feedBackValidator.getFeedbackValidationErrors(newFeedback, callback)
-
         if(errors.length > 0){
-            callback(errors, null)
+            callback(errors,null)
             return
         }
     
-        if (isloggedin)
-        feedBackRepository.createFeedBack(newFeedback, callback)
+        feedbackRepository.createFeedBack(newFeedback, callback)
     }
 
     exports.getFeedbackById = function(id, callback){
         feedBackRepository.getFeedbackById(id, callback)
     }
+
+    return exports
 
 }
