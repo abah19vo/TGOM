@@ -13,7 +13,7 @@ module.exports = function(){
     
     exports.createFeedBack= function(newFeedback,callback){
         const query = "INSERT INTO feedBack(title,content,game,userId) VALUES(?,?,?,?)"
-        const values = [newFeedback.title,newFeedback.game,newFeedback.content,newFeedback.userId]
+        const values = [newFeedback.title,newFeedback.content,newFeedback.game,newFeedback.userId]
 
         connection.query(query,values,function(error){
             if(error){                
@@ -25,23 +25,21 @@ module.exports = function(){
     }
 
     exports.getFeedbackById = function(id,callback){
-        const query = "SELECT * FROM feedBack AS F WHERE id= ? JOIN user AS U ON F.userId = U.id"
+        const query = " SELECT F.id, F.title, F.content, F.game, U.username FROM feedBack AS F JOIN user AS U ON F.userId = U.id WHERE F.id = ? "
         const values =[id]
         connection.query(query,values,function(error, feedback){
-
             if(error){
                 callback(['internalError'],null)
             }else{
-                callback([],feedback)
+                callback([],feedback[0])
             }
         
         })
     }
 
 
-
     exports.getAllFeedbacks = function(callback){
-        const query = "SELECT * FROM feedBack AS F JOIN user AS U ON F.userId = U.id"
+        const query = "SELECT F.id, F.title, F.game FROM feedBack AS F "
         connection.query(query,function(error, feedbacks){
             if(error){
                 callback(['internalError'],null)

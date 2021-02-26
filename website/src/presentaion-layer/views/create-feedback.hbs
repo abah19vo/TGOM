@@ -12,7 +12,7 @@
 				<p class="login_error_msg">{{this}}</p>
 			{{/each}}
 		{{/if}}
-		<form action="" method="POST">
+		<form action="/feedbacks/create" method="POST">
 			<input type="hidden" name="_csrf" value="{{csrfToken}}">
 			<div>
 				Title: <input type="name" name="title" value="{{feedback.title}}">

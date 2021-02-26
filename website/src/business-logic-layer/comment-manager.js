@@ -1,6 +1,9 @@
 const commentValidator = require('./comment-validation')
 
 module.exports= function({commentRepository}){
+
+    const exports = {}
+
     exports.createComment = function(newComment, callback){
 
         const errors = commentValidator.getCommentValidationErrors(newComment)
@@ -16,4 +19,5 @@ module.exports= function({commentRepository}){
         commentRepository.getCommentsByFeedbackId(feedbackId,callback)
     }
 
+    return exports
 }

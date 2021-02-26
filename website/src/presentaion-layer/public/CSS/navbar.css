@@ -60,16 +60,16 @@ a{
 .logout-button{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     margin-top: 5%;
     height: 50%;
     margin-left: 190%;
     font-family: 'Electrolize', sans-serif;
     font-size: xx-large;
-    border-style: none;
     font-weight: 900;
 }
 .logout-button:hover{
-    background-color: rgb(216, 13, 13);
+    background-color: rgb(210, 140, 1);
     color: white;
     font-family: 'Electrolize', sans-serif;
 }
@@ -84,14 +84,6 @@ a{
 }
 .staff_header{
     color: red;
-}
-.feedbacks_top{
-    margin-left: 2%;
-    font-family: 'Electrolize', sans-serif;
-    font-size: xx-large;
-    color: red;
-    font-weight: 900;
-    font-size: 45px;
 }
 .displayed_list{
     margin-left: 2%;
@@ -114,7 +106,7 @@ a{
     font-size: 25px;
 }
 .id_name:hover{
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(210, 140, 1);;
 }
 #comment_table{
     margin-top: 5%;
@@ -129,33 +121,13 @@ a{
 .comment_header{
     color: red;
 }
-.update_btn{
-    width: 5%;
-    color: red;
-}
-.delete_btn{
-    margin-top: 2%;
-    width: 20%;
-    background-color: red;
-    color: #fff;
-}
 .comment_area{
     margin-top: 2%;
-    max-width: 80%;
-    background-color: #000000;
-    border: 1px solid rgb(255, 0, 0);
-}
-.game_bubble{
-    margin-top: 2%;
-    max-width: 40%;
-    background-color: #000000;
-    border: 1px solid rgb(255, 0, 0);
-}
-.comment_bubble{
-    margin-top: 2%;
-    max-width: 40%;
-    background-color: #000000;
-    border: 1px solid rgb(255, 0, 0);
+    margin-left: 5%;
+    max-width: 47%;
+    border-bottom-left-radius: 20px;
+    background-color: rgb(25, 25, 25);
+    border: 1px solid rgb(210, 140, 1);
 }
 .form_error{
     margin-top: 20%;
@@ -167,9 +139,32 @@ a{
 }
 .title{
     margin-top: 2%;
+    margin-left: 5%;
+}
+.the_comment{
+    margin-left: 8%;
+    font-size: 20px;
+    font-family: 'Electrolize', sans-serif;
+    color: rgb(210, 140, 1);
+    font-weight: 800;
+    
+}
+.feedbacks_top{
+    margin-left: 2%;
+    font-family: 'Electrolize', sans-serif;
+    font-size: xx-large;
+    color:rgb(210, 140, 1);
+    width: fit-content;
+    font-weight: 900;
+    font-size: 45px;
+}
+.feedback{
+    margin-top: 2%;
+    margin-left: 2%;
     max-width: 50%;
     max-height: 30%;
-    border: 1px solid rgb(255, 0, 0);
+    border-radius: 5px;
+    border: 1px solid rgb(210, 140, 1);
     background-color: #000000;
 }
 .creat{
@@ -178,27 +173,14 @@ a{
     font-size: 45px;
     font-family: 'Electrolize', sans-serif;
     font-weight: 800;
-    color: rgb(255, 255, 255);
+    background-color:rgb(210, 140, 1);
+    width: fit-content;
+    border-radius: 10px;
     margin-left: 2%;
     margin-top: 5%;
 }
-.creat_staff{
-    text-decoration: none;
-    list-style: none;
-    font-size: 45px;
-    font-family: 'Electrolize', sans-serif;
-    font-weight: 800;
-    color: rgb(255, 255, 255);
-    margin-left: 2%;
-
-}
-.update{
-    text-decoration: none;
-    list-style: none;
-    font-size: 45px;
-    font-family: 'Electrolize', sans-serif;
-    font-weight: 800;
-    color: rgb(255, 255, 255);
+.creat:hover{
+    transform: scale(1.15);
 }
 .no-content{
     font-size: 30px;    
@@ -207,16 +189,18 @@ a{
     margin-left: 2%;
     color: rgb(255, 255, 255);
 }
-#submit_update{
-    margin-top: 1%;
-    width: 5%;
-}
-.submit_update_btn{
-    width: 100%;
-    text-align: center;
-    background-color: red;
-    color: #ffffff;
 
+.submit_comment_btn{
+    width: 20%;
+    border-radius: 10px;
+    margin-left: 75%;
+    text-align: center;
+    background-color:rgb(255, 255, 255);
+    color: #000000;
+    margin-bottom: 2%;
+}
+.submit_comment_btn:hover{
+    background-color:rgb(210, 140, 1);
 }
 .staff_capital{
     text-transform: capitalize;
@@ -227,8 +211,29 @@ a{
     color: red;
     font-size: 20px;
 }
-#update_textarea{
+#comment_textarea{
     margin-top: 2%;
+    margin-left: 2%;
+    background-color: rgb(62, 62, 62);
+    max-width: 50%;
+    border-bottom-left-radius: 30px;
+    border: 1px solid rgb(210, 140, 1);
+    background-color: #000000;
+}
+.comment_textarea{
+    width: 90%;  
+    margin-left: 5%;
+    resize: none;
+    border-radius: 10px;
+    border: 1px solid rgb(210, 140, 1);
+}
+.username{
+    font-size: 20px;
+    margin-left: 2% ;
+    margin-top: 2%;
+    margin-bottom: -1%;
+    font-family: 'Electrolize', sans-serif;
+    color: rgb(176, 176, 176);
 }
 #user_section{
     text-transform: uppercase;

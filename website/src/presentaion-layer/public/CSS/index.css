@@ -19,7 +19,7 @@ h1{
     padding-top: 140px;
 }
 #firstText{
-    color: rgb(255, 0, 0);
+    color: rgb(210, 140, 1);
     font-family: 'Electrolize', sans-serif;
     font-size: 30px;
     font-weight: 700; 
@@ -61,7 +61,7 @@ h1{
 }
 #flight{
     padding-top: 12%;
-    color: rgb(255, 0, 0);
+    color:rgb(210, 140, 1);
     font-family: 'Electrolize', sans-serif;
     font-size: 30px;
     font-weight: 600;
@@ -94,7 +94,7 @@ h1{
 }
 #sim a{
     font-size: 100%;
-    color: rgb(255, 0, 0);
+    color: rgb(210, 140, 1);
     
 }
 #marvel{
@@ -121,5 +121,5 @@ h1{
 }
 #marvelWiki a{
     font-size: 100%;
-    color: rgb(255, 0, 0);
+    color: rgb(210, 140, 1);
 }

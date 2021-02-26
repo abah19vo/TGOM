@@ -3,33 +3,53 @@
 <div id="comment_table">
 	{{#if feedback}}
 		<div class="content-section">
-			<h1 class="comment_header">{{feedback.title}}</h1>
 			{{> errors errors}}
 			{{#if dbErrorOccurred}}
 				<p class="admin_top">Can't display the page now, try again later.</p>
 			{{/if}}
 
-			<p>By:</p>
-			<p>{{feedback.name}}</p>
-			<p>TITLE:</p>
-			<p class="title">{{feedback.title}}</p>
-			<p>COMMENT:</p>
-			<p class="comment_area">{{feedback.comment}}</p>
+			<p class="username">Posted By: {{feedback.username}}</p>
+			<div class="feedback">					
+				<p class="title">TITLE: {{feedback.title}}</p>
+				<p class="title">GAME: {{feedback.game}}</p>
+				<p class="title">COMMENT: {{feedback.content}}</p>
+			</div>
 
 		</div>
+
+		
 		<div id= "section-space">
 			{{#if isLoggedIn}}
-        		<p class="creat"><a href="/feedbacks/create/{{user.id}}">Post A Comment</a></p>
+        		<div id="user_section">
+					{{#if errors.length}}
+						{{#each errors}}
+							<p class="login_error_msg">{{this}}</p>
+						{{/each}}
+					{{/if}}
+					<p class="username">Comment As {{feedback.username}}</p>
+					<form action="" method="POST">
+						<div id="comment_textarea">
+							<input type="hidden" name="_csrf" value="{{csrfToken}}">
+							<div id="textarea">
+								<p class="title">Comment:</p>
+									<textarea class="comment_textarea" type="text" name="content" rows="6" cols="60" >{{comment.content}} </textarea>
+									<input class="submit_comment_btn" type="submit" name="create-btn" value="POST">
+							</div>
+						</div>
+					</form>
+				</div>
     		{{/if}}
 		</div>
 		<div class="content-section">
 			{{#if comments.length}}
 				{{#each comments}}
-					<p>Name: {{comments.name}}</p>
-					<p>Comment: {{comments.content}}</p>
+				<div class="comment_area">
+					<p class="title">{{username}}</p>
+					<p class="the_comment">{{content}}</p>
+				</div>
 				{{/each}}
 			{{else}}
-				<p>No Comments with that post exists</p>
+				<p class="title">!!! Theres No Comments To Be Found !!!</p>
 			{{/if}}
 		</div>
 			

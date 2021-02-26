@@ -54,7 +54,7 @@
   
 }
 .btn:hover{
-  background-color: rgb(216, 13, 13);
+  background-color: rgb(210, 140, 1);
   font-family: 'Electrolize', sans-serif;
 }
 
@@ -69,6 +69,6 @@
   font-weight: 300;
 }
 .register:hover{
-  background-color: rgb(216, 13, 13);
+  background-color: rgb(210, 140, 1);
   font-family: 'Electrolize', sans-serif;
 }

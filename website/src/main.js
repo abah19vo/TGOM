@@ -15,6 +15,7 @@ container.register({
     variusRouter: awilix.asFunction(require('./presentaion-layer/routers/varius-router')),
     userRouter: awilix.asFunction(require('./presentaion-layer/routers/user-router')),
     feedbackRouter: awilix.asFunction(require('./presentaion-layer/routers/feedback-router')),
+    commentRouter: awilix.asFunction(require('./presentaion-layer/routers/comment-router')),
     app: awilix.asFunction(require('./presentaion-layer/app')),
 })
 //const app = express()

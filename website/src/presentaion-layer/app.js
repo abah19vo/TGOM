@@ -13,7 +13,7 @@ const Client = redis.createClient(6379, 'redis');
 
 //const ADMIN_USERNAME = "raswer"
 
-module.exports = function({userRouter,variusRouter,feedbackRouter}){
+module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter}){
   const app = express()
 
 
@@ -46,7 +46,7 @@ module.exports = function({userRouter,variusRouter,feedbackRouter}){
     next()
   })
 
-  
+  app.use('/comment',commentRouter)
   app.use('/feedbacks',feedbackRouter)
   app.use('/account',userRouter)
   app.use('/',variusRouter)

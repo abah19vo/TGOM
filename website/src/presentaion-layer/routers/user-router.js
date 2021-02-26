@@ -9,7 +9,6 @@ module.exports = function({accountManager}){
 
 
     router.get("/sign-up", function(request, response){
-		console.log("hello word")
 		response.render('register.hbs')
 	})
 

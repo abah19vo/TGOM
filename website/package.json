@@ -3,7 +3,7 @@
     ,"main": "index.js"
     ,"keywords": []
     ,"scripts": {
-        "start": "nodemon --inspect=0.0.0.0 src/main.js -L"
+        "start": "nodemon --inspect=0.0.0.0 src/main.js"
     }
     , "dependencies": {
         "express": "^4.17.1"

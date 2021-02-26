@@ -14,14 +14,8 @@
 		{{/if}}
 		<form action="" method="POST">
 			<input type="hidden" name="_csrf" value="{{csrfToken}}">
-			<div>
-				Title: <input type="name" name="title" value="{{feedback.title}}">
-			</div>
-			<div>
-				Game: <input type="name" name="game" value="{{feedback.game}}">
-			</div>
 			<div id="update_textarea">
-				content: <textarea class="update_textarea" type="text" name="content" rows="4" cols="60" >{{feedback.content}} </textarea>
+				Comment: <textarea class="update_textarea" type="text" name="content" rows="4" cols="60" >{{comment.content}} </textarea>
 			</div>
 			<div id="submit_update">
 				<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">

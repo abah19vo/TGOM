@@ -20,7 +20,7 @@ module.exports = function({feedbackRepository}){
     }
 
     exports.getFeedbackById = function(id, callback){
-        feedBackRepository.getFeedbackById(id, callback)
+        feedbackRepository.getFeedbackById(id, callback)
     }
 
     return exports
