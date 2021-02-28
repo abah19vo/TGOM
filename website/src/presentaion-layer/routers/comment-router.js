@@ -19,26 +19,27 @@ module.exports = function({commentManager}){
                 }
                 if(errors.length > 0){
                     const errorMessages = errors.map(e => errorTranslations[e])
-                    console.log(errorMessages)
                     const model = {
                         errors: errorMessages,
                         content: newComment.content,
                     }
                     res.render('create-comment.hbs',model)
                 }else{
-                    console.log("success")
                     res.redirect('/feedbacks/'+ req.params.id)
                 }
             })
-            
         }else{
             res.redirect('/')
         }
     })
 
     router.get('/:id/create', (req, res) => {
+        
         if(req.session.isLoggedIn){
-            res.render('create-comment.hbs')
+            const model ={
+                id: req.params.id
+            }
+            res.render('create-comment.hbs',model)
         }else{
             res.redirect('/')
         }

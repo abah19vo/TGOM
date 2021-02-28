@@ -5,20 +5,25 @@
 
 <title>CREATE A COMMENT</title>
 
-<div id="user_section">
-	<h1>CREATE A COMMENT</h1>
+{{#if isLoggedIn}}
+	<div id="user_section">
 		{{#if errors.length}}
 			{{#each errors}}
 				<p class="login_error_msg">{{this}}</p>
 			{{/each}}
 		{{/if}}
-		<form action="" method="POST">
-			<input type="hidden" name="_csrf" value="{{csrfToken}}">
-			<div id="update_textarea">
-				Comment: <textarea class="update_textarea" type="text" name="content" rows="4" cols="60" >{{comment.content}} </textarea>
-			</div>
-			<div id="submit_update">
-				<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">
+		<p class="username">Comment As {{feedback.username}}</p>
+		<form action="/comment/{{id}}/create" method="POST">
+			<div id="comment_textarea">
+				<input type="hidden" name="_csrf" value="{{csrfToken}}">
+				<div id="textarea">
+					<p class="title">Comment:</p>
+						<textarea class="comment_textarea" type="text" name="content" rows="6" cols="60" >{{comment.content}} </textarea>
+						<input class="submit_comment_btn" type="submit" name="create-btn" value="POST">
+				</div>
 			</div>
 		</form>
-</div>
+	</div>
+{{else}}
+	<p class="login_error_msg">You need to be logged in to post a comment.</p>
+{{/if}}

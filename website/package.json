@@ -3,7 +3,7 @@
     ,"main": "index.js"
     ,"keywords": []
     ,"scripts": {
-        "start": "nodemon --inspect=0.0.0.0 src/main.js"
+        "start": "nodemon --inspect=0.0.0.0 src/main.js -L"
     }
     , "dependencies": {
         "express": "^4.17.1"
@@ -13,7 +13,6 @@
         ,"csurf": "^1.11.0"
         ,"express-session": "^1.17.1"
         ,"express-handlebars": "^5.2.0"
-        ,"cookie-parser": "^1.4.5"
         ,"nodemon": "^2.0.7"
         ,"mysql2": "^2.2.5"
         ,"path": "^0.12.7"

@@ -5,10 +5,10 @@ exports.getCommentValidationErrors = function(comment){
 	
 	const errors = []
 	
-	if(comment.length < COMMENT_MIN_LENGTH){
+	if(comment.content.length < COMMENT_MIN_LENGTH){
 		errors.push("commentTooShort")
     }
-    if(comment.length > COMMENT_MAX_LENGTH){
+    if(comment.content.length > COMMENT_MAX_LENGTH){
 		errors.push("commentTooLong")
 	}
 	return errors

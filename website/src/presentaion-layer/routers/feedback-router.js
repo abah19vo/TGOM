@@ -86,7 +86,6 @@ module.exports = function({feedbackManager, commentManager}){
 
             if(errors.length > 0 ){
                 const errorMessages = errors.map(e => errorTranslations[e])
-                console.log(errors+"haahhahaha")
 
                 const model = {
                     errorMessages: errorMessages
@@ -100,7 +99,6 @@ module.exports = function({feedbackManager, commentManager}){
                     }
                     if(errors.length > 0 ){
                         const errorMessages = errors.map(e => errorTranslations[e])
-                        console.log(errors+"haahhahaha")
         
                         const model = {
                             errorMessages: errorMessages

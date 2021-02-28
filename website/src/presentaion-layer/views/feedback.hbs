@@ -27,7 +27,7 @@
 						{{/each}}
 					{{/if}}
 					<p class="username">Comment As {{feedback.username}}</p>
-					<form action="" method="POST">
+					<form action="/comment/{{feedback.id}}/create" method="POST">
 						<div id="comment_textarea">
 							<input type="hidden" name="_csrf" value="{{csrfToken}}">
 							<div id="textarea">

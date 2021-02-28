@@ -17,6 +17,8 @@ module.exports = function(){
         const query = 'INSERT INTO comment(feedBackId,userId,content) VALUES(?,?,?)'
         connection.query(query,values,function(error){
             if(error){
+            console.log("🚀 ~ file: comment_table.js ~ line 20 ~ connection.query ~ error", error)
+                
                 callback(['internalError'])
             }else{
                 callback([])
