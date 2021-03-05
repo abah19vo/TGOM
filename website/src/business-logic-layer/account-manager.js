@@ -44,8 +44,7 @@ module.exports= function({accountRepository}){
         }
 
         accountRepository.getUserByUserName(insertedAccount.username, function(repositoryErrors,repositoryAccount){
-            console.log(repositoryErrors)
-            console.log(repositoryAccount)
+          
             if(repositoryErrors.length > 0){
                 callback(repositoryErrors)
             }else{

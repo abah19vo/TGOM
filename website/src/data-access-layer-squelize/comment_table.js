@@ -18,17 +18,22 @@ const Comment = sequelize.define('comment',{
     },
     foreignKeyConstraint: true
 })
-Comment.belongsTo('comment')
-Comment.belongsTo('feedback')
+/*Comment.belongsTo('comment')
+Comment.belongsTo('feedback')*/
+module.exports = function(){
+    const exports = {}
+    
+    exports.createComment = function(newComment,callback){
+        Comment.create(newComment).then(callback([])).catch(e=>{           
+            callback(['internalError'])
+        })
+    }
 
-exports.createComment = function(newComment,callback){
-    Comment.create(newComment).then(callback([])).catch(e=>{           
-        callback(['internalError'])
-    })
-}
+    exports.getCommentsByFeedbackId = function(feedbackId,userId,callback){
+        Comment.findAll({where : {id},raw:true}).then(feedback =>callback([],feedback)).catch(e=>{
+            callback(['internalError'])
+        })
+    }
 
-exports.getCommentsByFeedbackId = function(feedbackId,userId,callback){
-    Comment.findAll({where : {id},raw:true}).then(feedback =>callback([],feedback)).catch(e=>{
-        callback(['internalError'])
-    })
+    return exports
 }

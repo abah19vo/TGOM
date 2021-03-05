@@ -17,8 +17,8 @@ const Feedback = sequelize.define('feedback',{
     foreignKeyConstraint: true
 })
 
-Feedback.belongsTo('user')
-Feedback.hasMany('comment')
+/*Feedback.belongsTo('user')
+Feedback.hasMany('comment')*/
 
 module.exports =function(){
    
