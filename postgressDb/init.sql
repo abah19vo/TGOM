@@ -3,9 +3,9 @@ DROP TABLE IF EXISTS feedBack;
 DROP TABLE IF EXISTS comment;
 CREATE TABLE users(
   id SERIAL not null primary key,
-  username  VARCHAR(50) UNIQUE NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL
+  username  TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  password TEXT NOT NULL
 );
 
 CREATE TABLE feedBack(

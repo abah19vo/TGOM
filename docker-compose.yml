@@ -11,7 +11,7 @@ services:
     depends_on: 
       - db
       - redis
-      - pdb
+      - postgressDb
     environment:
       DB_HOST: db
       REDIS_HOST: redis
@@ -35,7 +35,7 @@ services:
     networks:
       - webnet
 
-  pdb:
+  postgressDb:
     build: ./postgressDb
     image: postgres
     restart: always
