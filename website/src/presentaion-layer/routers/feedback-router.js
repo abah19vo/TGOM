@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 module.exports = function({feedbackManager, commentManager}){
     const router = express.Router()
 
-   router.post('/', function(req, res){
+    router.post('/', function(req, res){
         const title = req.body.title
         const game = req.body.game
         const content = req.body.content
@@ -51,7 +51,7 @@ module.exports = function({feedbackManager, commentManager}){
                 const model = {
                     feedbacks: feedbacks
                 }
-
+                //res.json(feedbacks)
                 res.render('feedbacks.hbs',model) 
             }
         })
@@ -59,11 +59,20 @@ module.exports = function({feedbackManager, commentManager}){
     
 
     router.get('/create', (req, res) => {
-        if(req.session.isLoggedIn){
-            res.render('create-feedback.hbs')
-        }else{
-            res.redirect('/')
-        }
+        feedbackManager.getCreateFeedback(req.session ,function(errors){
+            const errorTranslations = {
+                notLoggedIn: "Youre Not LoggedIn"
+            }
+            if(errors.length > 0){
+                const errorMessages = errors.map(e => errorTranslations[e])
+                const model = {
+                    errors: errorMessages,
+                }   
+                res.render('create-feedback.hbs', model)
+            }
+            else
+               res.render('create-feedback.hbs')
+        })        
     })
 
     router.post('/create', (req, res) => {
@@ -71,36 +80,35 @@ module.exports = function({feedbackManager, commentManager}){
             title: req.body.title,
             content: req.body.content,
             game:req.body.game,
-            userId: req.session.userId
+            userId: req.session.userId,
+            session: req.session
         }
-        if(req.session.isLoggedIn){
-            feedbackManager.createFeedback(newFeedback, function(errors, feedbackId){
-                const errorTranslations = {
-                    titleTooShort: "the title is needs to be at least 4 characters",
-                    gameTooShort: "the game name is supposed to be at least 4 characters",
-                    internalError: "Cant query out the request now.",
-                    contentTooShort:"the content is supposed to be at least 3 characters",
-                    contentTooLong: "the content is supposed to be at least under 260 characters",
+        
+        feedbackManager.createFeedback(newFeedback, function(errors, feedbackId){
+            const errorTranslations = {
+                titleTooShort: "the title is needs to be at least 4 characters",
+                gameTooShort: "the game name is supposed to be at least 4 characters",
+                internalError: "Cant query out the request now.",
+                contentTooShort:"the content is supposed to be at least 3 characters",
+                contentTooLong: "the content is supposed to be at least under 260 characters",
+                notLoggedIn: "Youre Not LoggedIn"
+            }
+
+            if(errors.length > 0){
+                const errorMessages = errors.map(e => errorTranslations[e])
+                const model = {
+                    errors: errorMessages,
+                    title: newFeedback.title,
+                    content: newFeedback.content,
+                    game: newFeedback.game
                 }
-    
-                if(errors.length > 0){
-                    const errorMessages = errors.map(e => errorTranslations[e])
-                    const model = {
-                        errors: errorMessages,
-                        title: newFeedback.title,
-                        content: newFeedback.content,
-                        game: newFeedback.game
-                    }
-                    res.render('create-feedback.hbs',model)
-    
-                }else{
-                    res.redirect('/feedbacks')
-                }
-            })
-            
-        }else{
-            res.redirect('/')
-        }
+                res.render('create-feedback.hbs',model)
+
+            }else{
+                res.redirect('/feedbacks')
+            }
+        })
+
     })
 
     router.get('/:id', (req, res) => {
@@ -138,7 +146,7 @@ module.exports = function({feedbackManager, commentManager}){
                             feedback: feedback,
                             comments: comments
                         }
-                        console.log(comments)
+                        //res.json(model)
                         res.render('feedback.hbs', model)
                     }
                 })

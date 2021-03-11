@@ -6,12 +6,14 @@
 <title>CREATE A COMMENT</title>
 
 <div id="user_section">
-	<h1>CREATE A COMMENT</h1>
+	
 		{{#if errors.length}}
 			{{#each errors}}
 				<p class="login_error_msg">{{this}}</p>
 			{{/each}}
 		{{/if}}
+		{{#if isLoggedIn}}
+		<h1>CREATE A COMMENT</h1>
 		<form action="/feedbacks/create" method="POST">
 			<input type="hidden" name="_csrf" value="{{csrfToken}}">
 			<div>
@@ -26,5 +28,6 @@
 			<div id="submit_update">
 				<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">
 			</div>
+		{{/if}}
 		</form>
 </div>

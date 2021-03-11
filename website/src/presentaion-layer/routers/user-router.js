@@ -69,7 +69,7 @@ module.exports = function({accountManager}){
 				usernameTooLong: "The username is too long.",
 				internalError: "Cant query out the request now.",
 				invalidUsername:"the username is wrong or does not exist",
-				invalidUser: "Wrong password please try again",
+				invalidPassword: "Wrong password please try again",
 
 			}
 

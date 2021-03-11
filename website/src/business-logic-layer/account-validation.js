@@ -48,7 +48,7 @@ exports.checkIfRealUser = function(repositoryAccount,insertedAccount){
 
     const valid = bcrypt.compareSync(insertedAccount.password, repositoryAccount.password)
     if(!valid){
-        errors.push("invalidUser")
+        errors.push("invalidPassword")
     }
     console.log("validator------->"+errors)
     return errors

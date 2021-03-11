@@ -46,7 +46,7 @@ module.exports =function(){
 
     exports.getAllFeedbacks = function(callback){
         const query = {
-            text: "SELECT F.id, F.title, F.game FROM feedBack AS F ",
+            text: "SELECT F.id, F.title, F.game, F.content FROM feedBack AS F ",
             rowMode: 'struct'
         }
         client.query(query,function(error, feedbacks){
