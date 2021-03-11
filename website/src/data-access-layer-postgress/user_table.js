@@ -67,7 +67,7 @@ module.exports = function(){
         client.query(query,values,function(error,user){
             if(error){
                 callback(['internalError'],null)
-            }else if(user.rows[0].length==0 || user.rows[0] == undefined){
+            }else if(user.rows[0] == undefined){
                 callback(['invalidUsername'],null)
             }else{
                 callback([],user.rows[0])

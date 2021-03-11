@@ -3,7 +3,7 @@
     ,"main": "index.js"
     ,"keywords": []
     ,"scripts": {
-        "start": "nodemon --inspect=0.0.0.0 src/main.js -L"
+        "start": "nodemon --inspect=0.0.0.0 src/main.js "
     }
     , "dependencies": {
         "express": "^4.17.1"
@@ -22,6 +22,7 @@
         ,"redis": "^3.0.2"
         ,"connect-redis": "^5.1.0"
         ,"pg":"8.5.1 "
+        ,"jsonwebtoken": "8.5.1"
     }
 }
 

@@ -25,7 +25,12 @@ module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter
     layoutsDir: path.join(__dirname,'layouts')
   }))
 
-	app.use(express.urlencoded())
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({
+    extended: false
+  }))
+
+  
   app.use(cookieParser())
  
   app.use(express.static(path.join(__dirname,'public')))
