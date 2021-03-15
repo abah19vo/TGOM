@@ -1,168 +1,155 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
+const secret = 'its me mario!!'
 
-module.exports = function({feedbackManager, commentManager}){
+
+module.exports = function({feedbackManager}){
     const router = express.Router()
 
-    router.post('/', function(req, res){
-        const title = req.body.title
-        const game = req.body.game
-        const content = req.body.content
-
-        const feedback = {
-			id,
-			title,
-			game,
-            content
-		}
-		
-		feedbacks.push(feedback)
-
-        res.setHeader("location","/")
-        res.status(201).json(feedback)
-    })
+   
     
     router.get('/', (req, res) => {
-
         feedbackManager.getAllFeedbacks(function(errors, feedbacks){
-            /*const authorizationHeader = request.header("Authorization") // "Bearer XXX"
-            const accessToken = authorizationHeader.substring("Bearer ".length) // "XXX"
-            jwt.verify(accessToken, "sdfsdfsdfsdfsdfsdf", function(error, payload){
-            
-                if(error){
-                    response.status(401).end()
-                }else{ 
-                    res.status(200).json(feedbacks)
-                }
-            })*/
-                    
-                
-           
             const errorTranslations = {
                 internalError: "Cant query out the request now.",
             }
-            
             if(errors.length > 0 ){
                 const errorMessages = errors.map(e => errorTranslations[e])
-                const model = {
-                    errorMessages: errorMessages
-                }
-                res.render('feedback.hbs', model)
-                
+                response.status(400).json(errorMessages)
             }else{
-
-                const model = {
-                    feedbacks: feedbacks
-                }
-                res.json(feedbacks)
-                //res.render('feedbacks.hbs',model) 
+                res.status(200).json(feedbacks)
             }
         })
-    })
-    
-
-    router.get('/create', (req, res) => {
-        feedbackManager.getCreateFeedback(req.session ,function(errors){
-            const errorTranslations = {
-                notLoggedIn: "Youre Not LoggedIn"
-            }
-            if(errors.length > 0){
-                const errorMessages = errors.map(e => errorTranslations[e])
-                const model = {
-                    errors: errorMessages,
-                }   
-                res.render('create-feedback.hbs', model)
-            }
-            else
-               res.render('create-feedback.hbs')
-        })        
     })
 
     router.post('/create', (req, res) => {
-        const newFeedback ={
-            title: req.body.title,
-            content: req.body.content,
-            game:req.body.game,
-            userId: req.session.userId,
-            session: req.session
-        }
-        
-        feedbackManager.createFeedback(newFeedback, function(errors, feedbackId){
-            const errorTranslations = {
-                titleTooShort: "the title is needs to be at least 4 characters",
-                gameTooShort: "the game name is supposed to be at least 4 characters",
-                internalError: "Cant query out the request now.",
-                contentTooShort:"the content is supposed to be at least 3 characters",
-                contentTooLong: "the content is supposed to be at least under 260 characters",
-                notLoggedIn: "Youre Not LoggedIn"
-            }
-
-            if(errors.length > 0){
-                const errorMessages = errors.map(e => errorTranslations[e])
-                const model = {
-                    errors: errorMessages,
-                    title: newFeedback.title,
-                    content: newFeedback.content,
-                    game: newFeedback.game
-                }
-                res.render('create-feedback.hbs',model)
-
+        const authorizationHeader = req.header("Authorization") 
+        const accessToken = authorizationHeader.substring("Bearer ".length) 
+        jwt.verify(accessToken,secret, function(error, payload){
+            
+            
+            if(error){
+                res.status(400).json(["Cant query out the request now."])
             }else{
-                res.redirect('/feedbacks')
+                const newFeedback ={
+                    title: req.body.title,
+                    content: req.body.content,
+                    game:req.body.game,
+                    userId: payload.userId,
+                    isLoggedIn: payload.isLoggedIn
+                }
+                feedbackManager.createFeedback(newFeedback, function(errors){
+                    const errorTranslations = {
+                        titleTooShort: "the title is needs to be at least 4 characters",
+                        gameTooShort: "the game name is supposed to be at least 4 characters",
+                        internalError: "Cant query out the request now.",
+                        contentTooShort:"the content is supposed to be at least 3 characters",
+                        contentTooLong: "the content is supposed to be at least under 260 characters",
+                        notLoggedIn: "you're Not LoggedIn"
+                    }
+
+                    if(errors.length > 0){
+                        const errorMessages = errors.map(e => errorTranslations[e])
+                        res.status(400).json(errorMessages)
+
+                    }else{
+                         res.redirect('/api/feedbacks')
+                    }
+                })
+            }
+        })
+    })
+    
+
+    router.get('/:id', (req, res) => {
+        const id = req.params.id
+        feedbackManager.getFeedbackById(id, function(errors, feedback){
+            const errorTranslations = {
+                internalError: "Cant query out the request now.",
+            }
+            if(errors.length > 0 ){
+                const errorMessages = errors.map(e => errorTranslations[e])
+                res.status(400).json(errorMessages)
+            }else{
+                res.status(200).json(feedback)
             }
         })
 
     })
 
-    router.get('/:id', (req, res) => {
-
-        const id = req.params.id
-
-        feedbackManager.getFeedbackById(id, function(errors, feedback){
-            
-            const errorTranslations = {
-                internalError: "Cant query out the request now.",
-            }
-
-            if(errors.length > 0 ){
-                const errorMessages = errors.map(e => errorTranslations[e])
-
-                const model = {
-                    errorMessages: errorMessages
-                }
-                res.render('feedback.hbs', model)
+    router.delete('/:id', (req, res) => {
+        const authorizationHeader = req.header("Authorization") 
+        const accessToken = authorizationHeader.substring("Bearer ".length) 
+        jwt.verify(accessToken,secret, function(error, payload){
+            if(error){
+                response.status(400).json(["Cant query out the request now."])
             }else{
-
-                commentManager.getCommentsByFeedbackId(id, function(errors, comments){
+                
+                feedback={
+                    id: req.params.id,
+                    isLoggedIn: payload.isLoggedIn,
+                    userId: payload.userId
+                }
+                feedbackManager.deleteFeedbackById(feedback, function(errors){
                     const errorTranslations = {
-                        internalError: "Cant query out the request now."
+                        internalError: "Cant query out the request now.",
+                        wrongUser:"you can not delete this post"
                     }
                     if(errors.length > 0 ){
                         const errorMessages = errors.map(e => errorTranslations[e])
-        
-                        const model = {
-                            errorMessages: errorMessages
-                        }
-                        res.render('feedback.hbs', model)
+                        res.status(400).json(errorMessages)
                     }else{
-                        const model = {
-                            feedback: feedback,
-                            comments: comments
-                        }
-                        //res.json(model)
-                        res.render('feedback.hbs', model)
+                        res.status(204).end()
+                    }
+                }) 
+            }
+            
+            
+        })
+
+        
+
+    })
+
+    router.put('/:id', (req, res) => {
+        const authorizationHeader = req.header("Authorization") 
+        const accessToken = authorizationHeader.substring("Bearer ".length) 
+
+        jwt.verify(accessToken,secret, function(error, payload){
+
+            if(error){
+                res.status(400).json(["Cant query out the request now."])
+            }else{
+                const newFeedback ={
+                    id: req.params.id,
+                    title: req.body.title,
+                    content: req.body.content,
+                    game:req.body.game,
+                    userId: payload.userId,
+                    isLoggedIn: payload.isLoggedIn
+                }
+                feedbackManager.updateFeedbackById(newFeedback, function(errors){
+                    const errorTranslations = {
+                        titleTooShort: "the title is needs to be at least 4 characters",
+                        gameTooShort: "the game name is supposed to be at least 4 characters",
+                        internalError: "Cant query out the request now.",
+                        contentTooShort:"the content is supposed to be at least 3 characters",
+                        contentTooLong: "the content is supposed to be at least under 260 characters",
+                        notLoggedIn: "you're Not LoggedIn"
+                    }
+
+                    if(errors.length > 0){
+                        const errorMessages = errors.map(e => errorTranslations[e])
+                        res.status(400).json(errorMessages)
+
+                    }else{
+                        res.redirect('/api/feedbacks/'+req.params.id)
                     }
                 })
-                
             }
         })
 
     })
-
-
-    
-    
-
 
     return router
 }

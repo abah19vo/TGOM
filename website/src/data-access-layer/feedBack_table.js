@@ -24,6 +24,32 @@ module.exports = function(){
         })
     }
 
+    exports.updateFeedBackById= function(newFeedback,callback){
+        const query = "UPDATE feedBack SET title = ?, content = ?, game= ? WHERE id=?"
+        const values = [newFeedback.title,newFeedback.content,newFeedback.game,newFeedback.id,newFeedback.userId]
+
+        connection.query(query,values,function(error){
+            if(error){                
+                callback(['internalError'])
+            }else{
+                callback([])
+            }
+        })
+    }
+
+    exports.deleteFeedBackById= function(feedback,callback){
+        const query = "DELETE F FROM feedBack AS F WHERE F.id = ? AND F.userId = ?"
+        const values = [feedback.id,feedback.userId]
+
+        connection.query(query,values,function(error){
+            if(error){                
+                callback(['internalError'])
+            }else{
+                callback([])
+            }
+        })
+    }
+
     exports.getFeedbackById = function(id,callback){
         const query = " SELECT F.id, F.title, F.content, F.game, U.username FROM feedBack AS F JOIN user AS U ON F.userId = U.id WHERE F.id = ? "
         const values =[id]

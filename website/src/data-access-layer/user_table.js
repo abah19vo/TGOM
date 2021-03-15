@@ -16,6 +16,7 @@ module.exports = function(){
         console.log("debugger")
         connection.query(query, values, function(error){
             if(error){
+                
                 if(error.sqlMessage.includes('usernameUnique')){
                     callback(['usernameTaken'])
                 }else{

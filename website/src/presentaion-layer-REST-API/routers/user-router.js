@@ -1,16 +1,11 @@
 const express = require('express')
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const jwt = require('jsonwebtoken')
+const secret = 'its me mario!!'
 
 
 module.exports = function({accountManager}){
     const router = express.Router()
 
-
-
-    router.get("/sign-up", function(request, response){
-		response.render('register.hbs')
-	})
 
 	router.post("/sign-up", function(request, response){
 
@@ -18,16 +13,13 @@ module.exports = function({accountManager}){
 			username: request.body.username,
 			password: request.body.password,
 			name: request.body.name,
-			confirmPassword: request.body.repeat_password
+			confirmPassword: request.body.repeat_password,
 		}
-		console.log(account)
-		
-		accountManager.createUser(account, function(errors, id){
-			
+        console.log("🚀 ~ file: user-router.js ~ line 18 ~ router.post ~ account", account)
+		accountManager.createUser(account, function(errors){
 			if(errors.length == 0){
-				response.render('login.hbs')
+				response.status(204).end()
 			}else{
-				
 				const errorTranslations = {
 					usernameTooShort: "The username needs to be at least 3 characters.",
 					usernameTooLong: "The username is too long.",
@@ -37,24 +29,12 @@ module.exports = function({accountManager}){
 					passwordDontMatch: "Passwords Does Not Match",
 				}
 				const errorMessages = errors.map(e => errorTranslations[e])
-				
-				const model = {
-					errors: errorMessages,
-					username: request.body.username,
-					password: request.body.password,
-					name: request.body.name,
-					confirmPassword: request.body.repeat_password
-				}
-				response.render('register.hbs',model)
+				response.status(400).json(errorMessages)
 			}
 			
 		})
 			
 	})
-
-	router.get('/sign-in', (req, res) => {
-        res.render('login.hbs')
-    })
 
 	router.post("/sign-in", function(request, response){
 
@@ -75,17 +55,22 @@ module.exports = function({accountManager}){
 
 			if(errors.length > 0){
 				const errorMessages = errors.map(e => errorTranslations[e])
-				const model = {
-					errors: errorMessages,
-					username: insertedAccount.username,
-					password: insertedAccount.password
-				}
-				response.render('login.hbs',model)
-
+				response.status(400).json(errorMessages)
 			}else{
-				request.session.isLoggedIn = true
-				request.session.userId = id
-				response.redirect('/')
+				const payload = {
+					isLoggedIn: true,
+					userId: id
+				}
+				jwt.sign(payload, secret, function(err, token) {
+					if(err){
+						response.status(400).json(errorTranslations.internalError)
+					}else{
+						response.status(200).json({
+						"access_token": token
+					})
+					}					
+					
+				})
 			}
 			
 		})
@@ -94,8 +79,14 @@ module.exports = function({accountManager}){
     
 
 	router.post('/sign-out', (req, res) =>{
-        req.session.isLoggedIn = false
-        res.redirect('/')
+        const payload = {
+			isLoggedIn: false,
+		}
+		jwt.sign(payload, secret, function(err, token) {					
+			res.status(200).json({
+				"access_token": token
+			})
+		})
     })
 
     return router

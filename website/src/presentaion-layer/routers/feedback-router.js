@@ -3,41 +3,10 @@ const jwt = require('jsonwebtoken')
 
 module.exports = function({feedbackManager, commentManager}){
     const router = express.Router()
-
-    router.post('/', function(req, res){
-        const title = req.body.title
-        const game = req.body.game
-        const content = req.body.content
-
-        const feedback = {
-			id,
-			title,
-			game,
-            content
-		}
-		
-		feedbacks.push(feedback)
-
-        res.setHeader("location","/")
-        res.status(201).json(feedback)
-    })
     
     router.get('/', (req, res) => {
 
         feedbackManager.getAllFeedbacks(function(errors, feedbacks){
-            /*const authorizationHeader = request.header("Authorization") // "Bearer XXX"
-            const accessToken = authorizationHeader.substring("Bearer ".length) // "XXX"
-            jwt.verify(accessToken, "sdfsdfsdfsdfsdfsdf", function(error, payload){
-            
-                if(error){
-                    response.status(401).end()
-                }else{ 
-                    res.status(200).json(feedbacks)
-                }
-            })*/
-                    
-                
-           
             const errorTranslations = {
                 internalError: "Cant query out the request now.",
             }
@@ -54,15 +23,14 @@ module.exports = function({feedbackManager, commentManager}){
                 const model = {
                     feedbacks: feedbacks
                 }
-                res.json(feedbacks)
-                //res.render('feedbacks.hbs',model) 
+                res.render('feedbacks.hbs',model) 
             }
         })
     })
     
 
     router.get('/create', (req, res) => {
-        feedbackManager.getCreateFeedback(req.session ,function(errors){
+        feedbackManager.getCreateFeedback(req.session.isLoggedIn ,function(errors){
             const errorTranslations = {
                 notLoggedIn: "Youre Not LoggedIn"
             }
@@ -84,7 +52,7 @@ module.exports = function({feedbackManager, commentManager}){
             content: req.body.content,
             game:req.body.game,
             userId: req.session.userId,
-            session: req.session
+            isLoggedIn: req.session.isLoggedIn
         }
         
         feedbackManager.createFeedback(newFeedback, function(errors, feedbackId){

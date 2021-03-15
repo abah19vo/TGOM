@@ -32,7 +32,6 @@ module.exports =function(){
 
         const values =[id]
         client.query(query,values,function(error, feedback){
-            console.log("🚀 ~ file: feedBack_table.js ~ line 37 ~ client.query ~ feedback.rows[0]", feedback.rows[0])
             if(error){
                 callback(['internalError'],null)
             }else{
@@ -42,6 +41,35 @@ module.exports =function(){
         
         })
     }
+
+    exports.updateFeedBackById= function(newFeedback,callback){
+        const query = "UPDATE feedBack SET title = $1, content = $2, game= $3 WHERE id= $4 AND userId = $5"
+        const values = [newFeedback.title,newFeedback.content,newFeedback.game,newFeedback.id,newFeedback.userId]
+
+        client.query(query,values,function(error){
+            if(error){                
+                callback(['internalError'])
+            }else{
+                callback([])
+            }
+        })
+    }
+
+    exports.deleteFeedBackById= function(feedback,callback){
+        const query = "DELETE FROM feedBack AS F  WHERE F.id = $1 AND F.userId = $2"
+        const values = [feedback.id,feedback.userId]
+
+        client.query(query,values,function(error){
+            if(error){                
+                callback(['internalError'])
+            }else{
+                callback([])
+            }
+        })
+    }
+
+    
+
 
 
     exports.getAllFeedbacks = function(callback){
