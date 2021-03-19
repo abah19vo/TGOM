@@ -3,7 +3,7 @@
 
 
 
-<title>CREATE A COMMENT</title>
+<title>CREATE A FEEDBACK</title>
 
 <div id="user_section">
 	
@@ -13,7 +13,7 @@
 			{{/each}}
 		{{/if}}
 		{{#if isLoggedIn}}
-		<h1>CREATE A COMMENT</h1>
+		<h1>CREATE A FEEDBACK</h1>
 		<form action="/feedbacks/create" method="POST">
 			<input type="hidden" name="_csrf" value="{{csrfToken}}">
 			<div>

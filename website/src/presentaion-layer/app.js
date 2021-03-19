@@ -6,6 +6,10 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const redis = require('redis')
 const redisStore = require('connect-redis')(session)
+const csurf = require('csurf')
+
+
+
 const Client = redis.createClient(6379, 'redis');
 
 
@@ -30,7 +34,7 @@ module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter
 
   
   app.use(cookieParser())
- 
+  csurf({ cookie: true })
   app.use(express.static(path.join(__dirname,'public')))
 
 
@@ -47,6 +51,23 @@ module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter
     const isLoggedIn = req.session.isLoggedIn
     res.locals.isLoggedIn = isLoggedIn
     next()
+  })
+
+  app.use(csurf())
+
+  app.use(function (request, response, next) {
+    response.locals.csrfToken = request.csrfToken
+    next()
+  })
+
+  app.use(function (error, request, response, next) {
+    if (error.code !== 'EBADCSRFTOKEN') return next(error)
+    response.status(403)
+    const model={
+      badCsrfToken: true
+    }
+    response.render('index.hbs',model)  
+    
   })
 
   app.use('/comment',commentRouter)
