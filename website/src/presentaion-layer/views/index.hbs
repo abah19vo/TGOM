@@ -2,9 +2,10 @@
 
 
 <title>TGOM</title>
-{{#if csurfError}}
-		<span> An Error With The Forms Was Encountered</span>
-{{/if}}
+{{#if badCsrfToken}}
+		<h1> An Error With The Forms Was Encountered</h1>
+{{else}}
+
 
 <div id="textrow">
 	<div id="firstText">
@@ -39,3 +40,4 @@
 		</div>
 	</div>
 </div>
+{{/if}}

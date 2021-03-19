@@ -13,7 +13,6 @@ module.exports = function(){
     exports.createUser = function(newUser,callback){
         const query = " INSERT INTO user(username,password,name) VALUES(?,?,?)"
         const values = [newUser.username,newUser.password,newUser.name]
-        console.log("debugger")
         connection.query(query, values, function(error){
             if(error){
                 
@@ -60,7 +59,6 @@ module.exports = function(){
         const values = [username]
         connection.query(query,values,function(error,user){
             if(error){
-                console.log(error)
                 callback(['internalError'],null)
             }else if(user.length==0 || user[0] == undefined){
                 callback(['invalidUsername'],null)

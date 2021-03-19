@@ -20,7 +20,6 @@ module.exports = function({accountManager}){
 			name: request.body.name,
 			confirmPassword: request.body.repeat_password
 		}
-		console.log(account)
 		
 		accountManager.createUser(account, function(errors, id){
 			

@@ -18,6 +18,7 @@
 			<li><a class="admin" href="/feedbacks" >FEEDBACK</a></li>
 		{{#if isLoggedIn}}
 			<form action="/account/sign-out"  method="POST"> 
+				<input type="hidden" name="_csrf" value="{{csrfToken}}">
 				<button class="logout-button" type="submit" name="logout" id="logout">LOGOUT</button>
 			</form>
 		{{/if}}	
