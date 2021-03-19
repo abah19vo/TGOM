@@ -43,11 +43,18 @@ services:
       POSTGRES_PASSWORD: abc123
       POSTGRES_DB: hello
       POSTGRES_USERNAME: root
-
     ports: 
       - 5432:5432
     networks: 
       - webnet
+
+  nginx:
+    build: ./spa
+    ports: 
+      - 8080:8080
+    networks: 
+      - webnet
+    
    
 networks:
   webnet:

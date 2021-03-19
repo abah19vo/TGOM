@@ -7,7 +7,7 @@ module.exports= function({accountRepository}){
     const exports = {}
 
     exports.getAllUsers = function(callback){
-        accountRepository.getAllAccounts(callback)
+        accountRepository.getAllUsers(callback)
     }
 
     exports.createUser = async (newUser, callback) =>{

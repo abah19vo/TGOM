@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> TGOM </title>
+
+
+	<script>
+
+    const BACKEND_URI = "http://localhost:8000/"
+		
+		// TODO: Want to remember the access token across page reloads?
+		// You could for example store it in local storage, although that
+		// would be really bad if your website contains a XSS vulnerability.
+		let accessToken = ""
+		const USERNAME_MIN_LENGTH = 3
+		const USERNAME_MAX_LENGTH = 20
+		const PASSWORD_MAX_LENGTH = 25
+		
+		document.addEventListener("DOMContentLoaded", function(){
+			
+			showPage(location.pathname)
+			
+			// TODO: Write comment explaining why we listen for click on links
+			// this very strange way.
+			document.body.addEventListener("click", function(event){
+				
+				const clickedElement = event.target
+				
+				if(clickedElement.tagName == "A"){
+					
+					if(clickedElement.hostname == location.hostname){
+						
+						event.preventDefault()
+						
+						const uri = clickedElement.getAttribute("href")
+						
+						if(location.pathname != uri){
+							
+							hideCurrentPage()
+							showPage(uri)
+							
+							history.pushState({}, "", uri)
+							
+						}
+						
+					}
+					
+				}
+				
+			})
+
+
+			document.getElementById("login-form").addEventListener("submit", async function(event){
+				
+				event.preventDefault()
+				
+				const username = document.getElementById("username").value
+				const password = document.getElementById("password").value
+
+				const data = {
+					username,
+					password,
+					//grant_type: "password"
+				}
+				
+				validateAccount = function(data){
+					const errors =[]
+
+					if(!data.username.hasOwnProperty("username")){
+						errors.push("usernameMissing")
+					}
+					if(data.username.length < USERNAME_MIN_LENGTH){
+						errors.push("usernameTooShort")
+					}
+
+					if(data.username.length > USERNAME_MAX_LENGTH){
+						errors.push("usernameTooLong")
+					}
+					if(data.password.length > PASSWORD_MAX_LENGTH){
+						errors.push("passwordTooLong")
+					}
+
+					return errors
+				}
+
+				const errors = validateAccount(data)
+
+				if(errors.length > 0){
+					const errorClass = document.getElementById(".errors")
+					const ul = document.createElement("ul")
+					errorClass.appendChild(ul)
+					for(error in errors){
+						const li = document.createElement("li")
+						li.innerText(error)
+						ul.appendChild(li)
+					}
+					
+				}
+				else{
+				
+					const response = await fetch(BACKEND_URI+"sign-in", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/x-www-form-urlencoded"
+						},
+						body: new URLSearchParams(data)
+					})
+					
+					switch(response.status){
+						
+						case 200:
+							
+							const body = await response.json()
+							
+							accessToken = body.access_token
+							
+							document.body.classList.remove("is-logged-out")
+							document.body.classList.add("is-logged-in")
+							
+							// TODO: Show feedback to the user (did the login succeed?).
+							
+						break
+						case 400:
+
+						const body = await response.json()
+
+						const erros = body.errorMessages
+							
+						if(errors.length > 0){
+							const errorClass = document.getElementById("errors")
+							const ul = document.createElement("ul")
+							errorClass.appendChild(ul)
+							for(error in errors){
+								const li = document.createElement("li")
+								li.innerText(error)
+								ul.appendChild(li)
+							}
+							
+						}	
+							
+							
+						break
+						case 500:
+						const body = await response.json()
+
+						const erros = body.internalError
+							
+						if(errors.length > 0){
+							const errorClass = document.getElementById("errors")
+							const ul = document.createElement("ul")
+							errorClass.appendChild(ul)
+							for(error in errors){
+								const li = document.createElement("li")
+								li.innerText(error)
+								ul.appendChild(li)
+							}
+							
+						}	
+						default:
+							
+							// TODO.
+						
+					}
+				}
+
+			})
+
+
+
+			document.getElementById("create-feedback-form").addEventListener("submit", async function(event){
+				
+				event.preventDefault()
+				
+				const title = document.getElementById("title").value
+				const game = document.getElementById("game").value
+				const content = document.getElementById("content").value
+				
+				// TODO: Can add client-side validation here.
+				
+				const feedback = {
+					title,
+					game,
+					content
+				}
+				
+				// TODO: Here we can start showing a loading indicator.
+				const response = await fetch(BACKEND_URI+"sign-out", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer "+accessToken
+					},
+					body: JSON.stringify(feedback)
+				})
+				// TODO: And here we can stop showing a loading indicator.
+				
+				switch(response.status){
+					
+					case 201:
+						
+						const createdFeedback = await response.json()
+						
+						const uri = "/humans/"+createdFeedback.id
+						
+						// TODO: This is the same code that runs when clicking on a link. Function instead of code duplication?
+						history.pushState({}, "", uri)
+						hideCurrentPage()
+						showPage(uri)
+						
+					break
+					case 400:
+					const body = await response.json()
+
+					const erros = body.errorMessages
+						
+					if(errors.length > 0){
+						const errorClass = document.getElementById("errors")
+						const ul = document.createElement("ul")
+						errorClass.appendChild(ul)
+						for(error in errors){
+							const li = document.createElement("li")
+							li.innerText(error)
+							ul.appendChild(li)
+						}
+						
+					}	
+
+					break
+					case 500:
+
+					const body = await response.json()
+
+						const erros = body.internalError
+							
+						if(errors.length > 0){
+							const errorClass = document.getElementById("errors")
+							const ul = document.createElement("ul")
+							errorClass.appendChild(ul)
+							for(error in errors){
+								const li = document.createElement("li")
+								li.innerText(error)
+								ul.appendChild(li)
+							}
+							
+						}	
+					default:
+						// TODDO.
+				}
+				
+			})
+		
+			
+			window.addEventListener("popstate", function(event){
+			
+			const uri = location.pathname
+			hideCurrentPage()
+			showPage(uri)
+			
+			})
+
+			function showPage(uri){
+			
+			let newPageId = ""
+			
+				switch(uri){
+					
+					case "/":
+						newPageId = "home-page"
+					break
+					case "/about":
+						newPageId = "about-page"
+					break
+					case "/login":
+						newPageId = "login-page"
+					break
+					case "/create-feedback":
+						newPageId = "create-feedback-page"
+					break
+					case "/all-feedbacks":
+						newPageId = "all-feedbacks-page"
+						loadAllFeedbacks()
+					break
+					default:
+						
+						if(uri.startsWith("/humans/")){
+							newPageId = "human-page"
+							const humanId = uri.split("/")[2]
+							loadHumanPage(humanId)
+						}else{
+							newPageId = "not-found-page"
+						}
+					
+				}
+				document.getElementById(newPageId).classList.add("current-page")
+				
+			}
+
+			function hideCurrentPage(){
+			document.querySelector(".current-page").classList.remove("current-page")
+		}
+
+
+		async function loadAllFeedbacks(){
+			
+			const page = document.getElementById("all-feedbacks-page")
+			page.innerText = ""
+			
+			const h1 = document.createElement("h1")
+			h1.innerText = "All Feedbacks"
+			page.appendChild(h1)
+			
+			// TODO: Investigate how the code works when the backend is down.
+			const response = await fetch(BACKEND_URI+"feedbacks")
+			
+			switch(response.status){
+				
+				case 200:
+					
+					const feedbacks = await response.json()
+					
+					const ul = document.createElement("ul")
+					
+					for(const feedback of feedbacks){
+						const li = document.createElement("li")
+						const a = document.createElement("a")
+						a.innerText = feedback.name
+						a.setAttribute("href", "/feedbacks/"+feedback.id)
+						li.appendChild(a)
+						ul.appendChild(li)
+					}
+					
+					page.appendChild(ul)
+					
+				break
+				
+				case 500:
+				default:
+					// TODO
+				
+			}
+			
+		}
+
+		})
+				
+
+
+
+			
+	</script>
+
+</head>
+<body>
+	<div>
+
+	</div>
+</body>

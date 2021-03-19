@@ -28,8 +28,7 @@ module.exports = function(){
             
         })
     }
-    
- 
+
     
     exports.getUserById = function(id,callback){
         const query = " SELECT * FROM user WHERE id = ?"

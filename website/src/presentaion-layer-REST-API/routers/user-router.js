@@ -55,7 +55,7 @@ module.exports = function({accountManager}){
 
 			if(errors.length > 0){
 				const errorMessages = errors.map(e => errorTranslations[e])
-				response.status(400).json(errorMessages)
+				response.status(400).json({errorMessages:errorMessages})
 			}else{
 				const payload = {
 					isLoggedIn: true,
@@ -63,7 +63,7 @@ module.exports = function({accountManager}){
 				}
 				jwt.sign(payload, secret, function(err, token) {
 					if(err){
-						response.status(400).json(errorTranslations.internalError)
+						response.status(500).json({internalError:errorTranslations.internalError})
 					}else{
 						response.status(200).json({
 						"access_token": token
