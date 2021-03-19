@@ -312,7 +312,6 @@
 			h1.innerText = "All Feedbacks"
 			page.appendChild(h1)
 			
-			// TODO: Investigate how the code works when the backend is down.
 			const response = await fetch(BACKEND_URI+"feedbacks")
 			
 			switch(response.status){
@@ -343,6 +342,44 @@
 			}
 			
 		}
+
+		async function loadFeedbackPage(feedbackId){
+			
+			const page = document.getElementById("feedback-page")
+			page.innerText = ""
+			
+			const h1 = document.createElement("h1")
+			h1.innerText = "Feedback"
+			page.appendChild(h1)
+			
+			const response = await fetch(BACKEND_URI+"feedbacks/"+feedbackId)
+			
+			switch(response.status){
+				
+				case 200:
+					
+					const feedback = await response.json()
+					
+					const p = document.createElement("p")
+					p.innerText = feedback.title+ +feedback.game+ +feedback.content+
+					
+					page.appendChild(p)
+					
+				break
+				
+				case 404:
+					// TODO
+				break
+				
+				case 500:
+				default:
+					// TODO
+				
+			}
+			
+		}
+
+
 
 		})
 				
