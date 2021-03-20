@@ -9,7 +9,7 @@
 
 	<script>
 
-    const BACKEND_URI = "http://localhost:8000/"
+    	const BACKEND_URI = "http://localhost:8000/"
 		
 		// TODO: Want to remember the access token across page reloads?
 		// You could for example store it in local storage, although that
@@ -300,49 +300,48 @@
 
 			function hideCurrentPage(){
 			document.querySelector(".current-page").classList.remove("current-page")
-		}
+			}
 
 
-		async function loadAllFeedbacks(){
-			
-			const page = document.getElementById("all-feedbacks-page")
-			page.innerText = ""
-			
-			const h1 = document.createElement("h1")
-			h1.innerText = "All Feedbacks"
-			page.appendChild(h1)
-			
-			// TODO: Investigate how the code works when the backend is down.
-			const response = await fetch(BACKEND_URI+"feedbacks")
-			
-			switch(response.status){
+			async function loadAllFeedbacks(){
 				
-				case 200:
-					
-					const feedbacks = await response.json()
-					
-					const ul = document.createElement("ul")
-					
-					for(const feedback of feedbacks){
-						const li = document.createElement("li")
-						const a = document.createElement("a")
-						a.innerText = feedback.name
-						a.setAttribute("href", "/feedbacks/"+feedback.id)
-						li.appendChild(a)
-						ul.appendChild(li)
-					}
-					
-					page.appendChild(ul)
-					
-				break
+				const page = document.getElementById("all-feedbacks-page")
+				page.innerText = ""
 				
-				case 500:
-				default:
-					// TODO
+				const h1 = document.createElement("h1")
+				h1.innerText = "All Feedbacks"
+				page.appendChild(h1)
+				
+				const response = await fetch(BACKEND_URI+"feedbacks")
+				
+				switch(response.status){
+					
+					case 200:
+						
+						const feedbacks = await response.json()
+						
+						const ul = document.createElement("ul")
+						
+						for(const feedback of feedbacks){
+							const li = document.createElement("li")
+							const a = document.createElement("a")
+							a.innerText = feedback.name
+							a.setAttribute("href", "/feedbacks/"+feedback.id)
+							li.appendChild(a)
+							ul.appendChild(li)
+						}
+						
+						page.appendChild(ul)
+						
+					break
+					
+					case 500:
+					default:
+						// TODO
+					
+				}
 				
 			}
-			
-		}
 
 		})	
 	</script>
