@@ -1,2 +1,2 @@
 FROM nginx
-COPY presentaion-layer-SPA /usr/share/nginx/html
+COPY src /usr/share/nginx/html
