@@ -81,6 +81,7 @@
 			document.getElementById("login-form").addEventListener("submit", async function(event){
 				
 				event.preventDefault()
+				const page = document.getElementById("login-page")
 				
 				const username = document.getElementById("username").value
 				const password = document.getElementById("password").value
@@ -90,13 +91,12 @@
 					password,
 					//grant_type: "password"
 				}
-				
+				console.log("🚀 ~ file: index.html ~ line 90 ~ document.getElementById ~ data", data)
+
 				validateAccount = function(data){
 					const errors =[]
 
-					if(!data.username.hasOwnProperty("username")){
-						errors.push("usernameMissing")
-					}
+					
 					if(data.username.length < USERNAME_MIN_LENGTH){
 						errors.push("usernameTooShort")
 					}
@@ -108,25 +108,29 @@
 						errors.push("passwordTooLong")
 					}
 
+					if(data.password.length == 0){
+						errors.push("passwordTooLong")
+					}
+
 					return errors
 				}
 
 				const errors = validateAccount(data)
 
 				if(errors.length > 0){
-					const errorClass = document.getElementById(".errors")
+					
 					const ul = document.createElement("ul")
-					errorClass.appendChild(ul)
-					for(error in errors){
+					page.appendChild(ul)
+					for(const error of errors){
 						const li = document.createElement("li")
-						li.innerText(error)
+						li.innerText = error
 						ul.appendChild(li)
 					}
 					
 				}
 				else{
 				
-					const response = await fetch(BACKEND_URI+"sign-in", {
+					const response = await fetch(BACKEND_URI+"account/sign-in", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/x-www-form-urlencoded"
@@ -141,6 +145,7 @@
 							var body = await response.json()
 							
 							accessToken = body.access_token
+                            console.log("🚀 ~ file: index.html ~ line 148 ~ document.getElementById ~ accessToken", accessToken)
 							
 							document.body.classList.remove("is-logged-out")
 							document.body.classList.add("is-logged-in")
@@ -303,9 +308,9 @@
 						newPageId = "all-feedbacks-page"
 						loadAllFeedbacks()
 					break
-					case "/regester":
-						newPageId = "all-feedbacks-page"
-						loadAllFeedbacks()
+					case "/register":
+						newPageId = "regester-page"
+						//loadAllFeedbacks()
 					break
 					default:
 						
@@ -437,6 +442,10 @@
 						page.appendChild(h1)
 				}
 			}
+		
+			async function regesterAccount(account) {
+				
+			}
 		})	
 	</script>
 
@@ -467,7 +476,7 @@
 			</div>
 			
 			
-			<div class="page" id="regester-page">
+			<div class="page" id="register-page">
 				<h1>Create</h1>
 				<form action=""  name="register">
 					<div class="form-group has-success">
