@@ -11,21 +11,21 @@
 			{{/each}}
 		{{/if}}
 		{{#if isLoggedIn}}
-		<h1>CREATE A FEEDBACK</h1>
-		<form action="/feedbacks/create" method="POST">
-			<input type="hidden" name="_csrf" value="{{csrfToken}}">
-			<div>
-				Title: <input type="name" name="title" value="{{feedback.title}}">
-			</div>
-			<div>
-				Game: <input type="name" name="game" value="{{feedback.game}}">
-			</div>
-			<div id="update_textarea">
-				content: <textarea class="update_textarea" type="text" name="content" rows="4" cols="60" >{{feedback.content}} </textarea>
-			</div>
-			<div id="submit_update">
-				<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">
-			</div>
+			<h1>CREATE A FEEDBACK</h1>
+			<form action="/feedbacks/create" method="POST">
+				<input type="hidden" name="_csrf" value="{{csrfToken}}">
+				<div>
+					Title: <input type="name" name="title" value="{{feedback.title}}">
+				</div>
+				<div>
+					Game: <input type="name" name="game" value="{{feedback.game}}">
+				</div>
+				<div id="update_textarea">
+					content: <textarea class="update_textarea" type="text" name="content" rows="4" cols="60" >{{feedback.content}} </textarea>
+				</div>
+				<div id="submit_update">
+					<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">
+				</div>	
+			</form>
 		{{/if}}
-		</form>
 </div>
