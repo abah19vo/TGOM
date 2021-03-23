@@ -146,10 +146,11 @@
 							
 							accessToken = body.access_token
                             console.log("🚀 ~ file: index.html ~ line 148 ~ document.getElementById ~ accessToken", accessToken)
-							
 							document.body.classList.remove("is-logged-out")
 							document.body.classList.add("is-logged-in")
-							
+							const uri = "/feedbacks"
+							hideCurrentPage()
+							showPage(uri)
 							// TODO: Show feedback to the user (did the login succeed?).
 							
 							break
@@ -163,7 +164,7 @@
 								const errorClass = document.getElementById("errors")
 								const ul = document.createElement("ul")
 								errorClass.appendChild(ul)
-								for(error in errors){
+								for(error of errors){
 									const li = document.createElement("li")
 									li.innerText(error)
 									ul.appendChild(li)
@@ -180,7 +181,7 @@
 								const errorClass = document.getElementById("errors")
 								const ul = document.createElement("ul")
 								errorClass.appendChild(ul)
-								for(error in errors){
+								for(error of errors){
 									const li = document.createElement("li")
 									li.innerText(error)
 									ul.appendChild(li)
@@ -310,7 +311,6 @@
 					break
 					case "/register":
 						newPageId = "regester-page"
-						//loadAllFeedbacks()
 					break
 					default:
 						
