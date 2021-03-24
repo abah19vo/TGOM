@@ -29,7 +29,7 @@ module.exports = function({feedbackManager}){
             
             
             if(error){
-                res.status(400).json(["Cant query out the request now."])
+                res.status(400).json({errorMessages:["Cant query out the request now."]})
             }else{
                 const newFeedback ={
                     title: req.body.title,
@@ -50,10 +50,10 @@ module.exports = function({feedbackManager}){
 
                     if(errors.length > 0){
                         const errorMessages = errors.map(e => errorTranslations[e])
-                        res.status(400).json(errorMessages)
+                        res.status(400).json({errorMessages :errorMessages})
 
                     }else{
-                         res.redirect('/api/feedbacks')
+                        res.status(201).end()
                     }
                 })
             }

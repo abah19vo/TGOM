@@ -77,18 +77,86 @@
 				
 			})
 
+			document.getElementById("click_logout").addEventListener("click", async function(event){
+				event.preventDefault()
+				const response = await fetch(BACKEND_URI+"account/sign-out", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						"Authorization": "Bearer "+accessToken
+					},
+				})
+				
+				switch(response.status){
+					
+					case 200:
+						
+						var body = await response.json()
+						
+						accessToken = body.access_token
+						console.log("🚀 ~ file: index.html ~ line 148 ~ document.getElementById ~ accessToken", accessToken)
+						document.body.classList.add("is-logged-out")
+						document.body.classList.remove("is-logged-in")
+						
+						const uri = "/feedbacks"
+						history.pushState({}, "", uri)
+						hideCurrentPage()
+						showPage(uri)
+						// TODO: Show feedback to the user (did the login succeed?).
+						
+						break
+					case 400:
+
+						body = await response.json()
+						const errors = body.errorMessages
+						console.log("🚀 ~ file: index.html ~ line 155 ~ document.getElementById ~ errors", errors)
+						
+						if(errors.length > 0){
+							const errorClass = document.getElementById("errors")
+							const ul = document.createElement("ul")
+							errorClass.appendChild(ul)
+							for(error of errors){
+								const li = document.createElement("li")
+								li.innerText(error)
+								ul.appendChild(li)
+							}
+							
+						}		
+						break
+					case 500:
+						body = await response.json()
+
+						errors = body.internalError
+							
+						if(errors.length > 0){ 
+							const errorClass = document.getElementById("errors")
+							const ul = document.createElement("ul")
+							errorClass.appendChild(ul)
+							for(error of errors){
+								const li = document.createElement("li")
+								li.innerText(error)
+								ul.appendChild(li)
+							}
+						}	
+					default:
+						
+						// TODO.
+					
+				}
+				
+			})
 
 			document.getElementById("login-form").addEventListener("submit", async function(event){
 				
 				event.preventDefault()
 				const page = document.getElementById("login-page")
 				
-				const username = document.getElementById("username").value
-				const password = document.getElementById("password").value
+				const username = document.getElementById("username_login").value
+				const password = document.getElementById("password_login").value
 
 				const data = {
-					username,
-					password,
+					username:username,
+					password:password,
 					//grant_type: "password"
 				}
 				console.log("🚀 ~ file: index.html ~ line 90 ~ document.getElementById ~ data", data)
@@ -109,7 +177,7 @@
 					}
 
 					if(data.password.length == 0){
-						errors.push("passwordTooLong")
+						errors.push("passwordTooShort")
 					}
 
 					return errors
@@ -149,6 +217,7 @@
 							document.body.classList.remove("is-logged-out")
 							document.body.classList.add("is-logged-in")
 							const uri = "/feedbacks"
+							history.pushState({}, "", uri)
 							hideCurrentPage()
 							showPage(uri)
 							// TODO: Show feedback to the user (did the login succeed?).
@@ -161,12 +230,11 @@
                             console.log("🚀 ~ file: index.html ~ line 155 ~ document.getElementById ~ errors", errors)
 							
 							if(errors.length > 0){
-								const errorClass = document.getElementById("errors")
 								const ul = document.createElement("ul")
-								errorClass.appendChild(ul)
+								page.appendChild(ul)
 								for(error of errors){
 									const li = document.createElement("li")
-									li.innerText(error)
+									li.innerText=error
 									ul.appendChild(li)
 								}
 								
@@ -178,12 +246,11 @@
 							errors = body.internalError
 								
 							if(errors.length > 0){ 
-								const errorClass = document.getElementById("errors")
 								const ul = document.createElement("ul")
-								errorClass.appendChild(ul)
+								page.appendChild(ul)
 								for(error of errors){
 									const li = document.createElement("li")
-									li.innerText(error)
+									li.innerText=error
 									ul.appendChild(li)
 								}
 							}	
@@ -199,6 +266,8 @@
 			document.getElementById("create-feedback-form").addEventListener("submit", async function(event){
 				
 				event.preventDefault()
+
+				page = document.getElementById("create-feedback-page")
 				
 				const title = document.getElementById("title").value
 				const game = document.getElementById("game").value
@@ -207,13 +276,13 @@
 				// TODO: Can add client-side validation here.
 				
 				const feedback = {
-					title,
-					game,
-					content
+					title:title,
+					game:game,
+					content:content
 				}
 				
 				// TODO: Here we can start showing a loading indicator.
-				const response = await fetch(BACKEND_URI+"sign-out", {
+				const response = await fetch(BACKEND_URI+"feedbacks/create", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -226,59 +295,145 @@
 				switch(response.status){
 					
 					case 201:
-						
-						const createdFeedback = await response.json()
-						
-						const uri = "/humans/"+createdFeedback.id
-						
-						// TODO: This is the same code that runs when clicking on a link. Function instead of code duplication?
+						const uri = "/feedbacks"
 						history.pushState({}, "", uri)
 						hideCurrentPage()
 						showPage(uri)
 						
 					break
+
 					case 400:
-					var body = await response.json()
+						var body = await response.json()
 
-					var errors = body.errorMessages
-						
-					if(errors.length > 0){
-						const errorClass = document.getElementById("errors")
-						const ul = document.createElement("ul")
-						errorClass.appendChild(ul)
-						for(error in errors){
-							const li = document.createElement("li")
-							li.innerText(error)
-							ul.appendChild(li)
-						}
-						
-					}	
-
-					break
-					case 500:
-
-					 	body = await response.json()
-
-						errors = body.internalError
+						var errors = body.errorMessages
 							
 						if(errors.length > 0){
-							const errorClass = document.getElementById("errors")
 							const ul = document.createElement("ul")
-							errorClass.appendChild(ul)
-							for(error in errors){
+							page.appendChild(ul)
+							for(error of errors){
 								const li = document.createElement("li")
-								li.innerText(error)
+								li.innerText = error
 								ul.appendChild(li)
 							}
 							
 						}	
-					default:
-						// TODDO.
+
+					break
+					case 500:
+					 	body = await response.json()
+						errors = body.internalError
+						if(errors.length > 0){
+							const ul = document.createElement("ul")
+							page.appendChild(ul)
+							for(error of errors){
+								const li = document.createElement("li")
+								li.innerText=error
+								ul.appendChild(li)
+							}
+							
+						}
+					break
+					
 				}
 				
 			})
 		
-			
+			document.getElementById("register-form").addEventListener("submit", async function(event){
+				event.preventDefault()
+				const page = document.getElementById("register-page")
+				
+				const name = document.getElementById("name").value
+				const username = document.getElementById("username").value
+				const password = document.getElementById("password").value
+				const repeatPassword = document.getElementById("repeat_password").value
+
+				const data = {
+					name:name,
+					username:username,
+					password:password,
+					repeat_password:repeatPassword
+				}
+				
+				validateAccount = function(data){
+					const errors =[]
+					
+					if(data.username.length < USERNAME_MIN_LENGTH){
+						errors.push("username Too Short")
+					}
+
+					if(data.username.length > USERNAME_MAX_LENGTH){
+						errors.push("username Too Long")
+					}
+					if(data.password.length > PASSWORD_MAX_LENGTH){
+						errors.push("password Too Long")
+					}
+
+					if(data.password.length == 0){
+						errors.push("password Too Long")
+					}
+
+					if(data.password != data.repeat_password){
+						errors.push("password Does Not Match")
+					}
+
+					return errors
+				}
+
+				const errors = validateAccount(data)
+
+				if(errors.length > 0){
+					
+					const ul = document.createElement("ul")
+					page.appendChild(ul)
+					for(const error of errors){
+						const li = document.createElement("li")
+						li.innerText = error
+						ul.appendChild(li)
+					}
+					
+				}
+				else{
+				
+					const response = await fetch(BACKEND_URI+"account/sign-up", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/x-www-form-urlencoded"
+						},
+						body: new URLSearchParams(data)
+					})
+
+					switch(response.status){
+						
+						case 204:							
+							const uri = "/login"
+							history.pushState({}, "", uri)
+							hideCurrentPage()
+							showPage(uri)
+							
+							break
+						case 400:
+
+							body = await response.json()
+							const errors = body.errorMessages
+							
+							if(errors.length > 0){
+								const ul = document.createElement("ul")
+								page.appendChild(ul)
+								for(const error of errors){
+									const li = document.createElement("li")
+									li.innerText=error
+									ul.appendChild(li)
+								}
+								
+							}		
+							break
+						
+						
+						
+					}
+				}
+			})
+
 			window.addEventListener("popstate", function(event){
 				event.preventDefault()
 				const uri = location.pathname
@@ -310,7 +465,7 @@
 						loadAllFeedbacks()
 					break
 					case "/register":
-						newPageId = "regester-page"
+						newPageId = "register-page"
 					break
 					default:
 						
@@ -465,6 +620,9 @@
 				<li class="if-is-logged-out"><a href="/login">Login</a></li>
 				<li class="if-is-logged-out"><a href="/register">Register</a></li>
 			</ul>
+			<div id="click_logout">
+				<button class="if-is-logged-in" type="click" name="Logout-btn" >Logout</button>
+			</div>	
 		</nav>
 		
 		<main>
@@ -477,23 +635,23 @@
 			
 			
 			<div class="page" id="register-page">
-				<h1>Create</h1>
-				<form action=""  name="register">
+				<h1>Register</h1>
+				<form action="" id="register-form"  name="register">
 					<div class="form-group has-success">
 						<label class="form-label" for="input-example-1">Name:</label>
-						<input class="form-input" type="text"  name="name" placeholder="Name" required>
+						<input class="form-input" type="text"  id="name" placeholder="Name" required>
 					</div>
 					<div class="form-group has-success">
 						<label class="form-label" for="input-example-1">Username:</label>
-						<input class="form-input" type="text" name="username" placeholder="Username" required>
+						<input class="form-input" type="text" id="username" placeholder="Username" required>
 					</div>
 					<div class="form-group">
 						<label class="form-label" for="input-example-1">Password:</label>
-						<input class="form-input" type="password"  name="password" placeholder="Password" required>
+						<input class="form-input" type="password"  id="password" placeholder="Password" required>
 					</div>      
 					<div class="form-group">
 						<label class="form-label" for="input-example-1">Repeat Password:</label>
-						<input class="form-input" type="password"  name="repeat_password" placeholder="Repeat Password" required>
+						<input class="form-input" type="password"  id="repeat_password" placeholder="Repeat Password" required>
 					</div> 
 						<button class="btn" type="submit" value="register">Register</button>
 				</form>
@@ -503,10 +661,10 @@
 				<h1>Login</h1>
 				<form action="" id="login-form">
 					<div>
-						Username: <input type="text" id="username">
+						Username: <input type="text" id="username_login">
 					</div>
 					<div>
-						Password: <input type="password" id="password">
+						Password: <input type="password" id="password_login">
 					</div>
 					<input type="submit" value="Login">
 				</form>
@@ -515,13 +673,13 @@
 			<div class="page" id="create-feedback-page">
 				<form action="" id="create-feedback-form">
 					<div>
-						Title: <input type="name" name="title" >
+						Title: <input type="name" id="title" >
 					</div>
 					<div>
-						Game: <input type="name" name="game" >
+						Game: <input type="name" id="game" >
 					</div>
 					<div id="update_textarea">
-						content: <textarea class="update_textarea" type="text" name="content" rows="4" cols="60" > </textarea>
+						content: <textarea class="update_textarea" type="text" id="content" rows="4" cols="60" > </textarea>
 					</div>
 					<div id="submit_update">
 						<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">

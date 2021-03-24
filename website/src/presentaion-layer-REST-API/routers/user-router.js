@@ -29,7 +29,9 @@ module.exports = function({accountManager}){
 					passwordDontMatch: "Passwords Does Not Match",
 				}
 				const errorMessages = errors.map(e => errorTranslations[e])
-				response.status(400).json(errorMessages)
+				response.status(400).json({
+					"errorMessages": errorMessages
+				})
 			}
 			
 		})
