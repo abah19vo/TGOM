@@ -43,6 +43,9 @@
 		const USERNAME_MIN_LENGTH = 3
 		const USERNAME_MAX_LENGTH = 20
 		const PASSWORD_MAX_LENGTH = 25
+		const TITLE_MIN_LENGTH = 3
+		const GAME_MIN_LENGTH = 3
+		const CONTENT_MIN_LENGTH = 10
 		
 		document.addEventListener("DOMContentLoaded", function(){
 			
@@ -94,7 +97,6 @@
 						var body = await response.json()
 						
 						accessToken = body.access_token
-						console.log("🚀 ~ file: index.html ~ line 148 ~ document.getElementById ~ accessToken", accessToken)
 						document.body.classList.add("is-logged-out")
 						document.body.classList.remove("is-logged-in")
 						
@@ -102,19 +104,16 @@
 						history.pushState({}, "", uri)
 						hideCurrentPage()
 						showPage(uri)
-						// TODO: Show feedback to the user (did the login succeed?).
 						
 						break
 					case 400:
 
 						body = await response.json()
 						const errors = body.errorMessages
-						console.log("🚀 ~ file: index.html ~ line 155 ~ document.getElementById ~ errors", errors)
 						
 						if(errors.length > 0){
-							const errorClass = document.getElementById("errors")
 							const ul = document.createElement("ul")
-							errorClass.appendChild(ul)
+							page.appendChild(ul)
 							for(error of errors){
 								const li = document.createElement("li")
 								li.innerText(error)
@@ -159,25 +158,23 @@
 					password:password,
 					//grant_type: "password"
 				}
-				console.log("🚀 ~ file: index.html ~ line 90 ~ document.getElementById ~ data", data)
 
 				validateAccount = function(data){
 					const errors =[]
 
-					
 					if(data.username.length < USERNAME_MIN_LENGTH){
-						errors.push("usernameTooShort")
+						errors.push("Username Too Short")
 					}
 
 					if(data.username.length > USERNAME_MAX_LENGTH){
-						errors.push("usernameTooLong")
+						errors.push("Username Too Long")
 					}
 					if(data.password.length > PASSWORD_MAX_LENGTH){
-						errors.push("passwordTooLong")
+						errors.push("Password Too Long")
 					}
 
 					if(data.password.length == 0){
-						errors.push("passwordTooShort")
+						errors.push("Password Too Short")
 					}
 
 					return errors
@@ -213,21 +210,18 @@
 							var body = await response.json()
 							
 							accessToken = body.access_token
-                            console.log("🚀 ~ file: index.html ~ line 148 ~ document.getElementById ~ accessToken", accessToken)
 							document.body.classList.remove("is-logged-out")
 							document.body.classList.add("is-logged-in")
 							const uri = "/feedbacks"
 							history.pushState({}, "", uri)
 							hideCurrentPage()
 							showPage(uri)
-							// TODO: Show feedback to the user (did the login succeed?).
 							
 							break
 						case 400:
 
 							body = await response.json()
 							const errors = body.errorMessages
-                            console.log("🚀 ~ file: index.html ~ line 155 ~ document.getElementById ~ errors", errors)
 							
 							if(errors.length > 0){
 								const ul = document.createElement("ul")
@@ -256,84 +250,197 @@
 							}	
 						default:
 							
-							// TODO.
 						
 					}
 				}
 
 			})
 
+			const createFeedbackPage = document.getElementById("create-feedback-page")
+			const feedbackErrorUL = document.createElement('ul')
+			createFeedbackPage.appendChild(feedbackErrorUL)
+			
+
 			document.getElementById("create-feedback-form").addEventListener("submit", async function(event){
 				
 				event.preventDefault()
-
-				page = document.getElementById("create-feedback-page")
-				
+			
 				const title = document.getElementById("title").value
 				const game = document.getElementById("game").value
 				const content = document.getElementById("content").value
-				
-				// TODO: Can add client-side validation here.
-				
+								
 				const feedback = {
 					title:title,
 					game:game,
 					content:content
 				}
 				
-				// TODO: Here we can start showing a loading indicator.
-				const response = await fetch(BACKEND_URI+"feedbacks/create", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": "Bearer "+accessToken
-					},
-					body: JSON.stringify(feedback)
-				})
-				// TODO: And here we can stop showing a loading indicator.
+				validateAccount = function(data){
+					let errors = []
+					
+					if(data.title.length < TITLE_MIN_LENGTH){
+						errors.push("Title Too Short")
+					}
+
+					if(data.game.length < GAME_MIN_LENGTH){
+						errors.push("Game Too Short")
+					}
+
+					if(data.content.length < CONTENT_MIN_LENGTH){
+						errors.push("Content Too Short")
+					}
+
+					return errors
+				}
+
+				const errors = validateAccount(feedback)
+			
+
+				if(errors.length > 0){
+
+					feedbackErrorUL.textContent = ''
+					for(const error of errors){
+						const li = document.createElement("li")
+						feedbackErrorUL.appendChild(li)
+						li.innerText = error
+
+					}
+				}
+
+				else{
+
+					const response = await fetch(BACKEND_URI+"feedbacks/create", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": "Bearer "+accessToken
+						},
+						body: JSON.stringify(feedback)
+					})
+
 				
-				switch(response.status){
-					
-					case 201:
-						const uri = "/feedbacks"
-						history.pushState({}, "", uri)
-						hideCurrentPage()
-						showPage(uri)
+					switch(response.status){
 						
-					break
+						case 201:
+							const uri = "/feedbacks"
+							history.pushState({}, "", uri)
+							hideCurrentPage()
+							showPage(uri)
+						break
 
-					case 400:
-						var body = await response.json()
+						case 400:
+							body = await response.json()
+							const errors = body.errorMessages
+								
+							if(errors.length > 0){
+								const ul = document.createElement("ul")
+								page.appendChild(ul)
+								for(error of errors){
+									const li = document.createElement("li")
+									li.innerText = error
+									ul.appendChild(li)
+								}
+								
+							}	
 
-						var errors = body.errorMessages
-							
-						if(errors.length > 0){
-							const ul = document.createElement("ul")
-							page.appendChild(ul)
-							for(error of errors){
-								const li = document.createElement("li")
-								li.innerText = error
-								ul.appendChild(li)
-							}
-							
-						}	
+						break	
+					}
+				}
+			})
 
-					break
-					case 500:
-					 	body = await response.json()
-						errors = body.internalError
-						if(errors.length > 0){
-							const ul = document.createElement("ul")
-							page.appendChild(ul)
-							for(error of errors){
-								const li = document.createElement("li")
-								li.innerText=error
-								ul.appendChild(li)
-							}
-							
-						}
-					break
+			const updateFeedbackPage = document.getElementById("create-feedback-page")
+			const updateFeedbackErrorUL = document.createElement('ul')
+			updateFeedbackPage.appendChild(feedbackErrorUL)
+
+
+			document.getElementById("update-feedback-form").addEventListener("submit", async function(event){
+				
+				event.preventDefault()
+		
+				const title = document.getElementById("newTitle").value
+				const game = document.getElementById("newGame").value
+				const content = document.getElementById("newContent").value
+								
+				const newFeedback = {
+					title: title,
+					game: game,
+					content: content,
+				}
+				
+				validateAccount = function(data){
+					let errors = []
 					
+					if(data.title.length < TITLE_MIN_LENGTH){
+						errors.push("Title Too Short")
+					}
+
+					if(data.game.length < GAME_MIN_LENGTH){
+						errors.push("Game Too Short")
+					}
+
+					if(data.content.length < CONTENT_MIN_LENGTH){
+						errors.push("Content Too Short")
+					}
+
+					return errors
+				}
+
+				const errors = validateAccount(newFeedback)
+
+				if(errors.length > 0){
+
+					updateFeedbackErrorUL.textContent = ''
+					for(const error of errors){
+
+						const li = document.createElement("li")
+						updateFeedbackErrorUL.appendChild(li)
+						li.innerText = error
+
+					}
+				}
+
+				else{
+
+					const uri = location.pathname
+					const id = uri.split("/")[2]
+					console.log(newFeedback)
+
+					const response = await fetch(BACKEND_URI+"feedbacks/"+id, {	
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": "Bearer "+accessToken
+						},
+						body: JSON.stringify(newFeedback)
+					})
+
+				
+					switch(response.status){
+						
+						case 204:
+							const uri = "/feedbacks/"+id
+							history.pushState({}, "", uri)
+							hideCurrentPage()
+							showPage(uri)						
+						break
+
+						case 400:
+							body = await response.json()
+							const errors = body.errorMessages
+								
+							if(errors.length > 0){
+								const ul = document.createElement("ul")
+								page.appendChild(ul)
+								for(error of errors){
+									const li = document.createElement("li")
+									li.innerText = error
+									ul.appendChild(li)
+								}
+								
+							}	
+
+						break
+					}
 				}
 				
 			})
@@ -358,22 +465,22 @@
 					const errors =[]
 					
 					if(data.username.length < USERNAME_MIN_LENGTH){
-						errors.push("username Too Short")
+						errors.push("Username Too Short")
 					}
 
 					if(data.username.length > USERNAME_MAX_LENGTH){
-						errors.push("username Too Long")
+						errors.push("Username Too Long")
 					}
 					if(data.password.length > PASSWORD_MAX_LENGTH){
-						errors.push("password Too Long")
+						errors.push("Password Too Long")
 					}
 
 					if(data.password.length == 0){
-						errors.push("password Too Long")
+						errors.push("Password Too Short")
 					}
 
 					if(data.password != data.repeat_password){
-						errors.push("password Does Not Match")
+						errors.push("Password Does Not Match")
 					}
 
 					return errors
@@ -460,6 +567,9 @@
 					case "/create-feedback":
 						newPageId = "create-feedback-page"
 					break
+					case "/update-feedback":
+						newPageId = "update-feedback-page"
+					break
 					case "/feedbacks":
 						newPageId = "all-feedbacks-page"
 						loadAllFeedbacks()
@@ -473,6 +583,9 @@
 							newPageId = "feedback-page"
 							const feedbackId = uri.split("/")[2]
 							loadFeedbackPage(feedbackId)
+						}else if(uri.startsWith("/update-feedback/")){
+							newPageId = "update-feedback-page"
+							const feedbackId = uri.split("/")[2]
 						}else{
 							newPageId = "not-found-page"
 						}
@@ -505,7 +618,6 @@
 						
 						const feedbacks = await response.json()
 		
-						
 						for(const feedback of feedbacks){
 							const li = document.createElement("li")
 							const a = document.createElement("a")
@@ -521,7 +633,6 @@
 					case 500:
 
 						const errors = await response.json()
-						
 						
 						for(const error of errors){
 							const li = document.createElement("li")
@@ -563,6 +674,12 @@
 						const usernameP = document.createElement("p")
 						const gameP = document.createElement("p")
 						const contentP = document.createElement("p")
+
+						const updateFeedback = document.createElement("p")
+						const updateLink = document.createElement("a")
+						updateLink.innerText = "Update This Feedback"
+						updateLink.setAttribute("href", "/update-feedback/"+feedback.id)
+						updateFeedback.appendChild(updateLink)
 						
 						titleP.innerText ="Title: "+ feedback.title
 						usernameP.innerText ="By: "+ feedback.username
@@ -573,6 +690,8 @@
 						page.appendChild(titleP)
 						page.appendChild(gameP)
 						page.appendChild(contentP)
+						page.appendChild(updateFeedback)
+						page.appendChild(updateLink)
 						
 					break
 					
@@ -679,10 +798,27 @@
 						Game: <input type="name" id="game" >
 					</div>
 					<div id="update_textarea">
-						content: <textarea class="update_textarea" type="text" id="content" rows="4" cols="60" > </textarea>
+						Content: <textarea class="update_textarea" type="text" id="content" rows="4" cols="60" > </textarea>
 					</div>
 					<div id="submit_update">
 						<input class="submit_update_btn" type="submit" name="create-btn" value="CREATE">
+					</div>	
+				</form>
+			</div>	
+
+			<div class="page" id="update-feedback-page">
+				<form action="" id="update-feedback-form">
+					<div>
+						New Title: <input type="name" id="newTitle" >
+					</div>
+					<div>
+						New Game: <input type="name" id="newGame" >
+					</div>
+					<div id="update_textarea">
+						New Content: <textarea class="update_textarea" type="text" id="newContent" rows="4" cols="60" > </textarea>
+					</div>
+					<div id="submit_update">
+						<input class="submit_update_btn" type="submit" name="update-btn" value="CREATE">
 					</div>	
 				</form>
 			</div>	

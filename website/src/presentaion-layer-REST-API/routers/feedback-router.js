@@ -26,8 +26,6 @@ module.exports = function({feedbackManager}){
         const authorizationHeader = req.header("Authorization") 
         const accessToken = authorizationHeader.substring("Bearer ".length) 
         jwt.verify(accessToken,secret, function(error, payload){
-            
-            
             if(error){
                 res.status(400).json({errorMessages:["Cant query out the request now."]})
             }else{
@@ -99,7 +97,7 @@ module.exports = function({feedbackManager}){
                         const errorMessages = errors.map(e => errorTranslations[e])
                         res.status(400).json(errorMessages)
                     }else{
-                        res.status(204).end()
+                        res.status(201).end()
                     }
                 }) 
             }
@@ -128,6 +126,7 @@ module.exports = function({feedbackManager}){
                     userId: payload.userId,
                     isLoggedIn: payload.isLoggedIn
                 }
+                console.log("---------->",newFeedback)
                 feedbackManager.updateFeedbackById(newFeedback, function(errors){
                     const errorTranslations = {
                         titleTooShort: "the title is needs to be at least 4 characters",
@@ -143,7 +142,7 @@ module.exports = function({feedbackManager}){
                         res.status(400).json(errorMessages)
 
                     }else{
-                        res.redirect('/api/feedbacks/'+req.params.id)
+                        res.status(204).end()
                     }
                 })
             }
