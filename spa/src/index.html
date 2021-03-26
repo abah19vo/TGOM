@@ -149,14 +149,12 @@
 				
 				event.preventDefault()
 				const page = document.getElementById("login-page")
-				
 				const username = document.getElementById("username_login").value
 				const password = document.getElementById("password_login").value
 
 				const data = {
 					username:username,
 					password:password,
-					//grant_type: "password"
 				}
 
 				validateAccount = function(data){
@@ -347,7 +345,7 @@
 				}
 			})
 
-			const updateFeedbackPage = document.getElementById("create-feedback-page")
+			const updateFeedbackPage = document.getElementById("update-feedback-page")
 			const updateFeedbackErrorUL = document.createElement('ul')
 			updateFeedbackPage.appendChild(updateFeedbackErrorUL)
 
@@ -443,8 +441,52 @@
 				}
 				
 			})
+			
+			/*document.getElementById("delete-feedback").addEventListener("click", async function(event){
+				event.preventDefault()	
+				
+				const uri = location.pathname
+				const id = uri.split("/")[2]
 
-			const registerPage = document.getElementById("register-form")
+				const response = await fetch(BACKEND_URI+"feedbacks/"+id,{	
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer "+accessToken
+					},
+				})
+
+				
+				switch(response.status){
+					
+					case 201:
+						const uri = "/feedbacks"
+						history.pushState({}, "", uri)
+						hideCurrentPage()
+						showPage(uri)						
+					break
+
+					case 400:
+						body = await response.json()
+						const errors = body.errorMessages
+							
+						if(errors.length > 0){
+							const ul = document.createElement("ul")
+							page.appendChild(ul)
+							for(error of errors){
+								const li = document.createElement("li")
+								li.innerText = error
+								ul.appendChild(li)
+							}
+							
+						}	
+
+					break
+				}
+				
+			})
+*/
+			const registerPage = document.getElementById("register-page")
 			const registerErrorUL = document.createElement('ul')
 			registerPage.appendChild(registerErrorUL)
 		
@@ -534,9 +576,6 @@
 								
 							}		
 							break
-						
-						
-						
 					}
 				}
 			})
@@ -550,9 +589,8 @@
 			})
 
 			function showPage(uri){
-			
-			let newPageId = ""
-			
+				
+				let newPageId = ""
 				switch(uri){
 					
 					case "/":
@@ -591,8 +629,7 @@
 						}
 					
 				}
-				document.getElementById(newPageId).classList.add("current-page")
-				
+				document.getElementById(newPageId).classList.add("current-page")	
 			}
 
 			function hideCurrentPage(){
@@ -679,8 +716,19 @@
 						const updateLink = document.createElement("a")
 						updateLink.innerText = "Update This Feedback"
 						updateLink.setAttribute("href", "/update-feedback/"+feedback.id)
+						updateLink.setAttribute("class", "if-is-logged-in")
 						updateFeedback.appendChild(updateLink)
 						
+						const deleteDiv = document.createElement("div")
+						deleteDiv.setAttribute("id", "delete-feedback")
+
+						const deleteButton = document.createElement("button")
+						deleteButton.innerText = "Delete Feedback"
+						deleteButton.setAttribute("class", "if-is-logged-in")
+						deleteButton.setAttribute("type", "click")
+						deleteButton.setAttribute("id", "delete-feedback")
+						deleteDiv.appendChild(deleteButton)
+
 						titleP.innerText ="Title: "+ feedback.title
 						usernameP.innerText ="By: "+ feedback.username
 						gameP.innerText ="Game: "+ feedback.game
@@ -692,6 +740,52 @@
 						page.appendChild(contentP)
 						page.appendChild(updateFeedback)
 						page.appendChild(updateLink)
+						page.appendChild(deleteDiv)
+
+
+						document.getElementById("delete-feedback").addEventListener("click", async function(event){
+							event.preventDefault()	
+							
+							const uri = location.pathname
+							const id = uri.split("/")[2]
+
+							const response = await fetch(BACKEND_URI+"feedbacks/"+id,{	
+								method: "DELETE",
+								headers: {
+									"Content-Type": "application/json",
+									"Authorization": "Bearer "+accessToken
+								},
+							})
+
+							
+							switch(response.status){
+								
+								case 201:
+									const uri = "/feedbacks"
+									history.pushState({}, "", uri)
+									hideCurrentPage()
+									showPage(uri)						
+								break
+
+								case 400:
+									body = await response.json()
+									const errors = body.errorMessages
+										
+									if(errors.length > 0){
+										const ul = document.createElement("ul")
+										page.appendChild(ul)
+										for(error of errors){
+											const li = document.createElement("li")
+											li.innerText = error
+											ul.appendChild(li)
+										}
+										
+									}	
+
+								break
+							}
+							
+						})
 						
 					break
 					

@@ -80,7 +80,7 @@ module.exports = function({feedbackManager}){
         const accessToken = authorizationHeader.substring("Bearer ".length) 
         jwt.verify(accessToken,secret, function(error, payload){
             if(error){
-                response.status(400).json(["Cant query out the request now."])
+                response.status(400).json({errorMessages:["Cant query out the request now."]})
             }else{
                 
                 feedback={
@@ -95,7 +95,7 @@ module.exports = function({feedbackManager}){
                     }
                     if(errors.length > 0 ){
                         const errorMessages = errors.map(e => errorTranslations[e])
-                        res.status(400).json(errorMessages)
+                        res.status(400).json({errorMessages:errorMessages})
                     }else{
                         res.status(201).end()
                     }
