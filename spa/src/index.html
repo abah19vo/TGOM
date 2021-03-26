@@ -260,7 +260,6 @@
 			const feedbackErrorUL = document.createElement('ul')
 			createFeedbackPage.appendChild(feedbackErrorUL)
 			
-
 			document.getElementById("create-feedback-form").addEventListener("submit", async function(event){
 				
 				event.preventDefault()
@@ -350,8 +349,7 @@
 
 			const updateFeedbackPage = document.getElementById("create-feedback-page")
 			const updateFeedbackErrorUL = document.createElement('ul')
-			updateFeedbackPage.appendChild(feedbackErrorUL)
-
+			updateFeedbackPage.appendChild(updateFeedbackErrorUL)
 
 			document.getElementById("update-feedback-form").addEventListener("submit", async function(event){
 				
@@ -364,10 +362,10 @@
 				const newFeedback = {
 					title: title,
 					game: game,
-					content: content,
+					content: content
 				}
 				
-				validateAccount = function(data){
+				validateUpdate = function(data){
 					let errors = []
 					
 					if(data.title.length < TITLE_MIN_LENGTH){
@@ -383,10 +381,11 @@
 					}
 
 					return errors
+					
 				}
 
-				const errors = validateAccount(newFeedback)
-
+				const errors = validateUpdate(newFeedback)
+		
 				if(errors.length > 0){
 
 					updateFeedbackErrorUL.textContent = ''
@@ -444,6 +443,10 @@
 				}
 				
 			})
+
+			const registerPage = document.getElementById("register-form")
+			const registerErrorUL = document.createElement('ul')
+			registerPage.appendChild(registerErrorUL)
 		
 			document.getElementById("register-form").addEventListener("submit", async function(event){
 				event.preventDefault()
@@ -471,12 +474,9 @@
 					if(data.username.length > USERNAME_MAX_LENGTH){
 						errors.push("Username Too Long")
 					}
+					
 					if(data.password.length > PASSWORD_MAX_LENGTH){
 						errors.push("Password Too Long")
-					}
-
-					if(data.password.length == 0){
-						errors.push("Password Too Short")
 					}
 
 					if(data.password != data.repeat_password){
@@ -490,8 +490,8 @@
 
 				if(errors.length > 0){
 					
-					const ul = document.createElement("ul")
-					page.appendChild(ul)
+					updateFeedbackErrorUL.textContent = ''
+
 					for(const error of errors){
 						const li = document.createElement("li")
 						li.innerText = error
@@ -717,9 +717,6 @@
 				}
 			}
 		
-			async function regesterAccount(account) {
-				
-			}
 		})	
 	</script>
 
