@@ -145,6 +145,10 @@
 				
 			})
 
+			const loginPage = document.getElementById("login-page")
+			const loginErrorUL = document.createElement('ul')
+			loginPage.appendChild(loginErrorUL)
+
 			document.getElementById("login-form").addEventListener("submit", async function(event){
 				
 				event.preventDefault()
@@ -182,12 +186,11 @@
 
 				if(errors.length > 0){
 					
-					const ul = document.createElement("ul")
-					page.appendChild(ul)
+					loginErrorUL.textContent = ''
 					for(const error of errors){
 						const li = document.createElement("li")
 						li.innerText = error
-						ul.appendChild(li)
+						loginErrorUL.appendChild(li)
 					}
 					
 				}
@@ -222,12 +225,11 @@
 							const errors = body.errorMessages
 							
 							if(errors.length > 0){
-								const ul = document.createElement("ul")
-								page.appendChild(ul)
+								loginErrorUL.textContent = ''
 								for(error of errors){
 									const li = document.createElement("li")
 									li.innerText=error
-									ul.appendChild(li)
+									loginErrorUL.appendChild(li)
 								}
 								
 							}		
@@ -238,12 +240,11 @@
 							errors = body.internalError
 								
 							if(errors.length > 0){ 
-								const ul = document.createElement("ul")
-								page.appendChild(ul)
+								loginErrorUL.textContent = ''
 								for(error of errors){
 									const li = document.createElement("li")
 									li.innerText=error
-									ul.appendChild(li)
+									loginErrorUL.appendChild(li)
 								}
 							}	
 						default:
@@ -330,12 +331,11 @@
 							const errors = body.errorMessages
 								
 							if(errors.length > 0){
-								const ul = document.createElement("ul")
-								page.appendChild(ul)
+								feedbackErrorUL.textContent = ''
 								for(error of errors){
 									const li = document.createElement("li")
 									li.innerText = error
-									ul.appendChild(li)
+									feedbackErrorUL.appendChild(li)
 								}
 								
 							}	
@@ -426,12 +426,11 @@
 							const errors = body.errorMessages
 								
 							if(errors.length > 0){
-								const ul = document.createElement("ul")
-								page.appendChild(ul)
+								updateFeedbackErrorUL.textContent = ''
 								for(error of errors){
 									const li = document.createElement("li")
 									li.innerText = error
-									ul.appendChild(li)
+									updateFeedbackErrorUL.appendChild(li)
 								}
 								
 							}	
@@ -442,50 +441,6 @@
 				
 			})
 			
-			/*document.getElementById("delete-feedback").addEventListener("click", async function(event){
-				event.preventDefault()	
-				
-				const uri = location.pathname
-				const id = uri.split("/")[2]
-
-				const response = await fetch(BACKEND_URI+"feedbacks/"+id,{	
-					method: "DELETE",
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": "Bearer "+accessToken
-					},
-				})
-
-				
-				switch(response.status){
-					
-					case 201:
-						const uri = "/feedbacks"
-						history.pushState({}, "", uri)
-						hideCurrentPage()
-						showPage(uri)						
-					break
-
-					case 400:
-						body = await response.json()
-						const errors = body.errorMessages
-							
-						if(errors.length > 0){
-							const ul = document.createElement("ul")
-							page.appendChild(ul)
-							for(error of errors){
-								const li = document.createElement("li")
-								li.innerText = error
-								ul.appendChild(li)
-							}
-							
-						}	
-
-					break
-				}
-				
-			})
-*/
 			const registerPage = document.getElementById("register-page")
 			const registerErrorUL = document.createElement('ul')
 			registerPage.appendChild(registerErrorUL)
@@ -508,6 +463,10 @@
 				
 				validateAccount = function(data){
 					const errors =[]
+
+					if(!isNaN(name)){
+						errors.push("Name Cant Contain Digit")
+					}
 					
 					if(data.username.length < USERNAME_MIN_LENGTH){
 						errors.push("Username Too Short")
@@ -532,12 +491,11 @@
 
 				if(errors.length > 0){
 					
-					updateFeedbackErrorUL.textContent = ''
-
+					registerErrorUL.textContent = ''
 					for(const error of errors){
 						const li = document.createElement("li")
 						li.innerText = error
-						ul.appendChild(li)
+						registerErrorUL.appendChild(li)
 					}
 					
 				}
@@ -566,12 +524,11 @@
 							const errors = body.errorMessages
 							
 							if(errors.length > 0){
-								const ul = document.createElement("ul")
-								page.appendChild(ul)
+								registerErrorUL.textContent = ''
 								for(const error of errors){
 									const li = document.createElement("li")
 									li.innerText=error
-									ul.appendChild(li)
+									registerErrorUL.appendChild(li)
 								}
 								
 							}		
@@ -689,6 +646,13 @@
 				}
 				
 			}
+
+			
+			
+			
+			const feedbackPage = document.getElementById("register-page")
+			const deleteErrorUL = document.createElement('ul')
+			feedbackPage.appendChild(deleteErrorUL)
 			
 			async function loadFeedbackPage(id){
 				const page = document.getElementById("feedback-page")
@@ -772,12 +736,11 @@
 									const errors = body.errorMessages
 										
 									if(errors.length > 0){
-										const ul = document.createElement("ul")
-										page.appendChild(ul)
+										registerErrorUL.textContent = ''
 										for(error of errors){
 											const li = document.createElement("li")
 											li.innerText = error
-											ul.appendChild(li)
+											registerErrorUL.appendChild(li)
 										}
 										
 									}	
@@ -909,7 +872,7 @@
 						New Content: <textarea class="update_textarea" type="text" id="newContent" rows="4" cols="60" > </textarea>
 					</div>
 					<div id="submit_update">
-						<input class="submit_update_btn" type="submit" name="update-btn" value="CREATE">
+						<input class="submit_update_btn" type="submit" name="update-btn" value="UPDATE">
 					</div>	
 				</form>
 			</div>	

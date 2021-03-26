@@ -21,6 +21,7 @@ module.exports = function({accountManager}){
 				response.status(204).end()
 			}else{
 				const errorTranslations = {
+					nameCantContainDigit: "The Name Cant Contain Digits",
 					usernameTooShort: "The username needs to be at least 3 characters.",
 					usernameTooLong: "The username is too long.",
 					internalError: "Cant query out the request now.",
