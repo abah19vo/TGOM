@@ -15,7 +15,7 @@ module.exports = function({feedbackManager}){
             }
             if(errors.length > 0 ){
                 const errorMessages = errors.map(e => errorTranslations[e])
-                response.status(400).json(errorMessages)
+                response.status(400).json({errorMessages:errorMessages})
             }else{
                 res.status(200).json(feedbacks)
             }
@@ -67,7 +67,7 @@ module.exports = function({feedbackManager}){
             }
             if(errors.length > 0 ){
                 const errorMessages = errors.map(e => errorTranslations[e])
-                res.status(400).json(errorMessages)
+                res.status(400).json({errorMessages:errorMessages})
             }else{
                 res.status(200).json(feedback)
             }
@@ -116,7 +116,7 @@ module.exports = function({feedbackManager}){
         jwt.verify(accessToken,secret, function(error, payload){
 
             if(error){
-                res.status(400).json(["Cant query out the request now."])
+                res.status(400).json({errorMessages:["Cant query out the request now."]})
             }else{
                 const newFeedback ={
                     id: req.params.id,
@@ -126,7 +126,6 @@ module.exports = function({feedbackManager}){
                     userId: payload.userId,
                     isLoggedIn: payload.isLoggedIn
                 }
-                console.log("---------->",newFeedback)
                 feedbackManager.updateFeedbackById(newFeedback, function(errors){
                     const errorTranslations = {
                         titleTooShort: "the title is needs to be at least 4 characters",
@@ -139,7 +138,7 @@ module.exports = function({feedbackManager}){
 
                     if(errors.length > 0){
                         const errorMessages = errors.map(e => errorTranslations[e])
-                        res.status(400).json(errorMessages)
+                        res.status(400).json({errorMessages:errorMessages})
 
                     }else{
                         res.status(204).end()

@@ -62,7 +62,7 @@ module.exports = function({feedbackManager, commentManager}){
                 internalError: "Cant query out the request now.",
                 contentTooShort:"the content is supposed to be at least 3 characters",
                 contentTooLong: "the content is supposed to be at least under 260 characters",
-                notLoggedIn: "Youre Not LoggedIn"
+                notLoggedIn: "you're Not LoggedIn"
             }
 
             if(errors.length > 0){

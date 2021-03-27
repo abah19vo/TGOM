@@ -15,7 +15,6 @@ module.exports = function({accountManager}){
 			name: request.body.name,
 			confirmPassword: request.body.repeat_password,
 		}
-        console.log("🚀 ~ file: user-router.js ~ line 18 ~ router.post ~ account", account)
 		accountManager.createUser(account, function(errors){
 			if(errors.length == 0){
 				response.status(204).end()
@@ -85,7 +84,9 @@ module.exports = function({accountManager}){
         const payload = {
 			isLoggedIn: false,
 		}
-		jwt.sign(payload, secret, function(err, token) {					
+		jwt.sign(payload, secret, function(err, token) {
+			if(err) res.status(500).json({internalError: ["Cant query out the request now."]})
+
 			res.status(200).json({
 				"access_token": token
 			})
