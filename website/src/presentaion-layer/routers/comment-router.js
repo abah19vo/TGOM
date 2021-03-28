@@ -8,41 +8,35 @@ module.exports = function({commentManager}){
         const newComment ={
             feedbackId: req.params.id,
             content: req.body.content,
-            userId: req.session.userId
+            userId: req.session.userId,
+            isLoggedIn: req.session.isLoggedIn
         }
-        if(req.session.isLoggedIn){ 
-            commentManager.createComment(newComment, function(errors){
-                const errorTranslations = {
-                    commentTooShort: "the comment is needs to be at least 4 characters",
-                    internalError: "Cant query out the request now.",
-                    commentTooLong: "the comment is supposed to be at least under 260 characters",
+        commentManager.createComment(newComment, function(errors){
+            const errorTranslations = {
+                commentTooShort: "the comment is needs to be at least 4 characters",
+                internalError: "Cant query out the request now.",
+                commentTooLong: "The comment is supposed to be at least under 260 characters",
+                notLoggedIn: "You Need To Be Logged In To Be Able To Comment"
+            }
+            if(errors.length > 0){
+                const errorMessages = errors.map(e => errorTranslations[e])
+                const model = {
+                    errors: errorMessages,
+                    content: newComment.content,
                 }
-                if(errors.length > 0){
-                    const errorMessages = errors.map(e => errorTranslations[e])
-                    const model = {
-                        errors: errorMessages,
-                        content: newComment.content,
-                    }
-                    res.render('create-comment.hbs',model)
-                }else{
-                    res.redirect('/feedbacks/'+ req.params.id)
-                }
-            })
-        }else{
-            res.redirect('/')
-        }
+                res.render('create-comment.hbs',model)
+            }else{
+                res.redirect('/feedbacks/'+ req.params.id)
+            }
+        })
     })
 
     router.get('/:id/create', (req, res) => {
         
-        if(req.session.isLoggedIn){
-            const model ={
-                id: req.params.id
-            }
-            res.render('create-comment.hbs',model)
-        }else{
-            res.redirect('/')
+        const model ={
+            id: req.params.id
         }
+        res.render('create-comment.hbs',model)
     })
 
 

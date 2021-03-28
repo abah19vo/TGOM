@@ -8,28 +8,20 @@ module.exports = function({feedbackRepository}){
         feedbackRepository.getAllFeedbacks(callback)
     }
 
-    exports.getCreateFeedback = function(isLoggedIn, callback){
-        if(!isLoggedIn){
-            callback(['notLoggedIn'])
-        }else{
-            callback([])
-        }
-            
-    }
-
     exports.createFeedback = function(newFeedback, callback){
-        
 
-        const errors = feedBackValidator.getFeedbackValidationErrors(newFeedback, callback)
-        if(errors.length > 0){
-            callback(errors,null)
-            return
-        }
         if(newFeedback.isLoggedIn){
+            const errors = feedBackValidator.getFeedbackValidationErrors(newFeedback, callback)
+
+            if(errors.length > 0){
+                callback(errors,null)
+                return
+            }
             feedbackRepository.createFeedBack(newFeedback, callback)
-        }
-        else
+        
+        }else{
             callback(['notLoggedIn'], null)
+        }
     }
 
     exports.getFeedbackById = function(id, callback){
@@ -39,7 +31,6 @@ module.exports = function({feedbackRepository}){
 
     exports.updateFeedbackById = function(newFeedback, callback){
         
-
         const errors = feedBackValidator.getFeedbackValidationErrors(newFeedback, callback)
         if(errors.length > 0){
             callback(errors,null)

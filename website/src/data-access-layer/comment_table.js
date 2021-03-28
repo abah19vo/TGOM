@@ -1,13 +1,13 @@
 const mysql = require("mysql2")
 
 
-
 const connection = mysql.createConnection({
     host: 'db',
     user: 'root',
     database: 'hello',
     password: "abc123"
 })
+
 module.exports = function(){
     const exports = {}
     
@@ -17,7 +17,6 @@ module.exports = function(){
         const query = 'INSERT INTO comment(feedBackId,userId,content) VALUES(?,?,?)'
         connection.query(query,values,function(error){
             if(error){
-                
                 callback(['internalError'])
             }else{
                 callback([])

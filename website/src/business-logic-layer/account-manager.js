@@ -24,16 +24,8 @@ module.exports= function({accountRepository}){
         accountRepository.createUser(newUser, callback)
     }
 
-    exports.getUserById = function(id, callback){
-        accountRepository.getAccountByUsername(id, callback)
-    }
-
     exports.getUserByUserName = function(username, callback){
         accountRepository.getAccountByUsername(username, callback)
-    }
-
-    exports.getPassword = function(username, callback){
-        accountRepository.getPassword(username, callback)
     }
 
     exports.login = function(insertedAccount, callback){

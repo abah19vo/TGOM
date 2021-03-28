@@ -30,20 +30,8 @@ module.exports = function({feedbackManager, commentManager}){
     
 
     router.get('/create', (req, res) => {
-        feedbackManager.getCreateFeedback(req.session.isLoggedIn ,function(errors){
-            const errorTranslations = {
-                notLoggedIn: "Youre Not LoggedIn"
-            }
-            if(errors.length > 0){
-                const errorMessages = errors.map(e => errorTranslations[e])
-                const model = {
-                    errors: errorMessages,
-                }   
-                res.render('create-feedback.hbs', model)
-            }
-            else
-               res.render('create-feedback.hbs')
-        })        
+
+        res.render('create-feedback.hbs')
     })
 
     router.post('/create', (req, res) => {
