@@ -1,4 +1,5 @@
 const accountValidator = require('./account-validation')
+const accountAuthentication = require('./account-authentication')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -48,7 +49,7 @@ module.exports= function({accountRepository}){
             if(repositoryErrors.length > 0){
                 callback(repositoryErrors)
             }else{
-                const errors = accountValidator.checkIfRealUser(repositoryAccount,insertedAccount)
+                const errors = accountAuthentication.checkIfRealUser(repositoryAccount,insertedAccount)
                 if(errors.length > 0){
                     callback(errors,null)
                 }else{
