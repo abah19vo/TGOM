@@ -235,6 +235,15 @@ a{
     font-family: 'Electrolize', sans-serif;
     color: rgb(176, 176, 176);
 }
+.notLoggedIn{
+    font-size: 30px;
+    margin-left: 2% ;
+    margin-top: 2%;
+    margin-bottom: -1%;
+    font-family: 'Electrolize', sans-serif;
+    color: rgb(255, 0, 0);
+}
+
 #user_section{
     text-transform: uppercase;
     font-family: 'Electrolize', sans-serif;
