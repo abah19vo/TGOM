@@ -8,9 +8,6 @@ exports.getErrorNewUser = function(account){
     if(!account.hasOwnProperty("username")){
         errors.push("usernameMissing")
     }
-    if(!isNaN(account.name)){
-        errors.push("nameCantContainDigit")
-    }
     if(account.username.length < USERNAME_MIN_LENGTH){
         errors.push("usernameTooShort")
     }
@@ -32,7 +29,6 @@ exports.validateAccount = function(insertedAccount){
     if(insertedAccount.username.length < USERNAME_MIN_LENGTH){
         errors.push("usernameTooShort")
     }
-
     if(insertedAccount.username.length > USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
     }

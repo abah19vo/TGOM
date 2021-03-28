@@ -105,14 +105,12 @@ module.exports = function({feedbackManager, commentManager}){
                             feedback: feedback,
                             comments: comments
                         }
-                        //res.json(model)
                         res.render('feedback.hbs', model)
                     }
                 })
                 
             }
         })
-
     })
 
 

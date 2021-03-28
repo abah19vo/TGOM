@@ -101,12 +101,7 @@ module.exports = function({feedbackManager}){
                     }
                 }) 
             }
-            
-            
         })
-
-        
-
     })
 
     router.put('/:id', (req, res) => {
@@ -146,8 +141,7 @@ module.exports = function({feedbackManager}){
                 })
             }
         })
-
     })
-
+    
     return router
 }

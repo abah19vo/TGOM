@@ -17,7 +17,6 @@ module.exports = function({accountManager}){
 		const account = {
 			username: request.body.username,
 			password: request.body.password,
-			name: request.body.name,
 			confirmPassword: request.body.repeat_password
 		}
 		
@@ -32,7 +31,6 @@ module.exports = function({accountManager}){
 					usernameTooLong: "The username is too long.",
 					internalError: "Cant query out the request now.",
 					usernameTaken: "Username already in use.",
-                    nameIsNumber: "Name Cant Contain Numbers",
 					passwordDontMatch: "Passwords Does Not Match",
 				}
 				const errorMessages = errors.map(e => errorTranslations[e])
@@ -41,7 +39,6 @@ module.exports = function({accountManager}){
 					errors: errorMessages,
 					username: request.body.username,
 					password: request.body.password,
-					name: request.body.name,
 					confirmPassword: request.body.repeat_password
 				}
 				response.render('register.hbs',model)

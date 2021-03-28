@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS comment;
 CREATE TABLE  IF NOT EXISTS user(
     id int(10) NOT NULL AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
-    name VARCHAR(50) NOT NULL, 
     password VARCHAR(150) NOT NULL,
     CONSTRAINT usernameUnique UNIQUE (username),
     PRIMARY KEY (id)

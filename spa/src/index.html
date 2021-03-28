@@ -4,31 +4,8 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="./spa.css" rel="stylesheet" type="text/css" >
 	<title> TGOM </title>
-
-	<style>
-		
-		/*** TODO: Put CSS code in separate file. ***/
-		
-		/* Code for only showing the page with the class "current-page". */
-		main > .page{
-			display: none;
-		}
-		
-		main > .page.current-page{
-			display: block;
-		}
-		
-		/* Code for hiding elements depending on if the user is logged in or not. */
-		.is-logged-in .if-is-logged-out{
-			display: none;
-		}
-		
-		.is-logged-out .if-is-logged-in{
-			display: none;
-		}
-		
-	</style>
 
 	
 
@@ -36,9 +13,7 @@
 
     	const BACKEND_URI = "http://localhost:8000/api/"
 		
-		// TODO: Want to remember the access token across page reloads?
-		// You could for example store it in local storage, although that
-		// would be really bad if your website contains a XSS vulnerability.
+
 		let accessToken = ""
 		const USERNAME_MIN_LENGTH = 3
 		const USERNAME_MAX_LENGTH = 20
@@ -50,9 +25,7 @@
 		document.addEventListener("DOMContentLoaded", function(){
 			
 			showPage(location.pathname)
-			
-			// TODO: Write comment explaining why we listen for click on links
-			// this very strange way.
+
 			document.body.addEventListener("click", function(event){
 				
 				const clickedElement = event.target

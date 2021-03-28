@@ -1,0 +1,15 @@
+main > .page{
+    display: none;
+}
+
+main > .page.current-page{
+    display: block;
+}
+
+.is-logged-in .if-is-logged-out{
+    display: none;
+}
+
+.is-logged-out .if-is-logged-in{
+    display: none;
+}

@@ -58,4 +58,3 @@ module.exports = function(){
 }
 
 
-/*'SELECT * FROM `user`'*/

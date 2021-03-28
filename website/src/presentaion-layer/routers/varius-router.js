@@ -4,8 +4,8 @@ const express = require('express')
 module.exports = function(){
     const router = express.Router()
 
-    router.get("/",function(request,response){
-        response.render('index.hbs')
+    router.get("/", (req,res) => {
+        res.render('index.hbs')
     }) 
     
     router.get('/about', (req, res) => {
@@ -13,7 +13,7 @@ module.exports = function(){
     })
     
     router.get('/contact', (req, res) => {
-    res.render('contact.hbs')
+        res.render('contact.hbs')
     })
     
     router.get('/flight', (req, res) => {

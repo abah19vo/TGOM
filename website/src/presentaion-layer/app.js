@@ -9,11 +9,7 @@ const redisStore = require('connect-redis')(session)
 const csurf = require('csurf')
 
 
-
 const Client = redis.createClient(6379, 'redis');
-
-
-
 
 module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter}){
   const app = express()
