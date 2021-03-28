@@ -1,6 +1,5 @@
 const USERNAME_MIN_LENGTH = 3
 const USERNAME_MAX_LENGTH = 20
-const bcrypt = require('bcrypt');
 
 exports.getErrorNewUser = function(account){
     
@@ -42,17 +41,4 @@ exports.validateAccount = function(insertedAccount){
 }
 
 
-exports.checkIfRealUser = function(repositoryAccount,insertedAccount){
-    const errors =[]
 
-    if(repositoryAccount.username != insertedAccount.username){
-        errors.push("invalidUsername")
-    }
-
-    const valid = bcrypt.compareSync(insertedAccount.password, repositoryAccount.password)
-    if(!valid){
-        errors.push("invalidPassword")
-    }
-    console.log("validator------->"+errors)
-    return errors
-}
