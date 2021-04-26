@@ -1,4 +1,4 @@
-const feedBackValidator = require('./feedBack-validation')
+const feedBackValidator = require('./feedback-validation')
 
 module.exports = function({feedbackRepository}){
 
@@ -17,7 +17,7 @@ module.exports = function({feedbackRepository}){
                 callback(errors,null)
                 return
             }
-            feedbackRepository.createFeedBack(newFeedback, callback)
+            feedbackRepository.createFeedback(newFeedback, callback)
         
         }else{
             callback(['notLoggedIn'], null)
@@ -31,13 +31,13 @@ module.exports = function({feedbackRepository}){
 
     exports.updateFeedbackById = function(newFeedback, callback){
         
-        const errors = feedBackValidator.getFeedbackValidationErrors(newFeedback, callback)
+        const errors = feedbackValidator.getFeedbackValidationErrors(newFeedback, callback)
         if(errors.length > 0){
             callback(errors,null)
             return
         }
         if(newFeedback.isLoggedIn){
-            feedbackRepository.updateFeedBackById(newFeedback, callback)
+            feedbackRepository.updateFeedbackById(newFeedback, callback)
         }
         else
             callback(['notLoggedIn'], null)
@@ -46,7 +46,7 @@ module.exports = function({feedbackRepository}){
     exports.deleteFeedbackById = function(feedback, callback){
         
         if(feedback.isLoggedIn){
-            feedbackRepository.deleteFeedBackById(feedback, callback)
+            feedbackRepository.deleteFeedbackById(feedback, callback)
         }
         else
             callback(['notLoggedIn'], null)

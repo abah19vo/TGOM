@@ -43,7 +43,7 @@ module.exports = function({feedbackManager, commentManager}){
             isLoggedIn: req.session.isLoggedIn
         }
         
-        feedbackManager.createFeedback(newFeedback, function(errors, feedbackId){
+        feedbackManager.createFeedback(newFeedback, function(errors){
             const errorTranslations = {
                 titleTooShort: "the title is needs to be at least 4 characters",
                 gameTooShort: "the game name is supposed to be at least 4 characters",

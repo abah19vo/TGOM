@@ -14,7 +14,7 @@ module.exports = function(){
     exports.createComment = function(newComment,callback){
 
         const values = [newComment.feedbackId,newComment.userId,newComment.content]
-        const query = 'INSERT INTO comment(feedBackId,userId,content) VALUES(?,?,?)'
+        const query = 'INSERT INTO comment(feedbackId,userId,content) VALUES(?,?,?)'
         connection.query(query,values,function(error){
             if(error){
                 callback(['internalError'])
@@ -35,6 +35,5 @@ module.exports = function(){
             }
         })
     }
-
     return exports
 }

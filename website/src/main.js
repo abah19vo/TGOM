@@ -4,11 +4,11 @@ const container = awilix.createContainer()
 container.register({
     accountManager: awilix.asFunction(require('./business-logic-layer/account-manager.js')),
     commentManager: awilix.asFunction(require('./business-logic-layer/comment-manager.js')),
-    feedbackManager: awilix.asFunction(require('./business-logic-layer/feedBack-manager.js')),
+    feedbackManager: awilix.asFunction(require('./business-logic-layer/feedback-manager.js')),
 
     accountRepository: awilix.asFunction(require('./data-access-layer/user_table.js')),
     commentRepository: awilix.asFunction(require('./data-access-layer/comment_table.js')),
-    feedbackRepository: awilix.asFunction(require('./data-access-layer/feedBack_table.js')),
+    feedbackRepository: awilix.asFunction(require('./data-access-layer/feedback_table.js')),
 
     variusRouter: awilix.asFunction(require('./presentaion-layer/routers/varius-router')),
     userRouter: awilix.asFunction(require('./presentaion-layer/routers/user-router')),
@@ -29,3 +29,4 @@ const app = container.resolve("app")
 app.listen(8000,function(){
     console.log("Running on 8000!")
 })
+
