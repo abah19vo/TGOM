@@ -18,17 +18,9 @@ module.exports = function({accountManager}){
 			if(errors.length == 0){
 				response.status(204).end()
 			}else{
-				const errorTranslations = {
-					nameCantContainDigit: "The Name Cant Contain Digits",
-					usernameTooShort: "The username needs to be at least 3 characters.",
-					usernameTooLong: "The username is too long.",
-					internalError: "Cant query out the request now.",
-					usernameTaken: "Username already in use.",
-					passwordDontMatch: "Passwords Does Not Match",
-				}
-				const errorMessages = errors.map(e => errorTranslations[e])
+				
 				response.status(400).json({
-					"errorMessages": errorMessages
+					"errors": errors
 				})
 			}
 			
@@ -44,18 +36,9 @@ module.exports = function({accountManager}){
 		}      
 		
 		accountManager.login(insertedAccount,function(errors,id){
-			const errorTranslations = {
-				usernameTooShort: "The username needs to be at least 3 characters.",
-				usernameTooLong: "The username is too long.",
-				internalError: "Cant query out the request now.",
-				invalidUsername:"the username is wrong or does not exist",
-				invalidPassword: "Wrong password please try again",
-
-			}
-
+			
 			if(errors.length > 0){
-				const errorMessages = errors.map(e => errorTranslations[e])
-				response.status(400).json({errorMessages:errorMessages})
+				response.status(400).json({errors:errors})
 			}else{
 				const payload = {
 					isLoggedIn: true,
@@ -63,7 +46,7 @@ module.exports = function({accountManager}){
 				}
 				jwt.sign(payload, secret, function(err, token) {
 					if(err){
-						response.status(500).json({internalError:errorTranslations.internalError})
+						response.status(500).json({internalError:"internalError"})
 					}else{
 						response.status(200).json({
 						"access_token": token
@@ -75,21 +58,7 @@ module.exports = function({accountManager}){
 			
 		})
     })
-    
-    
 
-	router.post('/sign-out', (req, res) =>{
-        const payload = {
-			isLoggedIn: false,
-		}
-		jwt.sign(payload, secret, function(err, token) {
-			if(err) res.status(500).json({internalError: ["Cant query out the request now."]})
-
-			res.status(200).json({
-				"access_token": token
-			})
-		})
-    })
 
     return router
 }

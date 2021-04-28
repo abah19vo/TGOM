@@ -12,7 +12,7 @@
 		{{/if}}
 		{{#if isLoggedIn}}
 			<h1>CREATE A FEEDBACK</h1>
-			<form action="/feedbacks/create" method="POST">
+			<form action="/feedbacks/newFeedback" method="POST">
 				<input type="hidden" name="_csrf" value="{{csrfToken}}">
 				<div>
 					Title: <input type="name" name="title" value="{{feedback.title}}">

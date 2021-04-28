@@ -4,7 +4,7 @@
     <p class="admin_top">Can't display the page now, try again later.</p>
 {{else}}
     {{#if isLoggedIn}}
-        <p class="creat"><a href="/feedbacks/create/{{user.id}}">✎Post A Feedback</a></p>
+        <p class="creat"><a href="/feedbacks/newFeedback/{{user.id}}">✎Post A Feedback</a></p>
     {{/if}}
     <p class="feedbacks_top">FEEDBACKS:</p>
     {{#if feedbacks.length}}

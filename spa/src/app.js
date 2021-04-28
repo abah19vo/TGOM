@@ -26,12 +26,9 @@ document.addEventListener("DOMContentLoaded", function(){
                 const uri = clickedElement.getAttribute("href")
                 
                 if(location.pathname != uri){
-                    
                     hideCurrentPage()
                     showPage(uri)
-                    
-                    history.pushState({}, "", uri)
-                    
+                    history.pushState({}, "", uri)  
                 }
                 
             }
@@ -42,66 +39,16 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.getElementById("click_logout").addEventListener("click", async function(event){
         event.preventDefault()
-        const response = await fetch(BACKEND_URI+"account/sign-out", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer "+accessToken
-            },
-        })
         
-        switch(response.status){
-            
-            case 200:
-                
-                var body = await response.json()
-                
-                accessToken = body.access_token
-                document.body.classList.add("is-logged-out")
-                document.body.classList.remove("is-logged-in")
-                
-                const uri = "/feedbacks"
-                history.pushState({}, "", uri)
-                hideCurrentPage()
-                showPage(uri)
-                
-                break
-            case 400:
-
-                body = await response.json()
-                const errors = body.errorMessages
-                
-                if(errors.length > 0){
-                    const ul = document.createElement("ul")
-                    page.appendChild(ul)
-                    for(error of errors){
-                        const li = document.createElement("li")
-                        li.innerText(error)
-                        ul.appendChild(li)
-                    }
-                    
-                }		
-                break
-            case 500:
-                body = await response.json()
-
-                errors = body.internalError
-                    
-                if(errors.length > 0){ 
-                    const errorClass = document.getElementById("errors")
-                    const ul = document.createElement("ul")
-                    errorClass.appendChild(ul)
-                    for(error of errors){
-                        const li = document.createElement("li")
-                        li.innerText(error)
-                        ul.appendChild(li)
-                    }
-                }	
-            default:
-                
-                // TODO.
-            
-        }
+         
+        accessToken = ""
+        document.body.classList.add("is-logged-out")
+        document.body.classList.remove("is-logged-in")
+        
+        const uri = "/feedbacks"
+        history.pushState({}, "", uri)
+        hideCurrentPage()
+        showPage(uri)
         
     })
 
@@ -112,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("login-form").addEventListener("submit", async function(event){
         
         event.preventDefault()
-        const page = document.getElementById("login-page")
         const username = document.getElementById("username_login").value
         const password = document.getElementById("password_login").value
 

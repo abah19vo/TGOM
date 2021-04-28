@@ -12,7 +12,7 @@ module.exports = function(){
     const exports = {}
     
     exports.createFeedback= function(newFeedback,callback){
-        const query = "INSERT INTO feedBack(title,content,game,userId) VALUES(?,?,?,?)"
+        const query = "INSERT INTO feedback(title,content,game,userId) VALUES(?,?,?,?)"
         const values = [newFeedback.title,newFeedback.content,newFeedback.game,newFeedback.userId]
 
         connection.query(query,values,function(error){

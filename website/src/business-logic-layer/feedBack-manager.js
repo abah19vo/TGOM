@@ -1,4 +1,4 @@
-const feedBackValidator = require('./feedback-validation')
+const feedbackValidator = require('./feedback-validation')
 
 module.exports = function({feedbackRepository}){
 
@@ -11,7 +11,7 @@ module.exports = function({feedbackRepository}){
     exports.createFeedback = function(newFeedback, callback){
 
         if(newFeedback.isLoggedIn){
-            const errors = feedBackValidator.getFeedbackValidationErrors(newFeedback, callback)
+            const errors = feedbackValidator.getFeedbackValidationErrors(newFeedback, callback)
 
             if(errors.length > 0){
                 callback(errors,null)

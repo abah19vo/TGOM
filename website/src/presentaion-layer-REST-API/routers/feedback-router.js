@@ -5,9 +5,7 @@ const secret = 'its me mario!!'
 
 module.exports = function({feedbackManager}){
     const router = express.Router()
-
-   
-    
+ 
     router.get('/', (req, res) => {
         feedbackManager.getAllFeedbacks(function(errors, feedbacks){
             const errorTranslations = {
@@ -22,12 +20,12 @@ module.exports = function({feedbackManager}){
         })
     })
 
-    router.post('/create', (req, res) => {
+    router.post('/newFeedback', (req, res) => {
         const authorizationHeader = req.header("Authorization") 
         const accessToken = authorizationHeader.substring("Bearer ".length) 
         jwt.verify(accessToken,secret, function(error, payload){
             if(error){
-                res.status(400).json({errorMessages:["Cant query out the request now."]})
+                res.status(400).json({errorMessages:"InternalError"})
             }else{
                 const newFeedback ={
                     title: req.body.title,
@@ -36,19 +34,9 @@ module.exports = function({feedbackManager}){
                     userId: payload.userId,
                     isLoggedIn: payload.isLoggedIn
                 }
-                feedbackManager.createFeedback(newFeedback, function(errors){
-                    const errorTranslations = {
-                        titleTooShort: "the title is needs to be at least 4 characters",
-                        gameTooShort: "the game name is supposed to be at least 4 characters",
-                        internalError: "Cant query out the request now.",
-                        contentTooShort:"the content is supposed to be at least 3 characters",
-                        contentTooLong: "the content is supposed to be at least under 260 characters",
-                        notLoggedIn: "you're Not LoggedIn"
-                    }
-
+                feedbackManager.createFeedback(newFeedback, function(errors){   
                     if(errors.length > 0){
-                        const errorMessages = errors.map(e => errorTranslations[e])
-                        res.status(400).json({errorMessages :errorMessages})
+                        res.status(400).json({errors :errors})
 
                     }else{
                         res.status(201).end()
@@ -62,12 +50,8 @@ module.exports = function({feedbackManager}){
     router.get('/:id', (req, res) => {
         const id = req.params.id
         feedbackManager.getFeedbackById(id, function(errors, feedback){
-            const errorTranslations = {
-                internalError: "Cant query out the request now.",
-            }
             if(errors.length > 0 ){
-                const errorMessages = errors.map(e => errorTranslations[e])
-                res.status(400).json({errorMessages:errorMessages})
+                res.status(400).json({errors:errors})
             }else{
                 res.status(200).json(feedback)
             }
@@ -80,7 +64,7 @@ module.exports = function({feedbackManager}){
         const accessToken = authorizationHeader.substring("Bearer ".length) 
         jwt.verify(accessToken,secret, function(error, payload){
             if(error){
-                response.status(400).json({errorMessages:["Cant query out the request now."]})
+                response.status(400).json({error:"InternalError"})
             }else{
                 
                 feedback={
@@ -89,13 +73,9 @@ module.exports = function({feedbackManager}){
                     userId: payload.userId
                 }
                 feedbackManager.deleteFeedbackById(feedback, function(errors){
-                    const errorTranslations = {
-                        internalError: "Cant query out the request now.",
-                        wrongUser:"you can not delete this post"
-                    }
+                    
                     if(errors.length > 0 ){
-                        const errorMessages = errors.map(e => errorTranslations[e])
-                        res.status(400).json({errorMessages:errorMessages})
+                        res.status(400).json({errors:errors})
                     }else{
                         res.status(201).end()
                     }
@@ -111,7 +91,7 @@ module.exports = function({feedbackManager}){
         jwt.verify(accessToken,secret, function(error, payload){
 
             if(error){
-                res.status(400).json({errorMessages:["Cant query out the request now."]})
+                res.status(400).json({error:"InternalError"})
             }else{
                 const newFeedback ={
                     id: req.params.id,
@@ -122,18 +102,8 @@ module.exports = function({feedbackManager}){
                     isLoggedIn: payload.isLoggedIn
                 }
                 feedbackManager.updateFeedbackById(newFeedback, function(errors){
-                    const errorTranslations = {
-                        titleTooShort: "the title is needs to be at least 4 characters",
-                        gameTooShort: "the game name is supposed to be at least 4 characters",
-                        internalError: "Cant query out the request now.",
-                        contentTooShort:"the content is supposed to be at least 3 characters",
-                        contentTooLong: "the content is supposed to be at least under 260 characters",
-                        notLoggedIn: "you're Not LoggedIn"
-                    }
-
                     if(errors.length > 0){
-                        const errorMessages = errors.map(e => errorTranslations[e])
-                        res.status(400).json({errorMessages:errorMessages})
+                        res.status(400).json({errors:errors})
 
                     }else{
                         res.status(204).end()

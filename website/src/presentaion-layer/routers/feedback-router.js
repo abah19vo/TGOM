@@ -29,12 +29,12 @@ module.exports = function({feedbackManager, commentManager}){
     })
     
 
-    router.get('/create', (req, res) => {
+    router.get('/newFeedback', (req, res) => {
 
         res.render('create-feedback.hbs')
     })
 
-    router.post('/create', (req, res) => {
+    router.post('/newFeedback', (req, res) => {
         const newFeedback ={
             title: req.body.title,
             content: req.body.content,
