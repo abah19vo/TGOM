@@ -1,16 +1,118 @@
 const BACKEND_URI = "http://localhost:8000/api/"
-			
+
+const constants = {
+    USERNAME_MIN_LENGTH : 3,
+    USERNAME_MAX_LENGTH : 20,
+    PASSWORD_MAX_LENGTH : 25,
+    TITLE_MIN_LENGTH : 3,
+    GAME_MIN_LENGTH : 3,
+    CONTENT_MIN_LENGTH : 20,
+    CONTENT_MAX_LENGTH : 260,
+}
+
+
+
+translateAccountError = function(errors){	
+	const errorTranslations = {
+        nameCantContainDigit: "The Name Cant Contain Digits",
+        usernameTooShort: "The username needs to be at least "+ constants.USERNAME_MIN_LENGTH +" characters.",
+        usernameTooLong: "The username should be less than "+ constants.USERNAME_MAX_LENGTH +" characters",
+        internalError: "Cant query out the request now.",
+        usernameTaken: "Username already in use.",
+        passwordDontMatch: "Passwords Does Not Match",
+        passwordTooLong: "The password should be less than  "+ constants.PASSWORD_MAX_LENGTH +" characters.",
+        invalidPassword: "Empty password field please try again",
+        notLoggedIn: "you're Not LoggedIn",
+    }
+    const errorMessages = errors.map(e => errorTranslations[e])
+    
+    return errorMessages
+}
+
+
+
+translateFeedbackError= function(errors){
+    const errorTranslations = {
+        titleTooShort: "the title is needs to be at least "+ constants.TITLE_MIN_LENGTH+" characters",
+        gameTooShort: "the game name is supposed to be at least "+constants.GAME_MIN_LENGTH+" characters",
+        internalError: "Cant query out the request now.",
+        contentTooShort:"the content is supposed to be at least "+constants.CONTENT_MIN_LENGTH+" characters",
+        contentTooLong: "the content is supposed to be at least under "+ constants.CONTENT_MAX_LENGTH+" characters",
+        notLoggedIn: "you're Not LoggedIn",
+        wrongUser:"you can not delete this post"
+    }
+    const errorMessages = errors.map(e => errorTranslations[e])
+    return errorMessages
+	
+}
+
+validatFeedback = function(newFeedback){
+	
+	const errors = []
+	
+	if(newFeedback.title.length < constants.TITLE_MIN_LENGTH){
+		errors.push("titleTooShort")
+	}
+	if(newFeedback.game.length < constants.GAME_NAME_MIN_LENGTH){
+		errors.push("gameTooShort")
+	}
+	if(newFeedback.content.length < constants.REVIEW_MIN_LENGTH){
+		errors.push("contentTooShort")
+    }
+    if(newFeedback.content.length > constants.REVIEW_MAX_LENGTH){
+		errors.push("contentTooLong")
+	}
+	
+	return errors
+	
+}
+
+
+getErrorNewAccount = function(account){
+    
+    const errors = []
+
+    if(!account.hasOwnProperty("username")){
+        errors.push("usernameMissing")
+    }
+    if(account.username.length < constants.USERNAME_MIN_LENGTH){
+        errors.push("usernameTooShort")
+    }
+    if(account.username.length > constants.USERNAME_MAX_LENGTH){
+        errors.push("usernameTooLong")
+    }
+    if(account.password != account.confirmPassword){
+        errors.push("passwordDontMatch")
+    }
+    return errors
+}
+
+validateAccount = function(account){
+    const errors =[]
+
+    if(!account.hasOwnProperty("username")){
+        errors.push("usernameMissing")
+    }
+    if(account.username.length < constants.USERNAME_MIN_LENGTH){
+        errors.push("usernameTooShort")
+    }
+    if(account.username.length > constants.USERNAME_MAX_LENGTH){
+        errors.push("usernameTooLong")
+    }
+
+    return errors
+}
+
+
+
+
 
 let accessToken = ""
-const USERNAME_MIN_LENGTH = 3
-const USERNAME_MAX_LENGTH = 20
-const PASSWORD_MAX_LENGTH = 25
-const TITLE_MIN_LENGTH = 3
-const GAME_MIN_LENGTH = 3
-const CONTENT_MIN_LENGTH = 10
+
+
 
 document.addEventListener("DOMContentLoaded", function(){
-    
+
     showPage(location.pathname)
 
     document.body.addEventListener("click", function(event){
@@ -61,34 +163,13 @@ document.addEventListener("DOMContentLoaded", function(){
         event.preventDefault()
         const username = document.getElementById("username_login").value
         const password = document.getElementById("password_login").value
-
         const data = {
             username:username,
             password:password,
         }
 
-        validateAccount = function(data){
-            const errors =[]
-
-            if(data.username.length < USERNAME_MIN_LENGTH){
-                errors.push("Username Too Short")
-            }
-
-            if(data.username.length > USERNAME_MAX_LENGTH){
-                errors.push("Username Too Long")
-            }
-            if(data.password.length > PASSWORD_MAX_LENGTH){
-                errors.push("Password Too Long")
-            }
-
-            if(data.password.length == 0){
-                errors.push("Password Too Short")
-            }
-
-            return errors
-        }
-
-        const errors = validateAccount(data)
+        var errorKodes = validateAccount(data)
+        var errors = translateAccountError(errorKodes)
 
         if(errors.length > 0){
             
@@ -124,11 +205,12 @@ document.addEventListener("DOMContentLoaded", function(){
                     hideCurrentPage()
                     showPage(uri)
                     
-                    break
+                break
                 case 400:
 
                     body = await response.json()
-                    const errors = body.errorMessages
+                    errorKodes = body.errors
+                    errors = translateAccountError(errorKodes)
                     
                     if(errors.length > 0){
                         loginErrorUL.textContent = ''
@@ -142,8 +224,8 @@ document.addEventListener("DOMContentLoaded", function(){
                     break
                 case 500:
                     body = await response.json()
-
-                    errors = body.internalError
+                    errorKode = body.errors
+                    errors = translateAccountError(errorKode)
                         
                     if(errors.length > 0){ 
                         loginErrorUL.textContent = ''
@@ -153,9 +235,6 @@ document.addEventListener("DOMContentLoaded", function(){
                             loginErrorUL.appendChild(li)
                         }
                     }	
-                default:
-                    
-                
             }
         }
 
@@ -179,25 +258,8 @@ document.addEventListener("DOMContentLoaded", function(){
             content:content
         }
         
-        validateAccount = function(data){
-            let errors = []
-            
-            if(data.title.length < TITLE_MIN_LENGTH){
-                errors.push("Title Too Short")
-            }
-
-            if(data.game.length < GAME_MIN_LENGTH){
-                errors.push("Game Too Short")
-            }
-
-            if(data.content.length < CONTENT_MIN_LENGTH){
-                errors.push("Content Too Short")
-            }
-
-            return errors
-        }
-
-        const errors = validateAccount(feedback)
+        var errorKodes = validatFeedback(feedback)
+        var errors = translateFeedbackError(errorKodes)
     
 
         if(errors.length > 0){
@@ -234,8 +296,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
                 case 400:
                     body = await response.json()
-                    const errors = body.errorMessages
-                        
+                    errorKodes = body.errors
+                    errors = translateFeedbackError(errorKodes)
                     if(errors.length > 0){
                         feedbackErrorUL.textContent = ''
                         for(error of errors){
@@ -269,26 +331,8 @@ document.addEventListener("DOMContentLoaded", function(){
             content: content
         }
         
-        validateUpdate = function(data){
-            let errors = []
-            
-            if(data.title.length < TITLE_MIN_LENGTH){
-                errors.push("Title Too Short")
-            }
-
-            if(data.game.length < GAME_MIN_LENGTH){
-                errors.push("Game Too Short")
-            }
-
-            if(data.content.length < CONTENT_MIN_LENGTH){
-                errors.push("Content Too Short")
-            }
-
-            return errors
-            
-        }
-
-        const errors = validateUpdate(newFeedback)
+        let errorKodes = validatFeedback(newFeedback)
+        let errors = translateFeedbackError(errorKodes)
 
         if(errors.length > 0){
 
@@ -321,6 +365,7 @@ document.addEventListener("DOMContentLoaded", function(){
             switch(response.status){
                 
                 case 204:
+                    updateFeedbackErrorUL.textContent = ''
                     const uri = "/feedbacks/"+id
                     history.pushState({}, "", uri)
                     hideCurrentPage()
@@ -329,8 +374,25 @@ document.addEventListener("DOMContentLoaded", function(){
 
                 case 400:
                     body = await response.json()
-                    const errors = body.errorMessages
+                    errorKodes = body.errors
+                    errors = translateFeedbackError(errorKodes)
+
+                    if(errors.length > 0){
+                        updateFeedbackErrorUL.textContent = ''
+                        for(error of errors){
+                            const li = document.createElement("li")
+                            li.innerText = error
+                            updateFeedbackErrorUL.appendChild(li)
+                        }
                         
+                    }	
+
+                break
+                case 500:
+                    body = await response.json()
+                    errorKode = body.error
+                    errors = translateFeedbackError(errorKode)
+
                     if(errors.length > 0){
                         updateFeedbackErrorUL.textContent = ''
                         for(error of errors){
@@ -353,7 +415,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.getElementById("register-form").addEventListener("submit", async function(event){
         event.preventDefault()
-        const page = document.getElementById("register-page")
         
         const name = document.getElementById("name").value
         const username = document.getElementById("username").value
@@ -367,33 +428,8 @@ document.addEventListener("DOMContentLoaded", function(){
             repeat_password:repeatPassword
         }
         
-        validateAccount = function(data){
-            const errors =[]
-
-            if(!isNaN(name)){
-                errors.push("Name Cant Contain Digit")
-            }
-            
-            if(data.username.length < USERNAME_MIN_LENGTH){
-                errors.push("Username Too Short")
-            }
-
-            if(data.username.length > USERNAME_MAX_LENGTH){
-                errors.push("Username Too Long")
-            }
-            
-            if(data.password.length > PASSWORD_MAX_LENGTH){
-                errors.push("Password Too Long")
-            }
-
-            if(data.password != data.repeat_password){
-                errors.push("Password Does Not Match")
-            }
-
-            return errors
-        }
-
-        const errors = validateAccount(data)
+        var errorKodes = getErrorNewAccount(data)
+        var errors = translateAccountError(errorKodes)
 
         if(errors.length > 0){
             
@@ -427,8 +463,8 @@ document.addEventListener("DOMContentLoaded", function(){
                 case 400:
 
                     body = await response.json()
-                    const errors = body.errorMessages
-                    
+                    errorKodes = body.errors
+                    errors = translateAccountError(errorKodes)
                     if(errors.length > 0){
                         registerErrorUL.textContent = ''
                         for(const error of errors){
@@ -438,7 +474,7 @@ document.addEventListener("DOMContentLoaded", function(){
                         }
                         
                     }		
-                    break
+                break
             }
         }
     })
@@ -532,8 +568,8 @@ document.addEventListener("DOMContentLoaded", function(){
             
             case 500:
 
-                const errors = await response.json()
-                
+                const errorKodes = await response.json()
+                const errors = translateFeedbackError(errorKodes)
                 for(const error of errors){
                     const li = document.createElement("li")
                     li.innerText = error
@@ -567,6 +603,8 @@ document.addEventListener("DOMContentLoaded", function(){
         const h1 = document.createElement("h1")
         h1.innerText = "Feedback"
         page.appendChild(h1)
+        var errorKodes 
+        var errors 
         
         const response = await fetch(BACKEND_URI+"feedbacks/"+id)
         
@@ -639,8 +677,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
                         case 400:
                             body = await response.json()
-                            const errors = body.errorMessages
-                                
+                            errorKodes = body.errors
+                            errors = translateFeedbackError(errorKodes)    
                             if(errors.length > 0){
                                 registerErrorUL.textContent = ''
                                 for(error of errors){
@@ -660,8 +698,8 @@ document.addEventListener("DOMContentLoaded", function(){
             
             case 500:
 
-                const errors = await response.json()
-                
+                errorKodes = await response.json()
+                errors = translateFeedbackError(errorKodes) 
                 const ul = document.createElement("ul")
                 
                 for(const error of errors){

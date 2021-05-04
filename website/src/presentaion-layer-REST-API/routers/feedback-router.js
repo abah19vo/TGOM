@@ -8,12 +8,9 @@ module.exports = function({feedbackManager}){
  
     router.get('/', (req, res) => {
         feedbackManager.getAllFeedbacks(function(errors, feedbacks){
-            const errorTranslations = {
-                internalError: "Cant query out the request now.",
-            }
+            
             if(errors.length > 0 ){
-                const errorMessages = errors.map(e => errorTranslations[e])
-                response.status(400).json({errorMessages:errorMessages})
+                response.status(500).json({errors:errors})
             }else{
                 res.status(200).json(feedbacks)
             }
@@ -25,7 +22,7 @@ module.exports = function({feedbackManager}){
         const accessToken = authorizationHeader.substring("Bearer ".length) 
         jwt.verify(accessToken,secret, function(error, payload){
             if(error){
-                res.status(400).json({errorMessages:"InternalError"})
+                res.status(400).json({errors:"InternalError"})
             }else{
                 const newFeedback ={
                     title: req.body.title,
@@ -91,7 +88,7 @@ module.exports = function({feedbackManager}){
         jwt.verify(accessToken,secret, function(error, payload){
 
             if(error){
-                res.status(400).json({error:"InternalError"})
+                res.status(500).json({error:"InternalError"})
             }else{
                 const newFeedback ={
                     id: req.params.id,
