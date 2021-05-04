@@ -350,7 +350,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
             const uri = location.pathname
             const id = uri.split("/")[2]
-            console.log(newFeedback)
 
             const response = await fetch(BACKEND_URI+"feedbacks/"+id, {	
                 method: "PUT",
