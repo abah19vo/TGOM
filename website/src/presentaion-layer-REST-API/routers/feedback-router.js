@@ -17,7 +17,7 @@ module.exports = function({feedbackManager}){
         })
     })
 
-    router.post('/newFeedback', (req, res) => {
+    router.post('/', (req, res) => {
         const authorizationHeader = req.header("Authorization") 
         const accessToken = authorizationHeader.substring("Bearer ".length) 
         jwt.verify(accessToken,secret, function(error, payload){

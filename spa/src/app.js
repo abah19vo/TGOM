@@ -68,7 +68,7 @@ validatFeedback = function(newFeedback){
 }
 
 
-getErrorNewAccount = function(account){
+validateNewAccount = function(account){
     
     const errors = []
 
@@ -81,7 +81,7 @@ getErrorNewAccount = function(account){
     if(account.username.length > constants.USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
     }
-    if(account.password != account.confirmPassword){
+    if(account.password != account.repeat_password){
         errors.push("passwordDontMatch")
     }
     return errors
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         else{
         
-            const response = await fetch(BACKEND_URI+"account/sign-in", {
+            const response = await fetch(BACKEND_URI+"account/token", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         else{
 
-            const response = await fetch(BACKEND_URI+"feedbacks/create", {
+            const response = await fetch(BACKEND_URI+"feedbacks", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", function(){
             repeat_password:repeatPassword
         }
         
-        var errorKodes = getErrorNewAccount(data)
+        var errorKodes = validateNewAccount(data)
         var errors = translateAccountError(errorKodes)
 
         if(errors.length > 0){
@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         else{
         
-            const response = await fetch(BACKEND_URI+"account/sign-up", {
+            const response = await fetch(BACKEND_URI+"account/account", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"

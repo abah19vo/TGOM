@@ -7,7 +7,7 @@ module.exports = function({accountManager}){
     const router = express.Router()
 
 
-	router.post("/sign-up", function(request, response){
+	router.post("/account", function(request, response){
 
 		const account = {
 			username: request.body.username,
@@ -28,7 +28,7 @@ module.exports = function({accountManager}){
 			
 	})
 
-	router.post("/sign-in", function(request, response){
+	router.post("/token", function(request, response){
 
 		const insertedAccount = {
 			username: request.body.username,
