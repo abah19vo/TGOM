@@ -1,7 +1,7 @@
-const accountValidator = require('./account-validation')
-const accountAuthentication = require('./account-authentication')
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const userValidator = require('./user-validation')
+const userAuthentication = require('./user-authentication')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 module.exports= function({accountRepository}){
 
@@ -13,7 +13,7 @@ module.exports= function({accountRepository}){
 
     exports.createUser = async (newUser, callback) =>{
         
-        const errors = accountValidator.getErrorNewUser(newUser)
+        const errors = userValidator.getErrorNewUser(newUser)
         
         if(errors.length > 0){
             callback(errors,null)
@@ -28,24 +28,24 @@ module.exports= function({accountRepository}){
         accountRepository.getAccountByUsername(username, callback)
     }
 
-    exports.login = function(insertedAccount, callback){
+    exports.login = function(user, callback){
 
-        const validationErrors = accountValidator.validateAccount(insertedAccount)
+        const validationErrors = userValidator.validateAccount(insertedAccount)
         if(validationErrors.length > 0){
             callback(validationErrors)
             return
         }
 
-        accountRepository.getUserByUserName(insertedAccount.username, function(repositoryErrors,repositoryAccount){
+        accountRepository.getUserByUserName(insertedAccount.username, function(repositoryErrors,storedUser){
           
             if(repositoryErrors.length > 0){
                 callback(repositoryErrors)
             }else{
-                const errors = accountAuthentication.checkIfRealUser(repositoryAccount,insertedAccount)
+                const errors = userAuthentication.authenticateUser(storedUser,user)
                 if(errors.length > 0){
                     callback(errors,null)
                 }else{
-                    callback([],repositoryAccount.id)
+                    callback([],storedUser.id)
                 }
             }
         })

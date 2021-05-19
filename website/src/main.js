@@ -2,13 +2,13 @@ const awilix = require('awilix')
 const container = awilix.createContainer()
 
 container.register({
-    accountManager: awilix.asFunction(require('./business-logic-layer/account-manager.js')),
+    accountManager: awilix.asFunction(require('./business-logic-layer/user-manager.js')),
     commentManager: awilix.asFunction(require('./business-logic-layer/comment-manager.js')),
     feedbackManager: awilix.asFunction(require('./business-logic-layer/feedback-manager.js')),
 
-    accountRepository: awilix.asFunction(require('./data-access-layer/user_table.js')),
-    commentRepository: awilix.asFunction(require('./data-access-layer/comment_table.js')),
-    feedbackRepository: awilix.asFunction(require('./data-access-layer/feedback_table.js')),
+    accountRepository: awilix.asFunction(require('./data-access-layer/user-table.js')),
+    commentRepository: awilix.asFunction(require('./data-access-layer/comment-table.js')),
+    feedbackRepository: awilix.asFunction(require('./data-access-layer/feedback-table.js')),
 
     variusRouter: awilix.asFunction(require('./presentaion-layer/routers/varius-router')),
     userRouter: awilix.asFunction(require('./presentaion-layer/routers/user-router')),
