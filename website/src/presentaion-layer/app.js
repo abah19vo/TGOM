@@ -9,7 +9,7 @@ const redisStore = require('connect-redis')(session)
 const csurf = require('csurf')
 
 
-const Client = redis.createClient(6379, 'redis');
+const Client = redis.createClient(6379, 'redis')
 
 module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter}){
   const app = express()
@@ -72,8 +72,8 @@ module.exports = function({userRouter,variusRouter,feedbackRouter, commentRouter
   app.use('/',variusRouter)
 
   Client.on("error", function (err) {
-    console.log(err);
-  });
+    console.log(err)
+  })
 
   Client.on("connect", () => {
     console.log('✅ connect redis success !')

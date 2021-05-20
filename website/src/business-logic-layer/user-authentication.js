@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
 
 exports.authenticateUser = function(storedUser,user){
     const errors =[]
@@ -9,7 +9,7 @@ exports.authenticateUser = function(storedUser,user){
 
     const isValid = bcrypt.compareSync(user.password, storedUser.password)
     if(!isValid){
-        errors.push("invalidPassword")
+        errors.push("wrongPassword")
     }
     return errors
 }

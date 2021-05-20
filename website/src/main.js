@@ -2,11 +2,11 @@ const awilix = require('awilix')
 const container = awilix.createContainer()
 
 container.register({
-    accountManager: awilix.asFunction(require('./business-logic-layer/user-manager.js')),
+    userManager: awilix.asFunction(require('./business-logic-layer/user-manager.js')),
     commentManager: awilix.asFunction(require('./business-logic-layer/comment-manager.js')),
     feedbackManager: awilix.asFunction(require('./business-logic-layer/feedback-manager.js')),
 
-    accountRepository: awilix.asFunction(require('./data-access-layer/user-table.js')),
+    userRepository: awilix.asFunction(require('./data-access-layer/user-table.js')),
     commentRepository: awilix.asFunction(require('./data-access-layer/comment-table.js')),
     feedbackRepository: awilix.asFunction(require('./data-access-layer/feedback-table.js')),
 

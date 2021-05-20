@@ -37,9 +37,9 @@ module.exports = function(){
         })
     }
 
-    exports.deleteFeedbackById= function(feedback,callback){
-        const query = "DELETE F FROM feedback AS F WHERE F.id = ? AND F.userId = ?"
-        const values = [feedback.id,feedback.userId]
+    exports.deleteFeedbackById= function(id,callback){
+        const query = "DELETE F FROM feedback AS F WHERE F.id = ?"
+        const values = [id]
 
         connection.query(query,values,function(error){
             if(error){                
@@ -51,12 +51,19 @@ module.exports = function(){
     }
 
     exports.getFeedbackById = function(id,callback){
-        const query = " SELECT F.id, F.title, F.content, F.game, U.username FROM feedback AS F JOIN user AS U ON F.userId = U.id WHERE F.id = ? "
+        const query = `
+            SELECT F.id, F.title, F.content, F.game, U.username,U.id as authorId 
+            FROM feedback AS F 
+            JOIN user AS U 
+            ON F.userId = U.id 
+            WHERE F.id = ? 
+        `
         const values =[id]
         connection.query(query,values,function(error, feedback){
             if(error){
                 callback(['internalError'],null)
             }else{
+                
                 callback([],feedback[0])
             }
         

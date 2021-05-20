@@ -8,10 +8,13 @@ module.exports = function({commentManager}){
         const newComment ={
             feedbackId: req.params.id,
             content: req.body.content,
+        }
+
+        const auth = {
             userId: req.session.userId,
             isLoggedIn: req.session.isLoggedIn
         }
-        commentManager.createComment(newComment, function(errors){
+        commentManager.createComment(newComment, auth,function(errors){
             const errorTranslations = {
                 commentTooShort: "the comment is needs to be at least 4 characters",
                 internalError: "Cant query out the request now.",

@@ -29,11 +29,15 @@ module.exports = function({feedbackManager}){
                     content: req.body.content,
                     game:req.body.game,
                     userId: payload.userId,
+
+                }
+                const auth = {
+                    userId: payload.userId,
                     isLoggedIn: payload.isLoggedIn
                 }
-                feedbackManager.createFeedback(newFeedback, function(errors){   
+                feedbackManager.createFeedback(newFeedback,auth, function(errors){   
                     if(errors.length > 0){
-                        res.status(400).json({errors :errors})
+                        res.status(400).json({errors:errors})
 
                     }else{
                         res.status(201).end()
@@ -63,13 +67,14 @@ module.exports = function({feedbackManager}){
             if(error){
                 response.status(400).json({error:"InternalError"})
             }else{
-                
-                feedback={
-                    id: req.params.id,
+                const id = req.params.id
+                const auth = {
+                    authorId: req.body.authorId,
                     isLoggedIn: payload.isLoggedIn,
                     userId: payload.userId
                 }
-                feedbackManager.deleteFeedbackById(feedback, function(errors){
+                console.log("🚀 ~ file: feedback-router.js ~ line 79 ~ jwt.verify ~ auth", auth)
+                feedbackManager.deleteFeedback(id,auth, function(errors){
                     
                     if(errors.length > 0 ){
                         res.status(400).json({errors:errors})
@@ -95,10 +100,14 @@ module.exports = function({feedbackManager}){
                     title: req.body.title,
                     content: req.body.content,
                     game:req.body.game,
+                    
+                }
+                const auth = {
+                    authorId: req.params.authorId,
                     userId: payload.userId,
                     isLoggedIn: payload.isLoggedIn
                 }
-                feedbackManager.updateFeedbackById(newFeedback, function(errors){
+                feedbackManager.updateFeedbackById(newFeedback, auth,function(errors){
                     if(errors.length > 0){
                         res.status(400).json({errors:errors})
 

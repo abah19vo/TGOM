@@ -22,7 +22,8 @@ translateAccountError = function(errors){
         passwordDontMatch: "Passwords Does Not Match",
         passwordTooLong: "The password should be less than  "+ constants.PASSWORD_MAX_LENGTH +" characters.",
         invalidPassword: "Empty password field please try again",
-        notLoggedIn: "you're Not LoggedIn",
+        wrongPassword: "Wrong password please try a gain",
+        notLoggedIn: "you're not logged in to the account that own this rights",
     }
     const errorMessages = errors.map(e => errorTranslations[e])
     
@@ -47,9 +48,7 @@ translateFeedbackError= function(errors){
 }
 
 validatFeedback = function(newFeedback){
-	
 	const errors = []
-	
 	if(newFeedback.title.length < constants.TITLE_MIN_LENGTH){
 		errors.push("titleTooShort")
 	}
@@ -62,44 +61,38 @@ validatFeedback = function(newFeedback){
     if(newFeedback.content.length > constants.REVIEW_MAX_LENGTH){
 		errors.push("contentTooLong")
 	}
-	
 	return errors
-	
 }
 
 
-validateNewAccount = function(account){
-    
+validateNewAccount = function(user){
     const errors = []
-
-    if(!account.hasOwnProperty("username")){
+    if(!user.hasOwnProperty("username")){
         errors.push("usernameMissing")
     }
-    if(account.username.length < constants.USERNAME_MIN_LENGTH){
+    if(user.username.length < constants.USERNAME_MIN_LENGTH){
         errors.push("usernameTooShort")
     }
-    if(account.username.length > constants.USERNAME_MAX_LENGTH){
+    if(user.username.length > constants.USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
     }
-    if(account.password != account.repeat_password){
+    if(user.password != user.repeat_password){
         errors.push("passwordDontMatch")
     }
     return errors
 }
 
-validateAccount = function(account){
+validateAccount = function(user){
     const errors =[]
-
-    if(!account.hasOwnProperty("username")){
+    if(!user.hasOwnProperty("username")){
         errors.push("usernameMissing")
     }
-    if(account.username.length < constants.USERNAME_MIN_LENGTH){
+    if(user.username.length < constants.USERNAME_MIN_LENGTH){
         errors.push("usernameTooShort")
     }
-    if(account.username.length > constants.USERNAME_MAX_LENGTH){
+    if(user.username.length > constants.USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
     }
-
     return errors
 }
 
@@ -168,8 +161,8 @@ document.addEventListener("DOMContentLoaded", function(){
             password:password,
         }
 
-        var errorKodes = validateAccount(data)
-        var errors = translateAccountError(errorKodes)
+        let errorKodes = validateAccount(data)
+        let errors = translateAccountError(errorKodes)
 
         if(errors.length > 0){
             
@@ -229,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function(){
                         
                     if(errors.length > 0){ 
                         loginErrorUL.textContent = ''
-                        for(error of errors){
+                        for(let error of errors){
                             const li = document.createElement("li")
                             li.innerText=error
                             loginErrorUL.appendChild(li)
@@ -629,6 +622,12 @@ document.addEventListener("DOMContentLoaded", function(){
                 const deleteDiv = document.createElement("div")
                 deleteDiv.setAttribute("id", "delete-feedback")
 
+                const authorId = document.createElement("input")
+                authorId.setAttribute("id", "authorId")
+                authorId.setAttribute("type", "hidden")
+
+                authorId.value = feedback.authorId 
+
                 const deleteButton = document.createElement("button")
                 deleteButton.innerText = "Delete Feedback"
                 deleteButton.setAttribute("class", "if-is-logged-in")
@@ -648,6 +647,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 page.appendChild(updateFeedback)
                 page.appendChild(updateLink)
                 page.appendChild(deleteDiv)
+                page.appendChild(authorId)
 
 
                 document.getElementById("delete-feedback").addEventListener("click", async function(event){
@@ -655,13 +655,16 @@ document.addEventListener("DOMContentLoaded", function(){
                     
                     const uri = location.pathname
                     const id = uri.split("/")[2]
+                    const data = {authorId: feedback.authorId}
 
+                    console.log("🚀 ~ file: app.js ~ line 660 ~ document.getElementById ~ data", data)
                     const response = await fetch(BACKEND_URI+"feedbacks/"+id,{	
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": "Bearer "+accessToken
                         },
+                        body:  JSON.stringify(data),
                     })
 
                     
@@ -679,11 +682,10 @@ document.addEventListener("DOMContentLoaded", function(){
                             errorKodes = body.errors
                             errors = translateFeedbackError(errorKodes)    
                             if(errors.length > 0){
-                                registerErrorUL.textContent = ''
                                 for(error of errors){
                                     const li = document.createElement("li")
                                     li.innerText = error
-                                    registerErrorUL.appendChild(li)
+                                    page.appendChild(li)
                                 }
                                 
                             }	

@@ -3,17 +3,17 @@ const userAuthentication = require('./user-authentication')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-module.exports= function({accountRepository}){
+module.exports= function({userRepository}){
 
     const exports = {}
 
     exports.getAllUsers = function(callback){
-        accountRepository.getAllUsers(callback)
+        userRepository.getAllUsers(callback)
     }
 
     exports.createUser = async (newUser, callback) =>{
         
-        const errors = userValidator.getErrorNewUser(newUser)
+        const errors = userValidator.validateUser(newUser)
         
         if(errors.length > 0){
             callback(errors,null)
@@ -21,22 +21,21 @@ module.exports= function({accountRepository}){
         }
 
         newUser.password = await bcrypt.hash(newUser.password, saltRounds)
-        accountRepository.createUser(newUser, callback)
+        userRepository.createUser(newUser, callback)
     }
 
     exports.getUserByUserName = function(username, callback){
-        accountRepository.getAccountByUsername(username, callback)
+        userRepository.getAccountByUsername(username, callback)
     }
 
     exports.login = function(user, callback){
-
-        const validationErrors = userValidator.validateAccount(insertedAccount)
+        const validationErrors = userValidator.validateUser(user)
         if(validationErrors.length > 0){
             callback(validationErrors)
             return
         }
 
-        accountRepository.getUserByUserName(insertedAccount.username, function(repositoryErrors,storedUser){
+        userRepository.getUserByUserName(user.username, function(repositoryErrors,storedUser){
           
             if(repositoryErrors.length > 0){
                 callback(repositoryErrors)
@@ -46,6 +45,7 @@ module.exports= function({accountRepository}){
                     callback(errors,null)
                 }else{
                     callback([],storedUser.id)
+                    console.log("🚀 ~ file: user-manager.js ~ line 48 ~ userRepository.getUserByUserName ~ storedUser.id", storedUser.id)
                 }
             }
         })

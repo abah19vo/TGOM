@@ -4,9 +4,9 @@ module.exports= function({commentRepository}){
 
     const exports = {}
 
-    exports.createComment = function(newComment, callback){
+    exports.createComment = function(newComment,auth, callback){
 
-        if(newComment.isLoggedIn){
+        if(auth.isLoggedIn){
             const errors = commentValidator.getCommentValidationErrors(newComment)
 
             if(errors.length > 0){

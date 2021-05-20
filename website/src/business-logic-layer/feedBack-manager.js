@@ -8,10 +8,10 @@ module.exports = function({feedbackRepository}){
         feedbackRepository.getAllFeedbacks(callback)
     }
 
-    exports.createFeedback = function(newFeedback, callback){
+    exports.createFeedback = function(newFeedback,auth, callback){
 
-        if(newFeedback.isLoggedIn){
-            const errors = feedbackValidator.getFeedbackValidationErrors(newFeedback, callback)
+        if(auth.isLoggedIn){
+            const errors = feedbackValidator.validateFeedback(newFeedback)
 
             if(errors.length > 0){
                 callback(errors,null)
@@ -29,24 +29,25 @@ module.exports = function({feedbackRepository}){
     }
 
 
-    exports.updateFeedbackById = function(newFeedback, callback){
+    exports.updateFeedbackById = function(newFeedback,auth, callback){
         
         const errors = feedbackValidator.getFeedbackValidationErrors(newFeedback, callback)
         if(errors.length > 0){
             callback(errors,null)
             return
         }
-        if(newFeedback.isLoggedIn){
+        if(auth.isLoggedIn && auth.id === auth.authorId){
             feedbackRepository.updateFeedbackById(newFeedback, callback)
         }
         else
             callback(['notLoggedIn'], null)
     }
 
-    exports.deleteFeedbackById = function(feedback, callback){
+    exports.deleteFeedback = function(id,auth, callback){
+    console.log("🚀 ~ file: feedback-manager.js ~ line 47 ~ exports.deleteFeedback ~ auth", auth)
         
-        if(feedback.isLoggedIn){
-            feedbackRepository.deleteFeedbackById(feedback, callback)
+        if(auth.userId === auth.authorId){
+            feedbackRepository.deleteFeedbackById(id, callback)
         }
         else
             callback(['notLoggedIn'], null)

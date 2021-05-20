@@ -1,9 +1,9 @@
 const express = require('express')
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 
-module.exports = function({accountManager}){
+module.exports = function({userManager}){
     const router = express.Router()
 
 
@@ -20,7 +20,7 @@ module.exports = function({accountManager}){
 			confirmPassword: request.body.repeat_password
 		}
 		
-		accountManager.createUser(account, function(errors, id){
+		userManager.createUser(account, function(errors, id){
 			
 			if(errors.length == 0){
 				response.render('login.hbs')
@@ -54,12 +54,12 @@ module.exports = function({accountManager}){
 
 	router.post("/sign-in", function(request, response){
 
-		const insertedAccount = {
+		const user = {
 			username: request.body.username,
 			password: request.body.password,
 		}      
 		
-		accountManager.login(insertedAccount,function(errors,id){
+		userManager.login(user,function(errors,id){
 			const errorTranslations = {
 				usernameTooShort: "The username needs to be at least 3 characters.",
 				usernameTooLong: "The username is too long.",

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const secret = 'its me mario!!'
 
 
-module.exports = function({accountManager}){
+module.exports = function({userManager}){
     const router = express.Router()
 
 
@@ -14,7 +14,7 @@ module.exports = function({accountManager}){
 			password: request.body.password,
 			confirmPassword: request.body.repeat_password,
 		}
-		accountManager.createUser(account, function(errors){
+		userManager.createUser(account, function(errors){
 			if(errors.length == 0){
 				response.status(204).end()
 			}else{
@@ -30,12 +30,11 @@ module.exports = function({accountManager}){
 
 	router.post("/token", function(request, response){
 
-		const insertedAccount = {
+		const user = {
 			username: request.body.username,
 			password: request.body.password,
-		}      
-		
-		accountManager.login(insertedAccount,function(errors,id){
+		}		
+		userManager.login(user,function(errors,id){
 			
 			if(errors.length > 0){
 				response.status(400).json({errors:errors})
@@ -55,11 +54,8 @@ module.exports = function({accountManager}){
 					
 				})
 			}
-			
 		})
     })
-
-
     return router
 }
 

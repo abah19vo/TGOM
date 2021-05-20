@@ -40,10 +40,14 @@ module.exports = function({feedbackManager, commentManager}){
             content: req.body.content,
             game:req.body.game,
             userId: req.session.userId,
+        }
+
+        const auth = {
+            userId: req.session.userId,
             isLoggedIn: req.session.isLoggedIn
         }
         
-        feedbackManager.createFeedback(newFeedback, function(errors){
+        feedbackManager.createFeedback(newFeedback,auth, function(errors){
             const errorTranslations = {
                 titleTooShort: "the title is needs to be at least 4 characters",
                 gameTooShort: "the game name is supposed to be at least 4 characters",
@@ -112,11 +116,6 @@ module.exports = function({feedbackManager, commentManager}){
             }
         })
     })
-
-
-    
-    
-
 
     return router
 }

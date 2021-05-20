@@ -1,36 +1,39 @@
 const USERNAME_MIN_LENGTH = 3
 const USERNAME_MAX_LENGTH = 20
 
-exports.getErrorNewUser = function(account){
+exports.validateNewUser = function(user){
     
     const errors = []
 
-    if(!account.hasOwnProperty("username")){
+    if(!user.hasOwnProperty("username")){
         errors.push("usernameMissing")
     }
-    if(account.username.length < USERNAME_MIN_LENGTH){
+    if(user.username.length < USERNAME_MIN_LENGTH){
         errors.push("usernameTooShort")
     }
-    if(account.username.length > USERNAME_MAX_LENGTH){
+    if(user.username.length > USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
     }
-    if(account.password != account.confirmPassword){
+    if(user.password != user.confirmPassword){
         errors.push("passwordDontMatch")
     }
     return errors
 }
 
-exports.validateAccount = function(insertedAccount){
+exports.validateUser = function(user){
     const errors =[]
 
-    if(!insertedAccount.hasOwnProperty("username")){
+    if(!user.hasOwnProperty("username")){
         errors.push("usernameMissing")
     }
-    if(insertedAccount.username.length < USERNAME_MIN_LENGTH){
+    if(user.username.length < USERNAME_MIN_LENGTH){
         errors.push("usernameTooShort")
     }
-    if(insertedAccount.username.length > USERNAME_MAX_LENGTH){
+    if(user.username.length > USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
+    }
+    if(user.username.length < USERNAME_MIN_LENGTH){
+        errors.push("usernameTooShort")
     }
 
     return errors
