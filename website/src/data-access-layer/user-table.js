@@ -1,10 +1,4 @@
-const mysql = require("mysql2")
-const connection = mysql.createConnection({
-    host: 'db',
-    user: 'root',
-    database: 'hello',
-    password: "abc123"
-})
+const connection = require('./db')
 
 module.exports = function(){
 
@@ -28,16 +22,6 @@ module.exports = function(){
         })
     }
     
-    exports.getAllUsers = function(callback){
-        const query = " SELECT * FROM user"
-        connection.query(query,function(error,users){
-            if(error){
-                callback(['internalError'],null)
-            }else{
-                callback([],users)
-            }
-        })
-    }
 
        
     exports.getUserByUserName = function(username,callback){

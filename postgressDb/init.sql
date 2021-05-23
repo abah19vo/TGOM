@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS comment;
 CREATE TABLE users(
   id SERIAL not null primary key,
   username  TEXT UNIQUE NOT NULL,
-  name TEXT NOT NULL,
   password TEXT NOT NULL
 );
 

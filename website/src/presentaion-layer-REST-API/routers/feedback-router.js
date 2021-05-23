@@ -73,9 +73,7 @@ module.exports = function({feedbackManager}){
                     isLoggedIn: payload.isLoggedIn,
                     userId: payload.userId
                 }
-                console.log("🚀 ~ file: feedback-router.js ~ line 79 ~ jwt.verify ~ auth", auth)
                 feedbackManager.deleteFeedback(id,auth, function(errors){
-                    
                     if(errors.length > 0 ){
                         res.status(400).json({errors:errors})
                     }else{
@@ -103,11 +101,11 @@ module.exports = function({feedbackManager}){
                     
                 }
                 const auth = {
-                    authorId: req.params.authorId,
+                    authorId: req.body.authorId,
                     userId: payload.userId,
                     isLoggedIn: payload.isLoggedIn
                 }
-                feedbackManager.updateFeedbackById(newFeedback, auth,function(errors){
+                feedbackManager.updateFeedback(newFeedback, auth,function(errors){
                     if(errors.length > 0){
                         res.status(400).json({errors:errors})
 

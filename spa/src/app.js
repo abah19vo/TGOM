@@ -101,7 +101,7 @@ validateAccount = function(user){
 
 
 let accessToken = ""
-
+let userId
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -188,9 +188,10 @@ document.addEventListener("DOMContentLoaded", function(){
                 
                 case 200:
                     
-                    var body = await response.json()
+                    let body = await response.json()
                     
                     accessToken = body.access_token
+                    userId = body.userId
                     document.body.classList.remove("is-logged-out")
                     document.body.classList.add("is-logged-in")
                     const uri = "/feedbacks"
@@ -251,8 +252,8 @@ document.addEventListener("DOMContentLoaded", function(){
             content:content
         }
         
-        var errorKodes = validatFeedback(feedback)
-        var errors = translateFeedbackError(errorKodes)
+        let errorKodes = validatFeedback(feedback)
+        let errors = translateFeedbackError(errorKodes)
     
 
         if(errors.length > 0){
@@ -317,14 +318,16 @@ document.addEventListener("DOMContentLoaded", function(){
         const title = document.getElementById("newTitle").value
         const game = document.getElementById("newGame").value
         const content = document.getElementById("newContent").value
+        const authorId = document.getElementById("authorId").value
                         
-        const newFeedback = {
+        const data = {
             title: title,
             game: game,
-            content: content
+            content: content,
+            authorId:parseInt(authorId),
         }
         
-        let errorKodes = validatFeedback(newFeedback)
+        let errorKodes = validatFeedback(data)
         let errors = translateFeedbackError(errorKodes)
 
         if(errors.length > 0){
@@ -350,7 +353,7 @@ document.addEventListener("DOMContentLoaded", function(){
                     "Content-Type": "application/json",
                     "Authorization": "Bearer "+accessToken
                 },
-                body: JSON.stringify(newFeedback)
+                body: JSON.stringify(data)
             })
 
         
@@ -420,8 +423,8 @@ document.addEventListener("DOMContentLoaded", function(){
             repeat_password:repeatPassword
         }
         
-        var errorKodes = validateNewAccount(data)
-        var errors = translateAccountError(errorKodes)
+        let errorKodes = validateNewAccount(data)
+        let errors = translateAccountError(errorKodes)
 
         if(errors.length > 0){
             
@@ -515,6 +518,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 }else if(uri.startsWith("/update-feedback/")){
                     newPageId = "update-feedback-page"
                     const feedbackId = uri.split("/")[2]
+                    loadUpdateFeedbackPage(feedbackId)
                 }else{
                     newPageId = "not-found-page"
                 }
@@ -595,8 +599,8 @@ document.addEventListener("DOMContentLoaded", function(){
         const h1 = document.createElement("h1")
         h1.innerText = "Feedback"
         page.appendChild(h1)
-        var errorKodes 
-        var errors 
+        let errorKodes 
+        let errors 
         
         const response = await fetch(BACKEND_URI+"feedbacks/"+id)
         
@@ -644,56 +648,57 @@ document.addEventListener("DOMContentLoaded", function(){
                 page.appendChild(titleP)
                 page.appendChild(gameP)
                 page.appendChild(contentP)
-                page.appendChild(updateFeedback)
-                page.appendChild(updateLink)
-                page.appendChild(deleteDiv)
                 page.appendChild(authorId)
 
-
-                document.getElementById("delete-feedback").addEventListener("click", async function(event){
-                    event.preventDefault()	
-                    
-                    const uri = location.pathname
-                    const id = uri.split("/")[2]
-                    const data = {authorId: feedback.authorId}
-
-                    console.log("🚀 ~ file: app.js ~ line 660 ~ document.getElementById ~ data", data)
-                    const response = await fetch(BACKEND_URI+"feedbacks/"+id,{	
-                        method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": "Bearer "+accessToken
-                        },
-                        body:  JSON.stringify(data),
-                    })
-
-                    
-                    switch(response.status){
+                if(userId === feedback.authorId ){
+                    page.appendChild(updateLink)
+                    page.appendChild(updateFeedback)
+                    page.appendChild(deleteDiv)
+                    document.getElementById("delete-feedback").addEventListener("click", async function(event){
+                        event.preventDefault()	
                         
-                        case 201:
-                            const uri = "/feedbacks"
-                            history.pushState({}, "", uri)
-                            hideCurrentPage()
-                            showPage(uri)						
-                        break
+                        const uri = location.pathname
+                        const id = uri.split("/")[2]
+                        const data = {authorId: feedback.authorId}
 
-                        case 400:
-                            body = await response.json()
-                            errorKodes = body.errors
-                            errors = translateFeedbackError(errorKodes)    
-                            if(errors.length > 0){
-                                for(error of errors){
-                                    const li = document.createElement("li")
-                                    li.innerText = error
-                                    page.appendChild(li)
-                                }
-                                
-                            }	
+                        const response = await fetch(BACKEND_URI+"feedbacks/"+id,{	
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": "Bearer "+accessToken
+                            },
+                            body:  JSON.stringify(data),
+                        })
 
-                        break
-                    }
-                    
-                })
+                        
+                        switch(response.status){
+                            
+                            case 201:
+                                const uri = "/feedbacks"
+                                history.pushState({}, "", uri)
+                                hideCurrentPage()
+                                showPage(uri)						
+                            break
+
+                            case 400:
+                                body = await response.json()
+                                errorKodes = body.errors
+                                errors = translateFeedbackError(errorKodes)    
+                                if(errors.length > 0){
+                                    for(error of errors){
+                                        const li = document.createElement("li")
+                                        li.innerText = error
+                                        page.appendChild(li)
+                                    }
+                                    
+                                }	
+
+                            break
+                        }
+                        
+                    })
+                }
+                
                 
             break
             
@@ -718,5 +723,44 @@ document.addEventListener("DOMContentLoaded", function(){
                 page.appendChild(h1)
         }
     }
+
+    async function loadUpdateFeedbackPage(id){
+
+        const page = document.getElementById("feedback-page")
+        page.innerText = ""
+        
+        const h1 = document.createElement("h1")
+        h1.innerText = "Update Feedback"
+        page.appendChild(h1)
+        let errorKodes 
+        let errors 
+        
+        const response = await fetch(BACKEND_URI+"feedbacks/"+id)
+        const feedback = await response.json()
+        switch(response.status){
+            
+            case 200:
+                const title = feedback.title
+                const game = feedback.game
+                const content = feedback.content
+                const authorId = feedback.authorId
+
+                document.getElementById("newTitle").value = title
+                document.getElementById("newGame").value = game
+                document.getElementById("newContent").value = content
+                document.getElementById("authorId").value = authorId
+
+            case 500:
+
+                
+
+            break
+            default:
+                const h1 = document.createElement("h1")
+                h1.innerText = "no page found" 
+                page.appendChild(h1)
+        }
+    }
+    
 
 })	

@@ -6,9 +6,9 @@ container.register({
     commentManager: awilix.asFunction(require('./business-logic-layer/comment-manager.js')),
     feedbackManager: awilix.asFunction(require('./business-logic-layer/feedback-manager.js')),
 
-    userRepository: awilix.asFunction(require('./data-access-layer/user-table.js')),
-    commentRepository: awilix.asFunction(require('./data-access-layer/comment-table.js')),
-    feedbackRepository: awilix.asFunction(require('./data-access-layer/feedback-table.js')),
+    userRepository: awilix.asFunction(require('./data-access-layer-postgress/user-table.js')),
+    commentRepository: awilix.asFunction(require('./data-access-layer-postgress/comment-table.js')),
+    feedbackRepository: awilix.asFunction(require('./data-access-layer-postgress/feedback-table.js')),
 
     variusRouter: awilix.asFunction(require('./presentaion-layer/routers/varius-router')),
     userRouter: awilix.asFunction(require('./presentaion-layer/routers/user-router')),

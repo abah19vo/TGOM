@@ -29,30 +29,24 @@ module.exports = function({feedbackRepository}){
     }
 
 
-    exports.updateFeedbackById = function(newFeedback,auth, callback){
-        
-        const errors = feedbackValidator.getFeedbackValidationErrors(newFeedback, callback)
+    exports.updateFeedback = function(newFeedback,auth, callback){
+        const errors = feedbackValidator.validateFeedback(newFeedback, callback)
         if(errors.length > 0){
             callback(errors,null)
             return
         }
-        if(auth.isLoggedIn && auth.id === auth.authorId){
+        if(auth.userId === auth.authorId){
             feedbackRepository.updateFeedbackById(newFeedback, callback)
         }
-        else
-            callback(['notLoggedIn'], null)
+        else callback(['notLoggedIn'], null)
     }
 
-    exports.deleteFeedback = function(id,auth, callback){
-    console.log("🚀 ~ file: feedback-manager.js ~ line 47 ~ exports.deleteFeedback ~ auth", auth)
-        
+    exports.deleteFeedback = function(id,auth, callback){        
         if(auth.userId === auth.authorId){
             feedbackRepository.deleteFeedbackById(id, callback)
         }
-        else
-            callback(['notLoggedIn'], null)
+        else callback(['notLoggedIn'], null)
     }
-
     return exports
 
 }
