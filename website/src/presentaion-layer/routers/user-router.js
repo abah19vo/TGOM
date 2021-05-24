@@ -59,13 +59,14 @@ module.exports = function({userManager}){
 			password: request.body.password,
 		}      
 		
-		userManager.login(user,function(errors,id){
+		userManager.login(user,function(errors,userId){
 			const errorTranslations = {
 				usernameTooShort: "The username needs to be at least 3 characters.",
 				usernameTooLong: "The username is too long.",
 				internalError: "Cant query out the request now.",
 				invalidUsername:"the username is wrong or does not exist",
 				invalidPassword: "Wrong password please try again",
+				wrongPassword: "wrong password please try again",
 
 			}
 
@@ -73,14 +74,17 @@ module.exports = function({userManager}){
 				const errorMessages = errors.map(e => errorTranslations[e])
 				const model = {
 					errors: errorMessages,
-					username: insertedAccount.username,
-					password: insertedAccount.password
+					username: user.username,
+					password: user.password
 				}
 				response.render('login.hbs',model)
+				console.log("🚀 ~ file: user-router.js ~ line 84 ~ userManager.login ~ error",errors)
+
 
 			}else{
 				request.session.isLoggedIn = true
-				request.session.userId = id
+				request.session.userId = userId
+                    console.log("🚀 ~ file: user-router.js ~ line 84 ~ userManager.login ~ u.id", userId)
 				response.redirect('/')
 			}
 			

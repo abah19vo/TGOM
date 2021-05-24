@@ -8,6 +8,8 @@ const client = new Client({
 })
 client.connect()
 
+const db = require('./db')
+
 module.exports =function(){
    
     exports.createFeedback= function(newFeedback,callback){

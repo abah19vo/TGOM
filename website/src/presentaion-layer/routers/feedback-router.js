@@ -104,15 +104,14 @@ module.exports = function({feedbackManager, commentManager}){
                             errorMessages: errorMessages
                         }
                         res.render('feedback.hbs', model)
-                    }else{
+                    }
                         const model = {
                             feedback: feedback,
                             comments: comments
                         }
                         res.render('feedback.hbs', model)
-                    }
+                    
                 })
-                
             }
         })
     })

@@ -7,7 +7,7 @@ module.exports = function(){
 
     exports.createUser = async function(user, callback){	
           db.User.create(user)
-			.then(a => callback([], a.id))
+			.then(u => callback([], u.id))
 			.catch(e => {
 				if(e instanceof UniqueConstraintError){
 					callback(['usernameTaken'], null)

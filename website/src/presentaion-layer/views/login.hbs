@@ -9,7 +9,7 @@
     <form action="/account/sign-in" method="POST" name="login">
         {{#if errors.length}}
             {{#each errors}}
-                <p class="login_error_msg">{{this}}</p>
+                <h1 class="login_error_msg">{{this}}</h1>
             {{/each}}
         {{/if}}
         <input type="hidden" name="_csrf" value="{{csrfToken}}">

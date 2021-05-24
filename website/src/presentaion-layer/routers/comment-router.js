@@ -6,8 +6,9 @@ module.exports = function({commentManager}){
 
     router.post('/:id/create', (req, res) => {
         const newComment ={
-            feedbackId: req.params.id,
             content: req.body.content,
+            feedbackId:parseInt(req.params.id),
+            userId: parseInt(req.session.userId),
         }
 
         const auth = {
