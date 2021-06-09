@@ -16,38 +16,29 @@ module.exports =function(){
     exports.createFeedback= function(newFeedback,callback){
         db.Feedback.create(newFeedback)
 			.then(a => callback([]))
-			.catch(e => {
-                callback(['internalError'])
-                console.log("🚀 ~ file: comment-table.js ~ line 8 ~ newComment", e)
-
-			})	   
+			.catch(e => callback(['internalError']))	   
     }
 
     exports.getFeedbackById = function(id,callback){
 
-        db.Feedback.findByPk(id).then(function(feedback){
-            console.log("🚀 ~ file: feedback-table.js ~ line 42 ~ feedback", feedback)
-
-            callback([],feedback)
-        }).catch(e=>{
-            console.log("🚀 ~ file: feedback-table.js ~ line 45 ~ db.Feedback.findByPk ~ e", e)
-            callback([], null)
-        })
-        /*
-        const query = {
-            text: " SELECT F.id, F.title, F.content, F.game, U.username FROM feedback AS F INNER JOIN users AS U ON F.userId = U.id WHERE F.id = $1 ",
-            rowMode: 'struct'
-        }
-
-        const values =[id]
-        client.query(query,values,function(error, feedback){
-            if(error){
-                callback(['internalError'],null)
-            }else{
-                callback([],feedback.rows[0])  
+        db.Feedback.findOne({
+            where:{id:id},
+            include: db.User,
+        },).then(function(feedback){
+            const data = {
+                id: feedback.dataValues.id,
+                title: feedback.dataValues.title,
+                game: feedback.dataValues.game,
+                content: feedback.dataValues.content,
+                userId: feedback.dataValues.userId,
+                username: feedback.dataValues.user.dataValues.username,
             }
-        
-        })*/
+            console.log("🚀 ~ file: feedback-table.js ~ line 42 ~ feedback", data)
+
+            callback([],data)
+        }).catch(e=>{
+            callback([], null)
+        }) 
     }
 
     exports.updateFeedbackById= function(newFeedback,callback){

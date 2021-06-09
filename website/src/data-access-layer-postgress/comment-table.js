@@ -5,9 +5,8 @@ const db = require('./db')
 module.exports = function(){
     const exports = {}
 
-    exports.createComment = function(newComment,callback){
-    console.log("🚀 ~ file: comment-table.js ~ line 9 ~ newComment", newComment)
-        db.Comment.create({ content: newComment.content, feedbackid:newComment.feedbackId, userid: newComment.feedbackId})
+    exports.createComment = function(comment,callback){
+        db.Comment.create(comment)
 			.then(a => callback([]))
 			.catch(e => {
                 callback(['internalError'])
@@ -15,11 +14,12 @@ module.exports = function(){
 			})	   
     }
 
-
+    
     exports.getCommentsByFeedbackId = function(feedbackId,callback){
         db.Comment.findAll({
             where:{feedbackId:feedbackId},
             include: db.User,
+            raw: true,
         }
         ).then(comments => {
             callback([],comments)
