@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize')
 
 const sequelize = new Sequelize('hello', 'postgres', 'abc123', {
     host: 'postgressDb',
-    dialect:'postgres',
+    dialect:'mysql',
     port:5432,
 });
 
@@ -25,19 +25,22 @@ const User = sequelize.define('users', {
   })
 
   const Feedback = sequelize.define('feedback',{
-     title:{
-         type: DataTypes.STRING
-     },
-     content:{
-         type: DataTypes.STRING
-     },
-     userId:{
-         type:DataTypes.INTEGER,
-         references: { model: 'users', key: 'id'},
-         onDelete: 'CASCADE'
-     },
-     foreignKeyConstraint: true
- }, {
+    title:{
+        type: DataTypes.STRING
+    },
+    game:{
+        type: DataTypes.STRING
+    },
+    content:{
+        type: DataTypes.STRING
+    },
+    userid:{
+        type:DataTypes.INTEGER,
+        //references: { model: 'users', key: 'id'},
+        //onDelete: 'CASCADE'
+    },
+    //foreignKeyConstraint: true
+}, {
     timestamps: false,
     tableName: 'feedback',
     freezeTableName: true,
@@ -49,7 +52,7 @@ const User = sequelize.define('users', {
      content:{
          type: DataTypes.STRING
      },
-     feedbackId:{
+     /*feedbackId:{
         type: DataTypes.INTEGER,
         references: { model: 'feedback', key: 'id'},
         onDelete: 'CASCADE'
@@ -58,7 +61,7 @@ const User = sequelize.define('users', {
          type:DataTypes.INTEGER,
          references: { model: 'users', key: 'id'},
          onDelete: 'CASCADE'
-     },
+     },*/
      
      //foreignKeyConstraint: true
  }, {
@@ -68,11 +71,14 @@ const User = sequelize.define('users', {
   })
 
  Comment.belongsTo(Feedback)
+ Comment.belongsTo(User)
+
  Feedback.hasMany(Comment)
- Feedback.belongsTo(User)
+ //Feedback.belongsTo(User)
+
  User.hasMany(Feedback)
  User.hasMany(Comment)
- 
+
   
  const db = {
     User: User,

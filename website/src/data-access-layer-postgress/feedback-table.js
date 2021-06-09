@@ -10,22 +10,30 @@ client.connect()
 
 const db = require('./db')
 
+
 module.exports =function(){
    
     exports.createFeedback= function(newFeedback,callback){
-        const query = "INSERT INTO feedback(title,content,game,userId) VALUES($1,$2,$3,$4)"
-        const values = [newFeedback.title,newFeedback.content,newFeedback.game,newFeedback.userId]
-
-        client.query(query,values,function(error){
-            if(error){                
+        db.Feedback.create(newFeedback)
+			.then(a => callback([]))
+			.catch(e => {
                 callback(['internalError'])
-            }else{
-                callback([])
-            }
-        })
+                console.log("🚀 ~ file: comment-table.js ~ line 8 ~ newComment", e)
+
+			})	   
     }
 
     exports.getFeedbackById = function(id,callback){
+
+        db.Feedback.findByPk(id).then(function(feedback){
+            console.log("🚀 ~ file: feedback-table.js ~ line 42 ~ feedback", feedback)
+
+            callback([],feedback)
+        }).catch(e=>{
+            console.log("🚀 ~ file: feedback-table.js ~ line 45 ~ db.Feedback.findByPk ~ e", e)
+            callback([], null)
+        })
+        /*
         const query = {
             text: " SELECT F.id, F.title, F.content, F.game, U.username FROM feedback AS F INNER JOIN users AS U ON F.userId = U.id WHERE F.id = $1 ",
             rowMode: 'struct'
@@ -39,7 +47,7 @@ module.exports =function(){
                 callback([],feedback.rows[0])  
             }
         
-        })
+        })*/
     }
 
     exports.updateFeedbackById= function(newFeedback,callback){
