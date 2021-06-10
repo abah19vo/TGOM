@@ -23,17 +23,18 @@ module.exports =function(){
 
         db.Feedback.findOne({
             where:{id:id},
-            include: db.User,
+            include: [{model:db.User,plain: true}],
+            raw: true,
         },).then(function(feedback){
             const data = {
-                id: feedback.dataValues.id,
-                title: feedback.dataValues.title,
-                game: feedback.dataValues.game,
-                content: feedback.dataValues.content,
-                userId: feedback.dataValues.userId,
-                username: feedback.dataValues.user.dataValues.username,
+                id: feedback.id,
+                title: feedback.title,
+                game: feedback.game,
+                content: feedback.content,
+                userId: feedback.userId,
+                username: feedback['user.username'],
             }
-            console.log("🚀 ~ file: feedback-table.js ~ line 42 ~ feedback", data)
+            console.log("🚀 ~ file: feedback-table.js ~ line 43 ~ feedback", data)
 
             callback([],data)
         }).catch(e=>{
@@ -72,16 +73,12 @@ module.exports =function(){
 
 
     exports.getAllFeedbacks = function(callback){
-        const query = {
-            text: "SELECT F.id, F.title, F.game, F.content FROM feedback AS F ",
-            rowMode: 'struct'
+        db.Feedback.findAll({
+            raw: true,
         }
-        client.query(query,function(error, feedbacks){
-            if(error){
-                callback(['internalError'],null)
-            }else{
-                callback([],feedbacks.rows)
-            }
+        ).then(feedbacks => callback([],feedbacks)
+        ).catch(e => {
+            callback(["internalError"], null)
         })
     }
     return exports
