@@ -31,11 +31,9 @@ module.exports =function(){
                 title: feedback.title,
                 game: feedback.game,
                 content: feedback.content,
-                userId: feedback.userId,
+                authorId: feedback.userId,
                 username: feedback['user.username'],
             }
-            console.log("🚀 ~ file: feedback-table.js ~ line 43 ~ feedback", data)
-
             callback([],data)
         }).catch(e=>{
             callback([], null)
@@ -43,34 +41,21 @@ module.exports =function(){
     }
 
     exports.updateFeedbackById= function(newFeedback,callback){
-        const query = "UPDATE feedback SET title = $1, content = $2, game= $3 WHERE id= $4 AND userId = $5"
-        const values = [newFeedback.title,newFeedback.content,newFeedback.game,newFeedback.id,newFeedback.userId]
 
-        client.query(query,values,function(error){
-            if(error){                
-                callback(['internalError'])
-            }else{
-                callback([])
-            }
-        })
+        db.Feedback.update(newFeedback, { where: {id: newFeedback.id}})
+			.then(a => callback([]))
+			.catch(e => callback(['internalError']))
     }
 
-    exports.deleteFeedBackById= function(feedback,callback){
-        const query = "DELETE FROM feedBack AS F  WHERE F.id = $1 AND F.userId = $2"
-        const values = [feedback.id,feedback.userId]
+    exports.deleteFeedbackById= function(id,callback){
 
-        client.query(query,values,function(error){
-            if(error){                
-                callback(['internalError'])
-            }else{
-                callback([])
-            }
-        })
+        db.Feedback.destroy({
+            where:{id:id},
+            
+        },).then(() => callback([])).catch(e=>{
+            callback(['internalError'])
+        }) 
     }
-
-    
-
-
 
     exports.getAllFeedbacks = function(callback){
         db.Feedback.findAll({

@@ -36,7 +36,6 @@ services:
       - webnet
 
   postgressDb:
-    build: ./postgressDb
     image: postgres
     restart: always
     environment:

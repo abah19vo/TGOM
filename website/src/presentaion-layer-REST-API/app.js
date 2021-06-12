@@ -1,8 +1,5 @@
 const express = require("express")
-const expressHandlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
-const path = require("path")
-const { response } = require("express")
 
 
 
@@ -20,7 +17,6 @@ module.exports = function({userRouterAPI,feedbackRouterAPI}){
     res.setHeader('Access-Control-Allow-Methods',"*")
     res.setHeader('Access-Control-Allow-Headers',"*")
     res.setHeader('Access-Control-Allow-Expose-Headers',"*")
-
     next()
   })
 

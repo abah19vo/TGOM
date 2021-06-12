@@ -7,7 +7,7 @@ module.exports = function({userManager}){
     const router = express.Router()
 
 
-	router.post("/account", function(request, response){
+	router.post("/", function(request, response){
 
 		const account = {
 			username: request.body.username,

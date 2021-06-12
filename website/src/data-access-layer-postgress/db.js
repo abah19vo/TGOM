@@ -39,6 +39,8 @@ const User = sequelize.define('users', {
 
   })
 
+
+
   const Comment = sequelize.define('comment',{
      content:{
          type: DataTypes.STRING
@@ -56,6 +58,7 @@ const User = sequelize.define('users', {
 
  User.hasMany(Feedback)
  User.hasMany(Comment)
+
  User.sync()
  Feedback.sync()
  Comment.sync()

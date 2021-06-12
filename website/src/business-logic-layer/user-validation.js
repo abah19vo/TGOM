@@ -1,3 +1,5 @@
+const { User } = require("../data-access-layer-postgress/db")
+
 const USERNAME_MIN_LENGTH = 3
 const USERNAME_MAX_LENGTH = 20
 
@@ -20,6 +22,8 @@ exports.validateNewUser = function(user){
     return errors
 }
 
+
+
 exports.validateUser = function(user){
     const errors =[]
 
@@ -31,9 +35,6 @@ exports.validateUser = function(user){
     }
     if(user.username.length > USERNAME_MAX_LENGTH){
         errors.push("usernameTooLong")
-    }
-    if(user.username.length < USERNAME_MIN_LENGTH){
-        errors.push("usernameTooShort")
     }
 
     return errors

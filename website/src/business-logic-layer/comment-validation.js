@@ -1,5 +1,5 @@
 const COMMENT_MIN_LENGTH = 2
-const COMMENT_MAX_LENGTH = 260
+const COMMENT_MAX_LENGTH = 1000
 
 exports.getCommentValidationErrors = function(comment){
 	

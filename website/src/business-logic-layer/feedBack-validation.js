@@ -1,7 +1,7 @@
 const TITLE_MIN_LENGTH = 4
 const GAME_NAME_MIN_LENGTH = 4
 const REVIEW_MIN_LENGTH = 3
-const REVIEW_MAX_LENGTH = 260
+const REVIEW_MAX_LENGTH = 1000
 
 exports.validateFeedback = function(feedback){
 	

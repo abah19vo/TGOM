@@ -7,7 +7,7 @@ const constants = {
     TITLE_MIN_LENGTH : 3,
     GAME_MIN_LENGTH : 3,
     CONTENT_MIN_LENGTH : 20,
-    CONTENT_MAX_LENGTH : 260,
+    CONTENT_MAX_LENGTH : 1000,
 }
 
 
@@ -411,13 +411,11 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("register-form").addEventListener("submit", async function(event){
         event.preventDefault()
         
-        const name = document.getElementById("name").value
         const username = document.getElementById("username").value
         const password = document.getElementById("password").value
         const repeatPassword = document.getElementById("repeat_password").value
 
         const data = {
-            name:name,
             username:username,
             password:password,
             repeat_password:repeatPassword
@@ -438,7 +436,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         else{
         
-            const response = await fetch(BACKEND_URI+"account/account", {
+            const response = await fetch(BACKEND_URI+"account", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"

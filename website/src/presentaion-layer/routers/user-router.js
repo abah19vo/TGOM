@@ -78,13 +78,10 @@ module.exports = function({userManager}){
 					password: user.password
 				}
 				response.render('login.hbs',model)
-				console.log("🚀 ~ file: user-router.js ~ line 84 ~ userManager.login ~ error",errors)
-
-
+				
 			}else{
 				request.session.isLoggedIn = true
 				request.session.userId = userId
-                    console.log("🚀 ~ file: user-router.js ~ line 84 ~ userManager.login ~ u.id", userId)
 				response.redirect('/')
 			}
 			

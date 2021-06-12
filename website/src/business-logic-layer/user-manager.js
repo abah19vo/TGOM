@@ -45,7 +45,6 @@ module.exports= function({userRepository}){
                     callback(errors,null)
                 }else{
                     callback([],storedUser.id)
-                    console.log("🚀 ~ file: user-manager.js ~ line 48 ~ userRepository.getUserByUserName ~ storedUser.id", storedUser.id)
                 }
             }
         })
